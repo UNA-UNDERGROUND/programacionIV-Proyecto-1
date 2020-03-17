@@ -1,0 +1,21 @@
+<%-- 
+    Document   : index
+    Created on : 3 mar. 2020, 14:33:18
+    Author     : jonathan
+--%>
+
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <%@ include file="/presentation/Head.jsp" %>
+        <title>Banco SWBC</title>
+    </head>
+    <body>
+        <%@ include file="/presentation/Header.jsp" %>
+        <h1>Banco SWBC</h1>
+        
+        <%@ include file="/presentation/Footer.jsp" %>
+    </body>
+</html>
