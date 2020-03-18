@@ -8,23 +8,11 @@
     <div class="menu">
         <ul> 
               <li>
-                <a href="/Proyecto 1/presentation/Index.jsp">Inicio</a>
+                <a href="/portal">Inicio</a>
               </li>
-                        <% if (usuario!=null){ %>
                 <li>
-                  <a href="/Proyecto 1/presentation/cliente/cuentas/View.jsp">Cuentas</a>
-                  <ul>  <!--submenu --> </ul>
-                </li>                        
-                <li >
-                  <a  href="#">User:<%=usuario.getCedula()%></a>
-                  <ul>  <!--submenu --> </ul>
-                </li> 
-                        <% } %>
-                        <% if (usuario==null){%>
-                <li>
-                  <a href="/Proyecto 1/presentation/login/show">Login</a>
-                </li>            
-                        <% }%>             
+                  <a href="/portal/login">Login</a>
+                </li>                  
             </ul>
     </div>
   </header>          

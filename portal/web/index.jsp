@@ -1,9 +1,3 @@
-<%-- 
-    Document   : index
-    Created on : 3 mar. 2020, 14:33:18
-    Author     : jonathan
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
