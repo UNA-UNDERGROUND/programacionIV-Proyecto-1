@@ -21,9 +21,12 @@ CREATE TABLE cuenta (
   moneda varchar(3) NOT NULL,
   saldo decimal(15, 4) NOT NULL,
   limite_transferencia int(11) NOT NULL,
-  CONSTRAINT FK_cuenta_cedula 
-    FOREIGN KEY (cedula) 
-    REFERENCES cliente(cedula)
+  CONSTRAINT FK_cuenta_cedula
+    FOREIGN KEY (cedula)
+    REFERENCES cliente(cedula),
+  CONSTRAINT FK_cuenta_moneda
+    FOREIGN KEY (moneda)
+    REFERENCES moneda(codigo)
 );
 
 CREATE TABLE moneda (
