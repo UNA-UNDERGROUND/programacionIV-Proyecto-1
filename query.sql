@@ -30,3 +30,20 @@ CREATE TABLE moneda (
   precio_compra decimal(13, 4) NOT NULL,
   porcentaje_interes float NOT NULL
 );
+
+
+CREATE TABLE movimiento(
+ id_transaccion int not null AUTO_INCREMENT PRIMARY KEY,
+ id_cuenta int not null,
+ deposito boolean not null,
+ moneda varchar(3) not null,
+ monto decimal(13, 4) not null,
+ descripcion varchar(255) not null,
+ fecha_deposito datetime default current_timestamp,
+ CONSTRAINT FK_movimiento_cuenta
+    FOREIGN KEY (id_cuenta) 
+    REFERENCES cuenta(id_cuenta),
+ CONSTRAINT FK_movimiento_moneda
+    FOREIGN KEY (moneda) 
+    REFERENCES moneda(codigo)
+);
