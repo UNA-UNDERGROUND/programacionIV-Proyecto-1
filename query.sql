@@ -9,7 +9,10 @@ CREATE TABLE cliente (
 
 CREATE TABLE usuario (
   cedula int NOT NULL PRIMARY KEY,
-  pass varchar(8) NOT NULL
+  pass varchar(8) NOT NULL,
+  CONSTRAINT FK_usuario_cedula
+    FOREIGN KEY (cedula)
+    REFERENCES cliente(cedula)
 );
 
 CREATE TABLE cuenta (
