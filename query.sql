@@ -1,3 +1,5 @@
+CREATE SCHEMA banco;
+
 CREATE TABLE cliente (
   cedula int NOT NULL PRIMARY KEY,
   nombre varchar(255) NOT NULL,
@@ -24,5 +26,7 @@ CREATE TABLE cuenta (
 CREATE TABLE moneda (
   codigo varchar(3) NOT NULL PRIMARY KEY,
   nombre varchar(100) NOT NULL,
-  signo varchar(5) NOT NULL
+  signo varchar(5) NOT NULL,
+  precio_compra decimal(13, 4) NOT NULL,
+  porcentaje_interes float NOT NULL
 );
