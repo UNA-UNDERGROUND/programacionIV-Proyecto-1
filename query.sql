@@ -18,7 +18,7 @@ CREATE TABLE usuario (
 CREATE TABLE cuenta (
   id_cuenta int NOT NULL AUTO_INCREMENT PRIMARY KEY,
   cedula int NOT NULL,
-  codigo varchar(3) NOT NULL,
+  moneda varchar(3) NOT NULL,
   saldo decimal(15, 4) NOT NULL,
   limite_transferencia int(11) NOT NULL,
   CONSTRAINT FK_cuenta_cedula 
