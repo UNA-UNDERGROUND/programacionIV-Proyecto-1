@@ -46,8 +46,7 @@ CREATE TABLE movimiento(
   fecha_deposito datetime default current_timestamp,
   CONSTRAINT FK_movimiento_cuenta
     FOREIGN KEY (id_cuenta)
-    REFERENCES cuenta(id_cuenta),
-  CONSTRAINT FK_movimiento_moneda
-    FOREIGN KEY (moneda)
-    REFERENCES moneda(codigo)
+    REFERENCES cuenta(id_cuenta)
 );
+
+
