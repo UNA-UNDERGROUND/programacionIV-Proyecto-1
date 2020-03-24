@@ -42,7 +42,6 @@ CREATE TABLE movimiento(
   id_cuenta int not null,
   deposito boolean not null,
   monto decimal(13, 4) not null,
-  decimal(13, 4) not null,
   descripcion varchar(255) not null,
   fecha_deposito datetime default current_timestamp,
   CONSTRAINT FK_movimiento_cuenta
