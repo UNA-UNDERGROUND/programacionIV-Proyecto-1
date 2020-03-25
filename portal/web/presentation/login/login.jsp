@@ -19,7 +19,7 @@
                 <label for="cedula">Cedula</label>
             </div>
             <div class="campo-entrada">
-                <input type="text" id="contraseña" required>
+                <input type="password" id="contraseña" required>
                 <label for="contraseña">Contraseña</label>
             </div>
 
