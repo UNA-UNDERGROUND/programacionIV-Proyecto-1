@@ -11,7 +11,7 @@
 
 .campo-entrada input[type=checkbox]+label:before {
     content: "✔";
-    border: 0.1em solid #000;
+    border: 0.1em solid #f4f4f4;
     border-radius: 0.2em;
     display: inline-block;
     width: 1em;
