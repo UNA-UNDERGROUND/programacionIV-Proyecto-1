@@ -43,7 +43,7 @@ public class Controller extends HttpServlet {
         Model model = (Model) request.getAttribute("model");
         HttpSession session = request.getSession(true);
  
-        return "/index.jsp";
+        return "/presentation/login/login.jsp";
 
     }
    
