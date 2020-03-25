@@ -4,7 +4,7 @@
 
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Login Administrativo</title>
+        <title>Login</title>
         <link rel="stylesheet" href="/portal/css/componentes/login-form.css">
         <link rel="stylesheet" href="/portal/css/dark-style.css">
         <meta name="viewport" content="width=device-width, initial-scale=1">
