@@ -1,0 +1,21 @@
+@import "componentes/checkbox.css";
+@import "componentes/button.css";
+@import "componentes/textbox.css";
+
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "hind",sans-serif;
+  text-decoration: none;
+}
+
+body{
+  background: #121212;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
