@@ -1,0 +1,17 @@
+
+.login-form{
+  width: 470px;
+  background: #202020;
+  padding: 30px 60px;
+}
+
+
+.login-form h6,  label{
+   color: #f1f1f1;
+}
+
+.login-form h6{
+  font-size: 15px;
+  text-transform: uppercase;
+  font-weight: 500;
+}
