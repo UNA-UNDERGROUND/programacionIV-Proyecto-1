@@ -5,6 +5,10 @@
  */
 package backend;
 
+import backend.dao.BancoDAO;
+import backend.estructuras.Usuario;
+
+
 /**
  *
  * @author jonguz
@@ -15,7 +19,14 @@ public class Backend {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        BancoDAO instancia = BancoDAO.obtenerInstancia();
+
+        Usuario cuentas[] = instancia.recuperarUsuarios();
+        
+        for(Usuario u: cuentas){
+            System.out.println(u);
+        }
+        
     }
     
 }
