@@ -3,13 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package backend.estructuras;
+package banco.backend.estructuras;
 
 /**
  *
  * @author jonguz
  */
 public class Usuario {
+    public Usuario(){
+        
+    }
     public Usuario(String cedula, String pass){
         this.cedula = cedula;
         this.pass = pass;

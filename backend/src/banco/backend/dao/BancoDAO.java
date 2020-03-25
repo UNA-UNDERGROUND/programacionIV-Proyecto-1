@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package backend.dao;
+package banco.backend.dao;
 
-import backend.estructuras.Usuario;
+import banco.backend.estructuras.Usuario;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
