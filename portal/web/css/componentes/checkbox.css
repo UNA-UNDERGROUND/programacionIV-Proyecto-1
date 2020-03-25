@@ -24,10 +24,6 @@
     transition: .2s;
 }
 
-.campo-entrada input[type=checkbox]+label:active {
-    transform: scale(0);
-}
-
 .campo-entrada input[type=checkbox]:checked+label:before {
     background-color: MediumSeaGreen;
     border-color: MediumSeaGreen;
