@@ -98,7 +98,7 @@ public class ControladorLogin extends HttpServlet {
         Credenciales credenciales = (Credenciales) request.getAttribute("credenciales");
         Controlador controlador = Controlador.getInstancia();
         HttpSession session = request.getSession(true);
-        String viewUrl="";
+        String viewUrl;
         try {
             Usuario usuario = controlador.login(credenciales.getCurrent());
             session.setAttribute("usuario", usuario);
