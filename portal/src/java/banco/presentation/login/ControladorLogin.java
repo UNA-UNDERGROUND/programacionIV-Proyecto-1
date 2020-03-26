@@ -106,7 +106,7 @@ public class ControladorLogin extends HttpServlet {
                 viewUrl = "/admin";
             }
             else{
-                viewUrl = "/cliente";
+                viewUrl = "/";
                 
             }
             
