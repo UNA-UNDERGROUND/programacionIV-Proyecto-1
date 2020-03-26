@@ -135,7 +135,8 @@ public class BancoDAO {
                 System.err.println(ex.getMessage());
             }
         } catch (Exception ex) {
-            System.err.println(ex.getMessage());
+            String error = ex.getLocalizedMessage();
+            System.err.println(error);
         }
         return resultado;
     }
@@ -164,8 +165,8 @@ public class BancoDAO {
             "WHERE cedula=?, pass = ?;";
 
     private static final String CMD_RECUPERAR_CLIENTE
-        = "select * from cliente"
-        + "where cedula = *";
+        = "select * from cliente "
+        + "where cedula = ?";
     
     
     //</editor-fold>
