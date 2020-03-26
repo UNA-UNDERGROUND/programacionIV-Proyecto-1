@@ -27,9 +27,7 @@
                         <form action="/portal/login" method="post">
                             <%if(textoError!=null){%>
                             <div class="erroneo">
-                                <label>
-                                    <%=textoError%>
-                                </label>
+                                <label><%=textoError%></label>
                             </div>
                             <%}%>
                             
