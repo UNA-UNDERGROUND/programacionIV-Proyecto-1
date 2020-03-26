@@ -3,19 +3,16 @@
 @import "componentes/textbox.css";
 
 
-*{
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: "hind",sans-serif;
-  text-decoration: none;
+.contenido.contenido  {
+    background: #121212;
 }
 
-body{
-  background: #121212;
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.contenido h6, h1, label{
+   color: #f1f1f1;
 }
 
+.contenido h6{
+  font-size: 15px;
+  text-transform: uppercase;
+  font-weight: 500;
+}

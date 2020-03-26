@@ -1,6 +1,24 @@
+header {
+  overflow: hidden;
+  background-color: #333;
+  position: fixed; /* Set the navbar to fixed position */
+  top: 0; /* Position the navbar at the top of the page */
+  width: 100%; /* Full width */
+}
+
+.contenido{
+  margin-top: 30px; /* Add a top margin to avoid content overlay */
+  margin-bottom: 30px;
+}
+
+footer{
+    position: fixed; /* Set the navbar to fixed position */
+    bottom: 0; /* Position the navbar at the bottom of the page */
+  width: 100%; 
+}
 
 .menu{
-    padding: 5px;
+    padding: 10px;
 }
 
 .menu>ul {
@@ -25,3 +43,4 @@
 .menu>ul>li>a:hover{
     color:white;
 }
+
