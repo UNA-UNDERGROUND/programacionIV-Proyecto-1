@@ -12,7 +12,7 @@
         <%@ include file="/presentation/Header.jsp" %>
         <div class="contenido centrado">
             <%if(cliente==null){%>
-            <h1>Banco SWBC</h1>
+            <h1>Banco PSB</h1>
             <%}else{%>
             <h1>Bienvenido: <%=cliente.getNombre()%> <%=cliente.getApellidos()%> </h1>
             <%}%>
