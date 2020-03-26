@@ -6,6 +6,7 @@
 package banco.presentation.login;
 
 import banco.backend.Controlador;
+import banco.backend.estructuras.Cliente;
 import banco.backend.estructuras.Usuario;
 import java.io.IOException;
 import java.util.HashMap;
@@ -101,13 +102,14 @@ public class ControladorLogin extends HttpServlet {
         try {
             Usuario usuario = controlador.login(credenciales.getCurrent());
             session.setAttribute("usuario", usuario);
-            
+
             if(usuario.esAdministrativo()){
                 viewUrl = "/admin";
             }
             else{
+                Cliente cliente = controlador.recuperarDatosPersonales(usuario);
+                session.setAttribute("cliente", cliente);
                 viewUrl = "/";
-                
             }
             
         } catch (Exception ex) {
