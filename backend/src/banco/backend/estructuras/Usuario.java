@@ -12,7 +12,7 @@ package banco.backend.estructuras;
 public class Usuario {
 
     public Usuario() {
-        
+
     }
 
     public Usuario(int cedula, String pass) {
@@ -66,7 +66,23 @@ public class Usuario {
         return "Cedula de Usuario: " + cedula + " Tipo de cuenta : " + (administrativo ? "Administrativo" : "Cliente");
     }
 
-    private int cedula=0;
-    private String pass="";
-    private boolean administrativo=false;
+    public boolean equals(Usuario u) {
+        if (administrativo != u.administrativo) {
+            return false;
+        }
+        if (cedula != u.cedula) {
+            return false;
+        }
+        if (!pass.equals(u.pass)) {
+            return false;
+        }
+   
+
+        return true;
+    }
+
+    private boolean administrativo = false;
+    private int cedula = 0;
+    private String pass = "";
+
 }
