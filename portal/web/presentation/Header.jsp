@@ -1,5 +1,5 @@
 <%@page import="banco.backend.estructuras.Usuario"%>
-<% Usuario usuario=  null;/* null;*/  %>
+<% Usuario usuario=  (Usuario) session.getAttribute("usuario");%>
 
 <header>
     <div class="logo">
@@ -10,9 +10,15 @@
               <li>
                 <a href="/portal">Inicio</a>
               </li>
+              <%if(usuario==null){%>
                 <li>
-                  <a href="/portal/login/show">Login</a>
-                </li>        
+                  <a href="/portal/login/show">Iniciar Sesion</a>
+                </li>       
+                <%}else{%>
+                <li>
+                  <a href="/portal/logout">Cerrar Sesion</a>
+                </li>   
+                <%}%>
             </ul>
     </div>
   </header>          
