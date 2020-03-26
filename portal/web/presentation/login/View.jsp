@@ -30,7 +30,7 @@
                                 <label>
                                     <%=textoError%>
                                 </label>
-                            <div>
+                            </div>
                             <%}%>
                             
                             <div class="campo-entrada <%=erroneo("usuario",errores)%>">
