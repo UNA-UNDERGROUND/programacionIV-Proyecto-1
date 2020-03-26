@@ -111,7 +111,7 @@ public class ControladorLogin extends HttpServlet {
             }
             
         } catch (Exception ex) {
-            request.setAttribute("textoError", "Verifique la informacion de los datos");
+            request.setAttribute("textoError", "Usuario y/o clave incorrectos");
             viewUrl = "/login/show";
         }
         return viewUrl;
