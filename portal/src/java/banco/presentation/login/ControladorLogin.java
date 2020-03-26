@@ -8,9 +8,7 @@ package banco.presentation.login;
 import banco.backend.Controlador;
 import banco.backend.estructuras.Usuario;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -23,7 +21,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author jonguz
  */
-@WebServlet(name = "AccountLoginController", urlPatterns = {"/login","/login/show"})
+@WebServlet(name = "AccountLoginController", urlPatterns = {"/login","/login/show", "/logout"})
 public class ControladorLogin extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request,
@@ -38,6 +36,9 @@ public class ControladorLogin extends HttpServlet {
                 break;
             case "/login":
                 viewUrl = this.login(request);
+                break;
+            case "/logout":
+                viewUrl = this.logout(request);
                 break;
         }
         request.getRequestDispatcher(viewUrl).forward(request, response);
@@ -81,6 +82,9 @@ public class ControladorLogin extends HttpServlet {
         }
     }
 
+    public String logout(HttpServletRequest request){
+        return this.logoutAction(request);
+    }
 
     public String showAction(HttpServletRequest request) {
         Credenciales model = (Credenciales) request.getAttribute("credenciales");
@@ -115,6 +119,13 @@ public class ControladorLogin extends HttpServlet {
         return viewUrl;
     }
 
+    public String logoutAction(HttpServletRequest request){
+        HttpSession session = request.getSession(true);
+        session.removeAttribute("usuario");
+        session.invalidate();
+        return "/";   
+    }
+    
     void updateModel(HttpServletRequest request) {
         Credenciales model = (Credenciales) request.getAttribute("credenciales");
 
