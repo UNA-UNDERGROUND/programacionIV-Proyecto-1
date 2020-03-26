@@ -19,7 +19,7 @@ public class Controlador {
     }
 
     public Usuario login(Usuario credenciales) {
-        Usuario  res = bd.recuperarUsuario(credenciales);
+        Usuario  res = bd.recuperarUsuario(credenciales.getCedula());
         
         if(res!=null && !res.equals(credenciales)){
                 res=null;
