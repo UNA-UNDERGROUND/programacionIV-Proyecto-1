@@ -111,9 +111,9 @@ public class ControladorLogin extends HttpServlet {
             }
             
         } catch (Exception ex) {
-            List errores = new ArrayList<>();
+            Map<String, String> errores = (Map<String, String>)request.getAttribute("errores");
+            errores.put("Credenciales","Usuario o clave incorrectos");
             request.setAttribute("errores", errores);
-            errores.add("Usuario o clave incorrectos");
             viewUrl = "/login/show";
         }
         return viewUrl;
