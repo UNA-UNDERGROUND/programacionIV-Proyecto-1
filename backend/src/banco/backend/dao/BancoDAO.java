@@ -78,13 +78,7 @@ public class BancoDAO {
 
             try (ResultSet rs = stm.executeQuery()) {
                 while (rs.next()) {
-                    lista.add(new Usuario(
-                                    new Object[]{
-                                        Integer.toString(rs.getInt(1)),
-                                        rs.getString(2)
-                                    }
-                            )
-                    );
+                    lista.add(new Usuario(rs.getInt(1), rs.getString(2)));
                 }
             } catch (Exception ex) {
                 System.err.println(ex.getMessage());
