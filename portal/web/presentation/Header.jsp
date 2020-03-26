@@ -1,4 +1,4 @@
-<%@page import="banca.logic.Usuario"%>
+<%@page import="banco.backend.estructuras.Usuario"%>
 <% Usuario usuario=  null;/* null;*/  %>
 
 <header>
@@ -11,8 +11,8 @@
                 <a href="/portal">Inicio</a>
               </li>
                 <li>
-                  <a href="/portal/login">Login</a>
-                </li>                  
+                  <a href="/portal/login/show">Login</a>
+                </li>        
             </ul>
     </div>
   </header>          
