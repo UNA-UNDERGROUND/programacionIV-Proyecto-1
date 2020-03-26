@@ -1,0 +1,30 @@
+footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: rgb(42, 47, 53);
+    color: rgb(255, 105, 45);
+    text-align: center;
+    padding: 15px;
+}
+
+footer>ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+footer>ul>li {
+    float: left;
+}
+
+footer>ul>li {
+    float: none;
+    display: inline-block;
+}
+
+footer>ul>li.derecha {
+    float: right;
+}

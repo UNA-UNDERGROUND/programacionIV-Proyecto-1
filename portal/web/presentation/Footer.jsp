@@ -1,14 +1,14 @@
 <footer>
-    <ul> 
-        <li class = "centro">
-            <a>Banco PSB 2020©.</a>
+    <ul>
+        <li class="centro">
+            <a>Banco PSB 2020.</a>
         </li>
         <li class="derecha">
-            <a >tema del sitio: </a>
+            <a>tema del sitio: </a>
             <select>
                 <option>Oscuro</option>
                 <option>Claro</option>
             </select>
-        </li>      
-    </ul>    
+        </li>
+    </ul>
 </footer>
