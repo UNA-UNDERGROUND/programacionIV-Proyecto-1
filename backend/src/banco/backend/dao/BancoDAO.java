@@ -85,13 +85,13 @@ public class BancoDAO {
         }
         return lista.toArray(new Usuario[0]);
     }
-    public Usuario recuperarUsuario(Usuario credenciales) {
+    public Usuario recuperarUsuario(int  cedula) {
         Usuario resultado=null;
         try (Connection cnx = obtenerConexion();
             PreparedStatement stm = cnx.prepareStatement(CMD_RECUPERAR_USUARIO)) {
             stm.clearParameters();
             
-            stm.setInt(1, credenciales.getCedula());
+            stm.setInt(1, cedula);
 
             try (ResultSet rs = stm.executeQuery()) {
                 if (rs.next()) {
