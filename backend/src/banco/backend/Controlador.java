@@ -5,6 +5,7 @@
  */
 package banco.backend;
 
+import banco.backend.dao.BancoDAO;
 import banco.backend.estructuras.Usuario;
 
 /**
@@ -13,6 +14,9 @@ import banco.backend.estructuras.Usuario;
  */
 public class Controlador {
 
+    private Controlador(){
+        
+    }
     
     public Usuario login(Usuario credenciales){
         return new Usuario();
@@ -24,4 +28,5 @@ public class Controlador {
     public static Controlador getInstancia() {
         return  instancia == null ? instancia=new Controlador() : instancia;
     }
+    BancoDAO bd = BancoDAO.obtenerInstancia();
 }
