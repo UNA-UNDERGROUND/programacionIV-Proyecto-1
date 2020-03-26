@@ -21,6 +21,7 @@ import java.util.Properties;
  */
 public class BancoDAO {
 
+    //<editor-fold desc="Metodos de generales" defaultstate="collapsed">
     private BancoDAO() {
         try {
             this.cfg.load(getClass().getResourceAsStream("configuracion.properties"));
@@ -47,7 +48,7 @@ public class BancoDAO {
     public static BancoDAO obtenerInstancia() {
         return instancia == null ? instancia=new BancoDAO() : instancia;
     }
-
+    //</editor-fold>
 
     //<editor-fold desc="Metodos de estructuras" defaultstate="collapsed">
     //<editor-fold desc="Cuenta" defaultstate="collapsed">
@@ -110,8 +111,9 @@ public class BancoDAO {
 
     //</editor-fold>
 
+    //<editor-fold desc="Cliente" defaultstate="collapsed">
 
-
+    //</editor-fold>
     //</editor-fold>
     private static BancoDAO instancia = null;
 
