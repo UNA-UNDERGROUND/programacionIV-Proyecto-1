@@ -37,7 +37,8 @@ public class BancoDAO {
             return GestorBD.obtenerInstancia().obtenerConexion(baseDatos, usuario, clave);
         }
         catch(SQLException e){
-            System.err.printf("No se pudo conectar con la base de datos: %s \n", e.getLocalizedMessage());
+            String error = e.getLocalizedMessage();
+            System.err.printf("No se pudo conectar con la base de datos: %s \n", error);
             return null;
         }
         
@@ -123,15 +124,15 @@ public class BancoDAO {
     private static final String CMD_AGREGAR_USUARIO
             = "INSERT INTO usuario (cedula, pass) VALUES (?, ?);";
     private static final String CMD_RECUPERAR_USUARIOS
-            = "select * from usuario";
+            = "select * from usuario;";
     private static final String CMD_RECUPERAR_USUARIO
-        = "select * from usuario"
+        = "select * from usuario "
         + "where cedula = ?";
     
     private static final String CMD_ACTUALIZAR_USUARIO
             = "UPDATE usuario " +
             "SET pass = ? " +
-            "WHERE cedula=?, pass = ? ";
+            "WHERE cedula=?, pass = ?;";
 
     //</editor-fold>
 
