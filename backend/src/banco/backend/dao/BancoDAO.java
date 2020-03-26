@@ -5,6 +5,7 @@
  */
 package banco.backend.dao;
 
+import banco.backend.estructuras.Cliente;
 import banco.backend.estructuras.Usuario;
 import java.io.IOException;
 import java.sql.Connection;
@@ -67,7 +68,6 @@ public class BancoDAO {
         }
         return false;
     }
-
     public Usuario[] recuperarUsuarios() {
         List<Usuario> lista = new ArrayList<>();
         try (Connection cnx = obtenerConexion();
@@ -113,6 +113,33 @@ public class BancoDAO {
 
     //<editor-fold desc="Cliente" defaultstate="collapsed">
 
+        public Cliente recuperarCliente(int  cedula) {
+        Cliente resultado=null;
+        try (Connection cnx = obtenerConexion();
+            PreparedStatement stm = cnx.prepareStatement(CMD_RECUPERAR_CLIENTE)) {
+            stm.clearParameters();
+            
+            stm.setInt(1, cedula);
+
+            try (ResultSet rs = stm.executeQuery()) {
+                if (rs.next()) {
+                    resultado = 
+                        new Cliente(
+                            rs.getInt(1), 
+                            rs.getString(2), 
+                            rs.getString(3),
+                            rs.getString(4)
+                        );
+                }
+            } catch (Exception ex) {
+                System.err.println(ex.getMessage());
+            }
+        } catch (Exception ex) {
+            System.err.println(ex.getMessage());
+        }
+        return resultado;
+    }
+    
     //</editor-fold>
     //</editor-fold>
     private static BancoDAO instancia = null;
@@ -136,6 +163,11 @@ public class BancoDAO {
             "SET pass = ? " +
             "WHERE cedula=?, pass = ?;";
 
+    private static final String CMD_RECUPERAR_CLIENTE
+        = "select * from cliente"
+        + "where cedula = *";
+    
+    
     //</editor-fold>
 
 
