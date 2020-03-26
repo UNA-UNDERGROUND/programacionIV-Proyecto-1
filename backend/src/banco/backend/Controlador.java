@@ -19,12 +19,9 @@ public class Controlador {
     }
     
     
-    private static Controlador uniqueInstance;
+    private static Controlador instancia;
 
     public static Controlador getInstancia() {
-        if (uniqueInstance == null) {
-            uniqueInstance = new Controlador();
-        }
-        return uniqueInstance;
+        return  instancia == null ? instancia=new Controlador() : instancia;
     }
 }
