@@ -53,8 +53,8 @@ public class Cliente {
         return this;
     }
 
-    public int cedula;
-    public String nombre = "";
-    public String apellidos = "";
-    public String numero = "";
+    private int cedula;
+    private String nombre = "";
+    private String apellidos = "";
+    private String numero = "";
 }
