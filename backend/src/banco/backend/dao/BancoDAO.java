@@ -22,7 +22,6 @@ import java.util.Properties;
 public class BancoDAO {
 
     private BancoDAO() {
-        this.cfg = new Properties();
         try {
             this.cfg.load(getClass().getResourceAsStream("configuracion.properties"));
             this.baseDatos = cfg.getProperty("base_datos");
@@ -45,10 +44,7 @@ public class BancoDAO {
     }
 
     public static BancoDAO obtenerInstancia() {
-        if (instancia == null) {
-            instancia = new BancoDAO();
-        }
-        return instancia;
+        return instancia == null ? instancia=new BancoDAO() : instancia;
     }
 
 
@@ -118,7 +114,7 @@ public class BancoDAO {
     //</editor-fold>
     private static BancoDAO instancia = null;
 
-    private Properties cfg;
+    private Properties cfg=new Properties();
     private String baseDatos;
     private String usuario;
     private String clave;
