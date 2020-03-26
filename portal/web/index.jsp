@@ -8,7 +8,12 @@
     </head>
     <body>
         <%@ include file="/presentation/Header.jsp" %>
-        <h1>Banco SWBC</h1>
+        <div class="contenido centrado">
+            <h1>Banco SWBC</h1>
+            
+        </div>
+        
+        
         
         <%@ include file="/presentation/Footer.jsp" %>
     </body>
