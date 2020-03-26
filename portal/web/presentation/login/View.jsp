@@ -28,6 +28,10 @@
                             <%if(textoError!=null){%>
                             <div class="erroneo">
                                 <label><%=textoError%></label>
+                                <%if(errores!=null){%>
+                                <%for(String error: errores.values()){%>
+                                    <label><%=error%></label>
+                                <%}}%>
                             </div>
                             <%}%>
                             
