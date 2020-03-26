@@ -18,6 +18,15 @@
     transition: background-color 100ms linear;
 }
 
+.campo-entrada.erroneo input {
+    border-style: solid;
+    border-color: #682f2fbe;
+}
+
+.campo-entrada.erroneo input:hover {
+    border-color: #771212be;
+}
+
 .campo-entrada.campo-entrada input:focus {
     background: #4f4f4f;
 }
