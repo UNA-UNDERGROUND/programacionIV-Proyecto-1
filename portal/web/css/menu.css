@@ -1,20 +1,41 @@
 header {
-  overflow: hidden;
-  background-color: #333;
-  position: fixed; /* Set the navbar to fixed position */
-  top: 0; /* Position the navbar at the top of the page */
-  width: 100%; /* Full width */
+    overflow: hidden;
+    background-color: #333;
+    position: fixed;
+    top: 0; 
+    width: 100%;
 }
 
 .contenido{
-  margin-top: 30px; /* Add a top margin to avoid content overlay */
-  margin-bottom: 30px;
+    margin-top: 30px;
+    margin-bottom: 30px;
 }
 
 footer{
-    position: fixed; /* Set the navbar to fixed position */
-    bottom: 0; /* Position the navbar at the bottom of the page */
-  width: 100%; 
+    position: fixed; 
+    bottom: 0; 
+    width: 100%; 
+    padding: 15px;
+}
+
+footer>ul{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+footer>ul>li {
+  float: left;
+}
+
+footer>ul>li.centro {
+  float: none;
+  display: inline-block;
+}
+
+footer>ul>li.derecha {
+  float: right;
 }
 
 .menu{
