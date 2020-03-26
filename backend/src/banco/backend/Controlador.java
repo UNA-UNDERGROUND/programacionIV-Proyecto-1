@@ -19,8 +19,13 @@ public class Controlador {
     }
 
     public Usuario login(Usuario credenciales) {
+        Usuario  res = bd.recuperarUsuario(credenciales);
+        
+        if(res!=null && !res.equals(credenciales)){
+                res=null;
+        }
 
-        return null;
+        return res;
     }
 
     private static Controlador instancia;
