@@ -15,23 +15,23 @@ public class Usuario {
         
     }
 
-    public Usuario(String cedula, String pass) {
+    public Usuario(int cedula, String pass) {
         this.cedula = cedula;
         this.pass = pass;
     }
 
-    public Usuario(String cedula, String pass, boolean administrativo) {
+    public Usuario(int cedula, String pass, boolean administrativo) {
         this.cedula = cedula;
         this.pass = pass;
         this.administrativo = administrativo;
     }
 
     public Usuario(Object[] datos) {
-        this((String) datos[0], (String) datos[1], (boolean) datos[2]);
+        this((int) datos[0], (String) datos[1], (boolean) datos[2]);
     }
 
-    public Usuario setCedula(String cedula) {
-        this.cedula=cedula;
+    public Usuario setCedula(int cedula) {
+        this.cedula = cedula;
         return this;
     }
 
@@ -45,7 +45,7 @@ public class Usuario {
         return this;
     }
 
-    public String getCedula() {
+    public int getCedula() {
         return cedula;
     }
 
@@ -61,11 +61,12 @@ public class Usuario {
         return new Object[]{cedula, pass, administrativo};
     }
 
+    @Override
     public String toString() {
         return "Cedula de Usuario: " + cedula + " Tipo de cuenta : " + (administrativo ? "Administrativo" : "Cliente");
     }
 
-    private String cedula="";
+    private int cedula=0;
     private String pass="";
     private boolean administrativo=false;
 }

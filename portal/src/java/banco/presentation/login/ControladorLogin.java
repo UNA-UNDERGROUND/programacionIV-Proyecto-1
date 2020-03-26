@@ -48,6 +48,14 @@ public class ControladorLogin extends HttpServlet {
         if (request.getParameter("usuario").isEmpty() ) {
             errores.put("usuario", "cedula requerida");
         }
+        else{
+            try{
+                Integer.parseInt(request.getParameter("usuario"));
+            }
+            catch(NumberFormatException e){
+                errores.put("usuario", "formato de cedula incorrecto");
+            }
+        }
         if (request.getParameter("pass").isEmpty()) {
             errores.put("pass", "contraseña requerida");
         }
@@ -65,8 +73,8 @@ public class ControladorLogin extends HttpServlet {
                 this.updateModel(request);
                 return this.loginAction(request);
             } else {
-                request.setAttribute("textoError", "Se requiere ingresar el usuario y contraseña");
-                return "/presentation/login/login.jsp";
+                request.setAttribute("textoError", "Verifique la informacion de los datos");
+                return "/presentation/login/View.jsp";
             }
         } catch (Exception e) {
             return "/presentation/Error.jsp";
@@ -110,7 +118,7 @@ public class ControladorLogin extends HttpServlet {
     void updateModel(HttpServletRequest request) {
         Credenciales model = (Credenciales) request.getAttribute("credenciales");
 
-        model.getCurrent().setCedula((String)request.getParameter("usuario"));
+        model.getCurrent().setCedula(Integer.parseInt(request.getParameter("usuario")));
         model.getCurrent().setPass(request.getParameter("pass"));
         //las casillas sin marcar no son enviadas
         if(request.getParameterValues("admin")!=null){

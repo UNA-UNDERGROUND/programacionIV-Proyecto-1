@@ -60,7 +60,7 @@ public class BancoDAO {
                 PreparedStatement stm = cnx.prepareStatement(CMD_AGREGAR_USUARIO)) {
 
             stm.clearParameters();
-            stm.setInt(1, Integer.parseInt(usuario.getCedula()));
+            stm.setInt(1, usuario.getCedula());
             stm.setString(2, usuario.getPass());
             
             return stm.executeUpdate() == 1;
