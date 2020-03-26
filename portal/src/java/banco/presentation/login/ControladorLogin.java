@@ -60,7 +60,7 @@ public class ControladorLogin extends HttpServlet {
         if (request.getParameter("pass").isEmpty()) {
             errores.put("pass", "contraseña requerida");
         }
-        request.setAttribute("listaErrores", errores);
+        request.setAttribute("errores", errores);
         return errores.isEmpty();
     }
 
