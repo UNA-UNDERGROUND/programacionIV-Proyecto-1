@@ -10,37 +10,62 @@ package banco.backend.estructuras;
  * @author jonguz
  */
 public class Usuario {
-    public Usuario(){
+
+    public Usuario() {
         
     }
-    public Usuario(String cedula, String pass){
+
+    public Usuario(String cedula, String pass) {
         this.cedula = cedula;
         this.pass = pass;
     }
-    public Usuario(Object[] datos){
-        this((String)datos[0], (String)datos[1]);
+
+    public Usuario(String cedula, String pass, boolean administrativo) {
+        this.cedula = cedula;
+        this.pass = pass;
+        this.administrativo = administrativo;
     }
-    
-    public Usuario setPass(String pass){
+
+    public Usuario(Object[] datos) {
+        this((String) datos[0], (String) datos[1], (boolean) datos[2]);
+    }
+
+    public Usuario setCedula(String cedula) {
+        this.cedula=cedula;
+        return this;
+    }
+
+    public Usuario setPass(String pass) {
         this.pass = pass;
         return this;
     }
-    public String getCedula(){
+
+    public Usuario setAdministrativo(boolean administrativo) {
+        this.administrativo = administrativo;
+        return this;
+    }
+
+    public String getCedula() {
         return cedula;
     }
-    
-    public String getPass(){
+
+    public String getPass() {
         return pass;
     }
-    
-    public Object[] toArray(){
-        return new Object[]{cedula, pass};
+
+    public boolean esAdministrativo() {
+        return administrativo;
     }
-    
-    public String toString(){
-        return "Cedula de Usuario: " + cedula + " Pass: " + pass;
+
+    public Object[] toArray() {
+        return new Object[]{cedula, pass, administrativo};
     }
-    
-    private String cedula;
-    private String pass;
+
+    public String toString() {
+        return "Cedula de Usuario: " + cedula + " Tipo de cuenta : " + (administrativo ? "Administrativo" : "Cliente");
+    }
+
+    private String cedula="";
+    private String pass="";
+    private boolean administrativo=false;
 }
