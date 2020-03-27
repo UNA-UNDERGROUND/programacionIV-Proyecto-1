@@ -7,10 +7,10 @@
 
 <header>
     <div class="logo">
-        <img src="/images/logo.png" alt="logo">
+        <img src="/portal/images/logo.png" alt="logo">
         <div class="overlay">
             <div>
-                <a href="/">Inicio</a>
+                <a href="/portal">Inicio</a>
             </div>
         </div>
     </div>
@@ -26,8 +26,8 @@
         </ul>
     </nav>
     <%if (usuario == null) {%>
-            <a href="/login/show"><button>Iniciar Sesion</button></a>
+            <a href="/portal/login/show"><button>Iniciar Sesion</button></a>
         <%} else {%>
-            <a href="/logout"><button>Cerrar Sesion</button></a>
+            <a href="/portal/logout"><button>Cerrar Sesion</button></a>
      <%}%>
 </header>
