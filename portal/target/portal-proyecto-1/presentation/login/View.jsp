@@ -1,6 +1,7 @@
+<%@page import="banco.frontend.login.Credenciales"%>
 <%@page import="java.util.HashMap"%>
 <%@page import="java.util.Map"%>
-<%@page import="banco.presentation.login.Credenciales"%>
+
     <%@page contentType="text/html" pageEncoding="UTF-8"%>
         <!DOCTYPE html>
         <html>

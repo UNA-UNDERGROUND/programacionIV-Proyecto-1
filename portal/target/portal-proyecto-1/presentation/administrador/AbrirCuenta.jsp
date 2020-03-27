@@ -1,6 +1,7 @@
+<%@page import="banco.frontend.login.Credenciales"%>
 <%@page import="java.util.HashMap"%>
 <%@page import="java.util.Map"%>
-<%@page import="banco.presentation.login.Credenciales"%>
+
     <%@page contentType="text/html" pageEncoding="UTF-8"%>
         <!DOCTYPE html>
         <html>
@@ -10,7 +11,7 @@
             <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
             <title>Login</title>
             <%@ include file="/presentation/Head.jsp" %>
-                <link rel="stylesheet" href="/portal/css/componentes/login-form.css">
+                <link rel="stylesheet" href="/portal/css/componentes/formulario.css">
                 <meta name="viewport" content="width=device-width, initial-scale=1">
         </head>
 
@@ -21,7 +22,7 @@
             <%Map<String, String>  errores = (Map<String, String>) request.getAttribute("errores"); %>
             
                 <div class="contenido">
-                    <div class="login-form">
+                    <div class="formulario">
                         <h6>Registrar Cuenta</h6>
 
                         <form action="/portal/login" method="post">
@@ -36,7 +37,7 @@
                             <%}%>
                             
                             <div class="campo-entrada <%=erroneo("limite",errores)%>">
-                                <input type="number" id="limite" name="limite" value="100000" required>
+                                <input type="number" id="limite" name="limite" value="100000" placeholder=" " required>
                                 <label for="limite">Limite transferencia</label>
                             </div>
 
