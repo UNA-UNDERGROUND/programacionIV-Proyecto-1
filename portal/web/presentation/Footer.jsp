@@ -6,11 +6,4 @@
             </li>
         </ul>
     </nav>
-    <div>
-        <a>tema del sitio: </a>
-        <select>
-            <option>Oscuro</option>
-            <option>Claro</option>
-        </select>
-    </div>
 </footer>
