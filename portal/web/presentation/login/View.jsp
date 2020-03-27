@@ -36,7 +36,7 @@
                             <%}%>
                             
                             <div class="campo-entrada <%=erroneo("usuario",errores)%>">
-                                <input type="text" id="cedula" name="usuario" required>
+                                <input type="text" id="cedula" name="usuario" pattern="\d+" title="Ingrese una cedula valida sin guiones y/o espacios" required>
                                 <label for="cedula">Cedula</label>
                             </div>
                             <div class="campo-entrada <%=erroneo("pass",errores)%>">
