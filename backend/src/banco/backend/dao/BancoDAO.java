@@ -33,26 +33,25 @@ public class BancoDAO {
             System.err.printf("Excepción: '%s'%n", ex.getMessage());
         }
     }
-    
-    private Connection obtenerConexion(){
-        try{
+
+    private Connection obtenerConexion() {
+        try {
             return GestorBD.obtenerInstancia().obtenerConexion(baseDatos, usuario, clave);
-        }
-        catch(SQLException e){
+        } catch (SQLException e) {
             String error = e.getLocalizedMessage();
             System.err.printf("No se pudo conectar con la base de datos: %s \n", error);
             return null;
         }
-        
+
     }
 
     public static BancoDAO obtenerInstancia() {
-        return instancia == null ? instancia=new BancoDAO() : instancia;
+        return instancia == null ? instancia = new BancoDAO() : instancia;
     }
     //</editor-fold>
 
     //<editor-fold desc="Metodos de estructuras" defaultstate="collapsed">
-    //<editor-fold desc="Cuenta" defaultstate="collapsed">
+    //<editor-fold desc="Usuario" defaultstate="collapsed">
     public boolean agregarUsuario(Usuario usuario) {
 
         try (Connection cnx = obtenerConexion();
@@ -61,13 +60,14 @@ public class BancoDAO {
             stm.clearParameters();
             stm.setInt(1, usuario.getCedula());
             stm.setString(2, usuario.getPass());
-            
+
             return stm.executeUpdate() == 1;
         } catch (Exception ex) {
             System.err.printf("No se pudo insertar un usuario nuevo: %s \n", ex.getMessage());
         }
         return false;
     }
+
     public Usuario[] recuperarUsuarios() {
         List<Usuario> lista = new ArrayList<>();
         try (Connection cnx = obtenerConexion();
@@ -86,17 +86,22 @@ public class BancoDAO {
         }
         return lista.toArray(new Usuario[0]);
     }
-    public Usuario recuperarUsuario(int  cedula) {
-        Usuario resultado=null;
+
+    public Usuario recuperarUsuario(Usuario credenciales) {
+        Usuario resultado = null;
         try (Connection cnx = obtenerConexion();
-            PreparedStatement stm = cnx.prepareStatement(CMD_RECUPERAR_USUARIO)) {
+                PreparedStatement stm
+                = cnx.prepareStatement(
+                        credenciales.esAdministrativo()
+                        ? CMD_RECUPERAR_ADMIN
+                        : CMD_RECUPERAR_USUARIO)) {
             stm.clearParameters();
-            
-            stm.setInt(1, cedula);
+
+            stm.setInt(1, credenciales.getCedula());
 
             try (ResultSet rs = stm.executeQuery()) {
                 if (rs.next()) {
-                    resultado = new Usuario(rs.getInt(1), rs.getString(2));
+                    resultado = new Usuario(rs.getInt(1), rs.getString(2), credenciales.esAdministrativo());
                 }
             } catch (Exception ex) {
                 System.err.println(ex.getMessage());
@@ -106,30 +111,26 @@ public class BancoDAO {
         }
         return resultado;
     }
-    
-    
 
     //</editor-fold>
-
     //<editor-fold desc="Cliente" defaultstate="collapsed">
-
-        public Cliente recuperarCliente(int  cedula) {
-        Cliente resultado=null;
+    public Cliente recuperarCliente(int cedula) {
+        Cliente resultado = null;
         try (Connection cnx = obtenerConexion();
-            PreparedStatement stm = cnx.prepareStatement(CMD_RECUPERAR_CLIENTE)) {
+                PreparedStatement stm = cnx.prepareStatement(CMD_RECUPERAR_CLIENTE)) {
             stm.clearParameters();
-            
+
             stm.setInt(1, cedula);
 
             try (ResultSet rs = stm.executeQuery()) {
                 if (rs.next()) {
-                    resultado = 
-                        new Cliente(
-                            rs.getInt(1), 
-                            rs.getString(2), 
-                            rs.getString(3),
-                            rs.getString(4)
-                        );
+                    resultado
+                            = new Cliente(
+                                    rs.getInt(1),
+                                    rs.getString(2),
+                                    rs.getString(3),
+                                    rs.getString(4)
+                            );
                 }
             } catch (Exception ex) {
                 System.err.println(ex.getMessage());
@@ -140,12 +141,12 @@ public class BancoDAO {
         }
         return resultado;
     }
-    
+
     //</editor-fold>
     //</editor-fold>
     private static BancoDAO instancia = null;
 
-    private Properties cfg=new Properties();
+    private Properties cfg = new Properties();
     private String baseDatos;
     private String usuario;
     private String clave;
@@ -156,20 +157,21 @@ public class BancoDAO {
     private static final String CMD_RECUPERAR_USUARIOS
             = "select * from usuario;";
     private static final String CMD_RECUPERAR_USUARIO
-        = "select * from usuario "
-        + "where cedula = ?";
-    
+            = "select * from usuario "
+            + "where cedula = ?";
+
+    private static final String CMD_RECUPERAR_ADMIN
+            = "select * from administrador "
+            + "where cedula = ?";
+
     private static final String CMD_ACTUALIZAR_USUARIO
-            = "UPDATE usuario " +
-            "SET pass = ? " +
-            "WHERE cedula=?, pass = ?;";
+            = "UPDATE usuario "
+            + "SET pass = ? "
+            + "WHERE cedula=?, pass = ?;";
 
     private static final String CMD_RECUPERAR_CLIENTE
-        = "select * from cliente "
-        + "where cedula = ?";
-    
-    
+            = "select * from cliente "
+            + "where cedula = ?";
+
     //</editor-fold>
-
-
 }
