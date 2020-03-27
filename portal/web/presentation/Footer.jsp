@@ -1,7 +1,7 @@
 <footer>
     <nav>
         <ul>
-            <li class="centro">
+            <li>
                 <a>Banco PSB 2020.</a>
             </li>
         </ul>
