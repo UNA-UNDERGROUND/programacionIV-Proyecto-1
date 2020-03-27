@@ -1,29 +1,20 @@
 footer {
-    position: fixed;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    text-align: center;
-    padding: 15px;
+    display: flex;
+    align-items: center;
+    padding: 15px 1%;
     background-color: #24252A;
 }
 
-footer>ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
+footer>nav {
+    text-align: center;
+    width: 100%;
 }
 
-footer>ul>li {
-    float: left;
+footer>nav>ul {
+    list-style: none;
 }
-
-footer>ul>li {
-    float: none;
+footer>nav>ul li {
     display: inline-block;
+    padding: 0px 20px;
 }
 
-footer>ul>li.derecha {
-    float: right;
-}
