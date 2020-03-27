@@ -4,3 +4,7 @@
   background: #202020;
   padding: 30px 60px;
 }
+
+.login-form>form:valid button{
+  background: #037bee;
+}
