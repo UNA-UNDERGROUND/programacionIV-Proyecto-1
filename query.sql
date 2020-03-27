@@ -15,6 +15,11 @@ CREATE TABLE usuario (
     REFERENCES cliente(cedula)
 );
 
+CREATE TABLE administrador (
+  cedula int NOT NULL PRIMARY KEY,
+  pass varchar(8) NOT NULL
+);
+
 CREATE TABLE cuenta (
   id_cuenta int NOT NULL AUTO_INCREMENT PRIMARY KEY,
   cedula int NOT NULL,
