@@ -19,7 +19,7 @@
         <ul>
             <%if (usuario != null) {%>
             <%if (usuario.esAdministrativo()) {%>
-            <li><a href="#">Abrir Cuenta</a></li>
+            <li><a href="/portal/admin/AbrirCuenta/show">Abrir Cuenta</a></li>
             <%}else{%>
             <li><a href="#">Ver Cuentas</a></li>
             <%}}%>
