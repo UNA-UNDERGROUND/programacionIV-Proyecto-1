@@ -104,7 +104,7 @@ public class ControladorLogin extends HttpServlet {
             session.setAttribute("usuario", usuario);
 
             if(usuario.esAdministrativo()){
-                viewUrl = "/admin";
+                viewUrl = "/";
             }
             else{
                 Cliente cliente = controlador.recuperarDatosPersonales(usuario);

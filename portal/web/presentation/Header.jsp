@@ -1,5 +1,9 @@
+<%@page import="banco.backend.estructuras.Cliente"%>
 <%@page import="banco.backend.estructuras.Usuario"%>
+<%Cliente cliente = (Cliente) session.getAttribute("cliente");%>
 <% Usuario usuario = (Usuario) session.getAttribute("usuario");%>
+
+
 
 <header>
     <div class="logo">
@@ -14,8 +18,11 @@
     <nav>
         <ul>
             <%if (usuario != null) {%>
+            <%if (usuario.esAdministrativo()) {%>
+            <li><a href="#">Abrir Cuenta</a></li>
+            <%}else{%>
             <li><a href="#">Ver Cuentas</a></li>
-            <%}%>
+            <%}}%>
         </ul>
     </nav>
     <%if (usuario == null) {%>
