@@ -1,28 +1,26 @@
 <%@page import="banco.backend.estructuras.Usuario"%>
-<% Usuario usuario=  (Usuario) session.getAttribute("usuario");%>
+<% Usuario usuario = (Usuario) session.getAttribute("usuario");%>
 
 <header>
     <div class="logo">
-        <span>Proyecto 1</span>
-    </div> 
-    <div class="menu">
-        <ul> 
-            <li>
-                
-            </li>
-              <li>
-                <a href="/portal">Inicio</a>
-              </li>
-              <%if(usuario==null){%>
-                <li>
-                  <a href="/portal/login/show">Iniciar Sesion</a>
-                </li>       
-                <%}else{%>
-                <li>
-                  <a href="/portal/logout">Cerrar Sesion</a>
-                </li>   
-                <%}%>
-            </ul>
+        <img src="/images/logo.png" alt="logo">
+        <div class="overlay">
+            <div>
+                <a href="/">Inicio</a>
+            </div>
+        </div>
     </div>
-  </header>          
 
+    <nav>
+        <ul>
+            <%if (usuario != null) {%>
+            <li><a href="#">Ver Cuentas</a></li>
+            <%}%>
+        </ul>
+    </nav>
+    <%if (usuario == null) {%>
+            <a href="/login/show"><button>Iniciar Sesion</button></a>
+        <%} else {%>
+            <a href="/logout"><button>Cerrar Sesion</button></a>
+     <%}%>
+</header>
