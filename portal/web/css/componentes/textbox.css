@@ -59,10 +59,3 @@
     border: 2px solid #1cbe2954;
     border-radius: 10px;
 }
-
-.campo-entrada label.active {
-    left: 5px;
-    top: -10px;
-    background: #fff;
-    padding: 0 5px;
-}
