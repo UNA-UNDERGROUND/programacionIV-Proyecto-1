@@ -40,7 +40,7 @@
                                 <label for="limite">Limite transferencia</label>
                             </div>
 
-                            <button class="submit">Iniciar sesion</button>
+                            <button class="submit">Crear Cuenta</button>
                         </form>
 
                     </div>
