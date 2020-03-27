@@ -45,7 +45,7 @@
 }
 
 .campo-entrada input:focus~label,
-.campo-entrada input:not([type=checkbox]):valid~label {
+.campo-entrada input:not([type=checkbox]):not(:placeholder-shown)~label {
     left: 5px;
     top: -10px;
     padding: 0 5px;
@@ -61,6 +61,11 @@
     border-radius: 10px;
     background: #1cbe2954;
     border: 2px solid #1cbe2954;
+}
+
+.campo-entrada input:not([type=checkbox]):not(:focus):not(:valid):not(:placeholder-shown)~label{
+    background: #682f2fbe;
+    border: 2px solid #682f2fbe;
 }
 
 /*.campo-entrada input:not([type=checkbox]):not(:focus):not(:valid)~label{

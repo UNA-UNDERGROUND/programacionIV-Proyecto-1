@@ -10,7 +10,6 @@
             <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
             <title>Login</title>
             <%@ include file="/presentation/Head.jsp" %>
-                <link rel="stylesheet" href="/portal/css/componentes/login-form.css">
                 <meta name="viewport" content="width=device-width, initial-scale=1">
         </head>
 
@@ -21,7 +20,7 @@
             <%Map<String, String>  errores = (Map<String, String>) request.getAttribute("errores"); %>
             
                 <div class="contenido centrado">
-                    <div class="login-form">
+                    <div class="formulario">
                         <h6>Iniciar sesion</h6>
 
                         <form action="/portal/login" method="post">
@@ -36,11 +35,11 @@
                             <%}%>
                             
                             <div class="campo-entrada <%=erroneo("usuario",errores)%>">
-                                <input type="text" id="cedula" name="usuario" pattern="\d+" title="Ingrese una cedula valida sin guiones y/o espacios" required>
+                                <input type="text" id="cedula" name="usuario" pattern="\d+" title="Ingrese una cedula valida sin guiones y/o espacios" placeholder=" " required>
                                 <label for="cedula">Cedula</label>
                             </div>
                             <div class="campo-entrada <%=erroneo("pass",errores)%>">
-                                <input type="password" id="contraseña" name="pass" required>
+                                <input type="password" id="contraseña" name="pass" placeholder=" " required>
                                 <label for="contraseña">Contraseña</label>
                             </div>
                             <div class="campo-entrada">
