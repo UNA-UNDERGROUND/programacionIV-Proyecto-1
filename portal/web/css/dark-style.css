@@ -2,18 +2,14 @@
 @import "componentes/button.css";
 @import "componentes/textbox.css";
 @import "componentes/div.css";
-
-
-.contenido.contenido  {
-    background: #121212;
+.contenido h6,
+h1,
+label {
+    color: #f1f1f1;
 }
 
-.contenido h6, h1, label{
-   color: #f1f1f1;
-}
-
-.contenido h6{
-  font-size: 15px;
-  text-transform: uppercase;
-  font-weight: 500;
+.contenido h6 {
+    font-size: 15px;
+    text-transform: uppercase;
+    font-weight: 500;
 }

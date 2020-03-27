@@ -9,10 +9,10 @@
 }
 
 .contenido {
-    margin-top: 30px;
     margin-bottom: 30px;
     min-height: 100vh;
     display: flex;
+    background-color: black;
 }
 
 .centrado {
@@ -20,20 +20,7 @@
     justify-content: center;
 }
 
-.logo>img {
-    margin-top: 10px;
-    height: 40px;
-    width: auto;
-}
-
-.logo>span {
-    font-family: cursive;
-    font-size: 2em;
-    color: rgb(255, 105, 45)
-}
-
 body {
-    background-color: darkslategray;
     background-position: center;
     background-size: cover;
 }
