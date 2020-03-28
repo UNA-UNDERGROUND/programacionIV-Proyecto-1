@@ -30,6 +30,18 @@ public class Usuario {
         this((int) datos[0], (String) datos[1], (boolean) datos[2]);
     }
 
+    public int getCedula() {
+        return cedula;
+    }
+
+    public String getPass() {
+        return pass;
+    }
+
+    public boolean esAdministrativo() {
+        return administrativo;
+    }
+
     public Usuario setCedula(int cedula) {
         this.cedula = cedula;
         return this;
@@ -43,18 +55,6 @@ public class Usuario {
     public Usuario setAdministrativo(boolean administrativo) {
         this.administrativo = administrativo;
         return this;
-    }
-
-    public int getCedula() {
-        return cedula;
-    }
-
-    public String getPass() {
-        return pass;
-    }
-
-    public boolean esAdministrativo() {
-        return administrativo;
     }
 
     public Object[] toArray() {
@@ -76,7 +76,6 @@ public class Usuario {
         if (!pass.equals(u.pass)) {
             return false;
         }
-   
 
         return true;
     }
