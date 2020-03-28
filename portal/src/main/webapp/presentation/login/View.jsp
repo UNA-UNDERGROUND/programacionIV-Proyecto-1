@@ -35,7 +35,9 @@
                             <%}%>
                             
                             <div class="campo-entrada <%=erroneo("usuario",errores)%>">
-                                <input type="text" id="cedula" name="usuario" value="<%=credenciales.getCedula()%>"  pattern="\d+" title="Ingrese una cedula valida sin guiones y/o espacios" placeholder=" " required>
+                                <input type="text" id="cedula" name="usuario" 
+                                       value="<%=credenciales.getCedula()==0? "" : credenciales.getCedula()%>"  
+                                       pattern="\d+" title="Ingrese una cedula valida sin guiones y/o espacios" placeholder=" " required>
                                 <label for="cedula">Cedula</label>
                             </div>
                             <div class="campo-entrada <%=erroneo("pass",errores)%>">
