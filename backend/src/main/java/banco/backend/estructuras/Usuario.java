@@ -11,6 +11,7 @@ package banco.backend.estructuras;
  */
 public class Usuario {
 
+    //<editor-fold desc="Constructores" defaultstate="collapsed">
     public Usuario() {
 
     }
@@ -25,11 +26,10 @@ public class Usuario {
         this.pass = pass;
         this.administrativo = administrativo;
     }
+    //</editor-fold>
 
-    public Usuario(Object[] datos) {
-        this((int) datos[0], (String) datos[1], (boolean) datos[2]);
-    }
-
+    //<editor-fold desc="Getters/Setters" defaultstate="collapsed">
+    //<editor-fold desc="Getters" defaultstate="collapsed">
     public int getCedula() {
         return cedula;
     }
@@ -41,7 +41,8 @@ public class Usuario {
     public boolean esAdministrativo() {
         return administrativo;
     }
-
+    //</editor-fold>
+    //<editor-fold desc="Setters" defaultstate="collapsed">
     public Usuario setCedula(int cedula) {
         this.cedula = cedula;
         return this;
@@ -56,15 +57,9 @@ public class Usuario {
         this.administrativo = administrativo;
         return this;
     }
+    //</editor-fold>
+    //</editor-fold>
 
-    public Object[] toArray() {
-        return new Object[]{cedula, pass, administrativo};
-    }
-
-    @Override
-    public String toString() {
-        return "Cedula de Usuario: " + cedula + " Tipo de cuenta : " + (administrativo ? "Administrativo" : "Cliente");
-    }
 
     public boolean equals(Usuario u) {
         if (administrativo != u.administrativo) {
