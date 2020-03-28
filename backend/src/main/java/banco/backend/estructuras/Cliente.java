@@ -11,6 +11,7 @@ package banco.backend.estructuras;
  */
 public class Cliente {
 
+    //<editor-fold desc="Constructores" defaultstate="collapsed">
     public Cliente(int cedula) {
         this.cedula = cedula;
     }
@@ -21,7 +22,10 @@ public class Cliente {
         this.apellidos = apellidos;
         this.numero = numero;
     }
-
+    //</editor-fold>
+    
+    //<editor-fold desc="Getters/Setters" defaultstate="collapsed">
+    //<editor-fold desc="Getters" defaultstate="collapsed">
     public int getCedula() {
         return cedula;
     }
@@ -37,7 +41,8 @@ public class Cliente {
     public String getNumero() {
         return numero;
     }
-
+    //</editor-fold>
+    //<editor-fold desc="Setters" defaultstate="collapsed">
     public Cliente setNombre(String nombre) {
         this.nombre = nombre;
         return this;
@@ -52,6 +57,8 @@ public class Cliente {
         this.numero = numero;
         return this;
     }
+    //</editor-fold>
+    //</editor-fold>
 
     private int cedula;
     private String nombre = "";
