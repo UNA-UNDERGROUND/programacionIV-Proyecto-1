@@ -35,11 +35,11 @@
                             <%}%>
                             
                             <div class="campo-entrada <%=erroneo("usuario",errores)%>">
-                                <input type="text" id="cedula" name="usuario" pattern="\d+" title="Ingrese una cedula valida sin guiones y/o espacios" placeholder=" " required>
+                                <input type="text" id="cedula" name="usuario" value="<%=credenciales.getCedula()%>"  pattern="\d+" title="Ingrese una cedula valida sin guiones y/o espacios" placeholder=" " required>
                                 <label for="cedula">Cedula</label>
                             </div>
                             <div class="campo-entrada <%=erroneo("pass",errores)%>">
-                                <input type="password" id="contraseña" name="pass" placeholder=" " required>
+                                <input type="password" id="contraseña" name="pass" value="<%=credenciales.getPass()%>" placeholder=" "  required>
                                 <label for="contraseña">Contraseña</label>
                             </div>
                             <div class="campo-entrada">
@@ -66,6 +66,5 @@
       else
         return "";
     }
-
-    
+   
 %> 

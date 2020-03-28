@@ -88,7 +88,7 @@ public class ControladorLogin extends HttpServlet {
     }
 
     public String showAction(HttpServletRequest request) {
-        HttpSession session = request.getSession(true);
+        //HttpSession session = request.getSession(true);
         return "/presentation/login/View.jsp";
     }
 
