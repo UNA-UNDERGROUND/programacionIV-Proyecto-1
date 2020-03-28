@@ -14,7 +14,7 @@
         </head>
 
         <body>
-            <%@ include file="/presentation/Header.jsp" %>
+             <jsp:include page="/presentation/Header.jsp" />
             <% Usuario credenciales= (Usuario) request.getAttribute("credenciales"); %>
             <%String  textoError = (String) request.getAttribute("textoError"); %>
             <%Map<String, String>  errores = (Map<String, String>) request.getAttribute("errores"); %>

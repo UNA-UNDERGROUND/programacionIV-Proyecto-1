@@ -1,4 +1,4 @@
-<%@page import="banco.frontend.login.Credenciales"%>
+<%@page import="banco.presentation.login.Credenciales"%>
 <%@page import="java.util.HashMap"%>
 <%@page import="java.util.Map"%>
 
@@ -17,7 +17,7 @@
 
         <body>
             <%@ include file="/presentation/Header.jsp" %>
-            <% Credenciales model= (Credenciales) request.getAttribute("credenciales"); %>
+            <% Credenciales credenciales= (Credenciales) request.getAttribute("credenciales"); %>
             <%String  textoError = (String) request.getAttribute("textoError"); %>
             <%Map<String, String>  errores = (Map<String, String>) request.getAttribute("errores"); %>
             
@@ -35,6 +35,10 @@
                                 <%}}%>
                             </div>
                             <%}%>
+                            
+                            
+                            
+                            
                             
                             <div class="campo-entrada <%=erroneo("limite",errores)%>">
                                 <input type="number" id="limite" name="limite" value="100000" placeholder=" " required>
