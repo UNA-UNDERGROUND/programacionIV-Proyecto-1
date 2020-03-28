@@ -7,7 +7,6 @@ package banco.frontend.cliente;
 
 import banco.backend.Controlador;
 import banco.backend.estructuras.Usuario;
-import banco.frontend.login.Credenciales;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
@@ -27,8 +26,6 @@ public class ControladorCliente extends HttpServlet {
     protected void processRequest(HttpServletRequest request,
         HttpServletResponse response)
         throws ServletException, IOException {
-
-        request.setAttribute("model", new Credenciales());
 
         String viewUrl = "";
         switch (request.getServletPath()) {
@@ -51,7 +48,7 @@ public class ControladorCliente extends HttpServlet {
     }
 
     public String showAction(HttpServletRequest request) {
-        Credenciales credenciales = (Credenciales) request.getAttribute("model");
+
         Controlador controlador = Controlador.getInstancia();
         HttpSession session = request.getSession(true);
         Usuario usuario = (Usuario) session.getAttribute("usuario");

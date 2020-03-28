@@ -28,8 +28,8 @@ public class ControladorLogin extends HttpServlet {
     protected void processRequest(HttpServletRequest request,
         HttpServletResponse response)
         throws ServletException, IOException {
-        request.setAttribute("credenciales", new Credenciales());
-
+        
+        request.setAttribute("credenciales", new Usuario());
         String viewUrl="";
         switch (request.getServletPath()) {
             case "/login/show":
@@ -88,19 +88,17 @@ public class ControladorLogin extends HttpServlet {
     }
 
     public String showAction(HttpServletRequest request) {
-        Credenciales model = (Credenciales) request.getAttribute("credenciales");
         HttpSession session = request.getSession(true);
-        model.reset();
         return "/presentation/login/View.jsp";
     }
 
     public String loginAction(HttpServletRequest request) {
-        Credenciales credenciales = (Credenciales) request.getAttribute("credenciales");
+        Usuario credenciales = (Usuario) request.getAttribute("credenciales");
         Controlador controlador = Controlador.getInstancia();
         HttpSession session = request.getSession(true);
         String viewUrl;
         try {
-            Usuario usuario = controlador.login(credenciales.getCurrent());
+            Usuario usuario = controlador.login(credenciales);
             session.setAttribute("usuario", usuario);
 
             if(usuario.esAdministrativo()){
@@ -127,13 +125,13 @@ public class ControladorLogin extends HttpServlet {
     }
     
     void updateModel(HttpServletRequest request) {
-        Credenciales model = (Credenciales) request.getAttribute("credenciales");
+        Usuario credenciales = (Usuario) request.getAttribute("credenciales");
 
-        model.getCurrent().setCedula(Integer.parseInt(request.getParameter("usuario")));
-        model.getCurrent().setPass(request.getParameter("pass"));
+        credenciales.setCedula(Integer.parseInt(request.getParameter("usuario")));
+        credenciales.setPass(request.getParameter("pass"));
         //las casillas sin marcar no son enviadas
         if(request.getParameterValues("admin")!=null){
-            model.getCurrent().setAdministrativo(true);
+            credenciales.setAdministrativo(true);
         }
           
     }

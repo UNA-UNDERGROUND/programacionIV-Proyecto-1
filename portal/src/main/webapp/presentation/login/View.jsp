@@ -1,4 +1,3 @@
-<%@page import="banco.frontend.login.Credenciales"%>
 <%@page import="java.util.HashMap"%>
 <%@page import="java.util.Map"%>
 
@@ -16,7 +15,7 @@
 
         <body>
             <%@ include file="/presentation/Header.jsp" %>
-            <% Credenciales model= (Credenciales) request.getAttribute("credenciales"); %>
+            <% Usuario credenciales= (Usuario) request.getAttribute("credenciales"); %>
             <%String  textoError = (String) request.getAttribute("textoError"); %>
             <%Map<String, String>  errores = (Map<String, String>) request.getAttribute("errores"); %>
             
