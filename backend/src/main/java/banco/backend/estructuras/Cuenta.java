@@ -15,11 +15,11 @@ public class Cuenta {
 
     //<editor-fold desc="Constructores" defaultstate="collapsed">
     
-    Cuenta() {
+    public Cuenta() {
 
     }
 
-    Cuenta(int id, int cedula, String moneda, BigDecimal saldo, int limiteDiario) {
+    public Cuenta(int id, int cedula, String moneda, BigDecimal saldo, int limiteDiario) {
         this.idCuenta = id;
         this.cedula = cedula;
         this.moneda = moneda;
