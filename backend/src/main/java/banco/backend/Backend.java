@@ -19,7 +19,7 @@ public class Backend {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        BancoDAO instancia = BancoDAO.obtenerInstancia();
+        BancoDAO instancia = new BancoDAO();
 
 
         

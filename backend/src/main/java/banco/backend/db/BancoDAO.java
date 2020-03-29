@@ -23,32 +23,13 @@ import java.util.Properties;
 public class BancoDAO {
 
     //<editor-fold desc="Metodos de generales" defaultstate="collapsed">
-    private BancoDAO() {
-        try {
 
-            this.cfg.load(getClass().getResourceAsStream(UBICACION_CREDENCIALES));
-            this.baseDatos = cfg.getProperty("base_datos");
-            this.usuario = cfg.getProperty("usuario");
-            this.clave = cfg.getProperty("clave");
-        } catch (IOException ex) {
-            System.err.printf("Excepción: '%s'%n", ex.getMessage());
-        }
+
+    protected Connection obtenerConexion() {
+        return GestorConexion.obtenerInstancia().obtenerConexion();
     }
 
-    private Connection obtenerConexion() {
-        try {
-            return GestorBD.obtenerInstancia().obtenerConexion(baseDatos, usuario, clave);
-        } catch (SQLException e) {
-            String error = e.getLocalizedMessage();
-            System.err.printf("No se pudo conectar con la base de datos: %s \n", error);
-            return null;
-        }
-
-    }
-
-    public static BancoDAO obtenerInstancia() {
-        return instancia == null ? instancia = new BancoDAO() : instancia;
-    }
+    
     //</editor-fold>
 
     //<editor-fold desc="Metodos de estructuras" defaultstate="collapsed">
@@ -286,11 +267,7 @@ public class BancoDAO {
     }
     //</editor-fold>
     private static BancoDAO instancia = null;
-    private static final String UBICACION_CREDENCIALES = "/configuraciones/credenciales-bd.properties";
-    private Properties cfg = new Properties();
-    private String baseDatos;
-    private String usuario;
-    private String clave;
+
 
     //<editor-fold desc="SENTENCIAS SQL" defaultstate="collapsed">
     //<editor-fold desc="Usuario" defaultstate="collapsed">

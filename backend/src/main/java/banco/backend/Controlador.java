@@ -40,5 +40,5 @@ public class Controlador {
     public static Controlador getInstancia() {
         return instancia == null ? instancia = new Controlador() : instancia;
     }
-    BancoDAO bd = BancoDAO.obtenerInstancia();
+    BancoDAO bd = new BancoDAO();
 }
