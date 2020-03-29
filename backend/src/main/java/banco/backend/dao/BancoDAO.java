@@ -55,7 +55,7 @@ public class BancoDAO {
     //<editor-fold desc="Metodos de estructuras" defaultstate="collapsed">
     //<editor-fold desc="Usuario" defaultstate="collapsed">
     public boolean agregarUsuario(Usuario usuario) {
-        String comando = usuario.esAdministrativo()?CMD_AGREGAR_ADMIN:CMD_AGREGAR_USUARIO;
+        String comando = usuario.esAdministrativo() ? CMD_AGREGAR_ADMIN : CMD_AGREGAR_USUARIO;
         try (Connection cnx = obtenerConexion();
                 PreparedStatement stm = cnx.prepareStatement(comando)) {
 
@@ -144,13 +144,13 @@ public class BancoDAO {
 
     //</editor-fold>
     //<editor-fold desc="Cuenta" defaultstate="collapsed">
-    public Cuenta recuperarCuenta(int cedula) {
+    public Cuenta recuperarCuenta(int numeroCuenta) {
         Cuenta resultado = null;
         try (Connection cnx = obtenerConexion();
-                PreparedStatement stm = cnx.prepareStatement(CMD_RECUPERAR_CLIENTE)) {
+                PreparedStatement stm = cnx.prepareStatement(CMD_RECUPERAR_CUENTA)) {
             stm.clearParameters();
 
-            stm.setInt(1, cedula);
+            stm.setInt(1, numeroCuenta);
 
             try (ResultSet rs = stm.executeQuery()) {
                 if (rs.next()) {
@@ -172,7 +172,36 @@ public class BancoDAO {
         }
         return resultado;
     }
-    //</editor-fold>
+    public Cuenta[] recuperarCuentas(int cedula) {
+        ArrayList<Cuenta> resultado = new ArrayList<>();
+        try (Connection cnx = obtenerConexion();
+                PreparedStatement stm = cnx.prepareStatement(CMD_RECUPERAR_CUENTAS)) {
+            stm.clearParameters();
+
+            stm.setInt(1, cedula);
+
+            try (ResultSet rs = stm.executeQuery()) {
+                while (rs.next()) {
+                    Cuenta nuevo
+                            = new Cuenta(
+                                    rs.getInt(1),
+                                    rs.getInt(2),
+                                    rs.getString(3),
+                                    rs.getBigDecimal(4),
+                                    rs.getInt(4)
+                            );
+                    resultado.add(nuevo);
+                }
+            } catch (Exception ex) {
+                System.err.println(ex.getMessage());
+            }
+        } catch (Exception ex) {
+            String error = ex.getLocalizedMessage();
+            System.err.println(error);
+        }
+        return resultado.toArray(new Cuenta[0]);
+    }
+//</editor-fold>
     private static BancoDAO instancia = null;
     private static final String UBICACION_CREDENCIALES = "/configuraciones/credenciales-bd.properties";
     private Properties cfg = new Properties();
@@ -203,6 +232,12 @@ public class BancoDAO {
     private static final String CMD_AGREGAR_CLIENTE
             = "insert into cliente (cedula, nombre, apellidos, telefono) "
             + "values (?, ?, ?, ?)";
+    private static final String CMD_RECUPERAR_CUENTA
+            = "select * from cuenta "
+            + "where id_cuenta = ?";
+    private static final String CMD_RECUPERAR_CUENTAS
+            = "select * from cuenta "
+            + "where cedula= ?";
 
     //</editor-fold>
 }
