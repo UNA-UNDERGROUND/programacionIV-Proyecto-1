@@ -178,6 +178,22 @@ public class BancoDAO {
 
     //</editor-fold>
     //<editor-fold desc="Cuenta" defaultstate="collapsed">
+    public boolean agregarCuenta(Cuenta cuenta) {
+        try (Connection cnx = obtenerConexion();
+                PreparedStatement stm = cnx.prepareStatement(CMD_AGREGAR_CUENTA)) {
+
+            stm.clearParameters();
+            stm.setInt(1, cuenta.getCedula());
+            stm.setString(2,  cuenta.getMoneda());
+            stm.setInt(3, cuenta.getLimiteTransferencia());
+
+            return stm.executeUpdate() == 1;
+        } catch (Exception ex) {
+            System.err.printf("No se pudo insertar un cliente nuevo: %s \n", ex.getMessage());
+        }
+        return false;
+    }
+    
     public Cuenta recuperarCuenta(int numeroCuenta) {
         Cuenta resultado = null;
         try (Connection cnx = obtenerConexion();
@@ -236,13 +252,13 @@ public class BancoDAO {
         }
         return resultado.toArray(new Cuenta[0]);
     }
-
+   
     //</editor-fold>
     //<editor-fold desc="Cuenta Vinculada" defaultstate="collapsed">
     public Cuenta[] recuperarCuentasVinculadas(int cedula) {
         ArrayList<Cuenta> resultado = new ArrayList<>();
         try (Connection cnx = obtenerConexion();
-                PreparedStatement stm = cnx.prepareStatement(CMD_RECUPERAR_CUENTA_VINCULADA)) {
+                PreparedStatement stm = cnx.prepareStatement(CMD_RECUPERAR_CUENTAS_VINCULADAS)) {
             stm.clearParameters();
 
             stm.setInt(1, cedula);
@@ -320,7 +336,7 @@ public class BancoDAO {
     private static final String CMD_AGREGAR_CUENTA
             = "insert into cuenta "
             + "(cedula, moneda, saldo, limite_transferencia) "
-            + "values (?, ?, ?, ?, ?);";
+            + "values (?, ?, 0, ?);";
     private static final String CMD_RECUPERAR_CUENTA
             = "select * from cuenta "
             + "where id_cuenta = ?;";
@@ -338,12 +354,17 @@ public class BancoDAO {
     //</editor-fold>
     //<editor-fold desc="Cuenta Vinculada" defaultstate="collapsed">
     private static final String CMD_AGREGAR_CUENTA_VINCULADA
-            = "insert into cuenta "
-            + "(id_cuenta, cedula) "
-            + "values (?, ?, ?, ?, ?);";
-    private static final String CMD_RECUPERAR_CUENTA_VINCULADA
-            = "select * from cuenta_vinculada "
-            + "where cedula= ?";
+            = "insert into cuenta_vinculada "
+            + "select ?, ?"
+            + "from cuenta "
+            + "where not exist "
+            + "select id_cuenta "
+            + "from cuenta "
+            + "where cedula = ?";
+    private static final String CMD_RECUPERAR_CUENTAS_VINCULADAS
+            = "select cuenta.* from cuenta_vinculada "
+            + "inner join cuenta "
+            + "on cuenta_vinculada.id_cuenta=cuenta.id_cuenta;";
     private static final String CMD_REMOVER_CUENTA_VINCULADA
             = "delete from cuenta_vinculada "
             + "where id_cuenta= ? cedula= ? ";
