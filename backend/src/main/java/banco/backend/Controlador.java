@@ -5,7 +5,7 @@
  */
 package banco.backend;
 
-import banco.backend.dao.BancoDAO;
+import banco.backend.db.BancoDAO;
 import banco.backend.estructuras.Cliente;
 import banco.backend.estructuras.Usuario;
 

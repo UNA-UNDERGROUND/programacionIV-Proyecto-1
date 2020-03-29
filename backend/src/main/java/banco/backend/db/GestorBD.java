@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package banco.backend.dao;
+package banco.backend.db;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -18,10 +18,8 @@ public class GestorBD {
     private GestorBD() {
         //System.out.printf("Inicializando manejador BD: '%s'..%n", CLASE_MANEJADOR);
         try {
-            Class.forName(CLASE_MANEJADOR).newInstance();
-        } catch (ClassNotFoundException
-                | IllegalAccessException
-                | InstantiationException ex) {
+            Class.forName(CLASE_MANEJADOR).getDeclaredConstructor().newInstance();
+        } catch (Exception ex) {
             System.err.printf("Excepción: '%s'%n", ex.getMessage());
         }
     }

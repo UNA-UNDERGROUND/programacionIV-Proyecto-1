@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package banco.backend.dao;
+package banco.backend.db;
 
 import banco.backend.estructuras.Cliente;
 import banco.backend.estructuras.Cuenta;
