@@ -178,7 +178,6 @@ public class BancoDAO {
 
     //</editor-fold>
     //<editor-fold desc="Cuenta" defaultstate="collapsed">
-
     public Cuenta recuperarCuenta(int numeroCuenta) {
         Cuenta resultado = null;
         try (Connection cnx = obtenerConexion();
@@ -238,10 +237,12 @@ public class BancoDAO {
         return resultado.toArray(new Cuenta[0]);
     }
 
+    //</editor-fold>
+    //<editor-fold desc="Cuenta Vinculada" defaultstate="collapsed">
     public Cuenta[] recuperarCuentasVinculadas(int cedula) {
         ArrayList<Cuenta> resultado = new ArrayList<>();
         try (Connection cnx = obtenerConexion();
-                PreparedStatement stm = cnx.prepareStatement(CMD_RECUPERAR_CUENTAS_VINCULADAS)) {
+                PreparedStatement stm = cnx.prepareStatement(CMD_RECUPERAR_CUENTA_VINCULADA)) {
             stm.clearParameters();
 
             stm.setInt(1, cedula);
@@ -267,7 +268,7 @@ public class BancoDAO {
         }
         return resultado.toArray(new Cuenta[0]);
     }
-//</editor-fold>
+    //</editor-fold>
     private static BancoDAO instancia = null;
     private static final String UBICACION_CREDENCIALES = "/configuraciones/credenciales-bd.properties";
     private Properties cfg = new Properties();
@@ -276,7 +277,7 @@ public class BancoDAO {
     private String clave;
 
     //<editor-fold desc="SENTENCIAS SQL" defaultstate="collapsed">
-     //<editor-fold desc="Usuario" defaultstate="collapsed">
+    //<editor-fold desc="Usuario" defaultstate="collapsed">
     private static final String CMD_AGREGAR_USUARIO
             = "INSERT INTO usuario "
             + "(cedula, pass) "
@@ -288,8 +289,8 @@ public class BancoDAO {
             = "UPDATE usuario "
             + "SET pass = ? "
             + "WHERE cedula=?, pass = ?;";
-     //</editor-fold>
-     //<editor-fold desc="Administrador" defaultstate="collapsed">
+    //</editor-fold>
+    //<editor-fold desc="Administrador" defaultstate="collapsed">
     private static final String CMD_AGREGAR_ADMIN
             = "INSERT INTO administrador "
             + "(cedula, pass) "
@@ -302,7 +303,7 @@ public class BancoDAO {
             + "SET pass = ? "
             + "WHERE cedula=?, pass = ?;";
     //</editor-fold>
-     //<editor-fold desc="Cliente" defaultstate="collapsed">
+    //<editor-fold desc="Cliente" defaultstate="collapsed">
     private static final String CMD_AGREGAR_CLIENTE
             = "insert into cliente "
             + "(cedula, nombre, apellidos, telefono) "
@@ -315,16 +316,53 @@ public class BancoDAO {
             + "SET nombre = ?, apellidos=?, numero=? "
             + "WHERE cedula=?;";
     //</editor-fold>
-     //<editor-fold desc="Cuenta" defaultstate="collapsed">
+    //<editor-fold desc="Cuenta" defaultstate="collapsed">
+    private static final String CMD_AGREGAR_CUENTA
+            = "insert into cuenta "
+            + "(cedula, moneda, saldo, limite_transferencia) "
+            + "values (?, ?, ?, ?, ?);";
     private static final String CMD_RECUPERAR_CUENTA
             = "select * from cuenta "
             + "where id_cuenta = ?;";
     private static final String CMD_RECUPERAR_CUENTAS
             = "select * from cuenta "
             + "where cedula= ?;";
-    private static final String CMD_RECUPERAR_CUENTAS_VINCULADAS
+    private static final String CMD_ACTUALIZAR_CUENTA_SALDO
+            = "UPDATE cliente "
+            + "SET saldo = ? "
+            + "WHERE cedula=?;";
+    private static final String CMD_ACTUALIZAR_CUENTA_LIMITE
+            = "UPDATE cliente "
+            + "SET saldo = ? "
+            + "WHERE cedula=?;";
+    //</editor-fold>
+    //<editor-fold desc="Cuenta Vinculada" defaultstate="collapsed">
+    private static final String CMD_AGREGAR_CUENTA_VINCULADA
+            = "insert into cuenta "
+            + "(id_cuenta, cedula) "
+            + "values (?, ?, ?, ?, ?);";
+    private static final String CMD_RECUPERAR_CUENTA_VINCULADA
             = "select * from cuenta_vinculada "
             + "where cedula= ?";
-    
+    private static final String CMD_REMOVER_CUENTA_VINCULADA
+            = "delete from cuenta_vinculada "
+            + "where id_cuenta= ? cedula= ? ";
+
+    //</editor-fold>
+    //<editor-fold desc="Moneda" defaultstate="collapsed">
+    private static final String CMD_RECUPERAR_MONEDA
+            = "select * from moneda";
+    private static final String CMD_RECUPERAR_MONEDAS
+            = "select * from moneda "
+            + "where codigo= ?";
+    //</editor-fold>
+    //<editor-fold desc="Movimiento" defaultstate="collapsed">
+    private static final String CMD_AGREGAR_MOVIMIENTO
+            = "insert into movimiento "
+            + "(id_cuenta, deposito, monto, descripcion)"
+            + "values (?, ?, ?, ?);";
+    private static final String CMD_RECUPERAR_MOVIMIENTO
+            = "select * from movimiento "
+            + "where id_transaccion = ?";
     //</editor-fold>
 }
