@@ -81,5 +81,5 @@
             </plugin>
         </plugins>
     </build>
-    <name>frontend</name>
+    <name>portal</name>
 </project>
