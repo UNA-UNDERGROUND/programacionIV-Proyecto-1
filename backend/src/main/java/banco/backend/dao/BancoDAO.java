@@ -94,6 +94,23 @@ public class BancoDAO {
         }
         return resultado;
     }
+    
+    public boolean modificarUsuario(Usuario usuario){
+                String comando = usuario.esAdministrativo() ? CMD_ACTUALIZAR_ADMIN : CMD_ACTUALIZAR_USUARIO;
+        try (Connection cnx = obtenerConexion();
+                PreparedStatement stm = cnx.prepareStatement(comando)) {
+
+            stm.clearParameters();
+             stm.setString(1, usuario.getPass());
+            stm.setInt(2, usuario.getCedula());
+            stm.setString(3, usuario.getPass());
+
+            return stm.executeUpdate() == 1;
+        } catch (Exception ex) {
+            System.err.printf("No se pudo insertar un usuario nuevo: %s \n", ex.getMessage());
+        }
+        return false;
+    }
 
     //</editor-fold>
     //<editor-fold desc="Cliente" defaultstate="collapsed">
@@ -244,15 +261,18 @@ public class BancoDAO {
     private static final String CMD_RECUPERAR_USUARIO
             = "select * from usuario "
             + "where cedula = ?";
+        private static final String CMD_ACTUALIZAR_USUARIO
+            = "UPDATE usuario "
+            + "SET pass = ? "
+            + "WHERE cedula=?, pass = ?;";
 
     private static final String CMD_AGREGAR_ADMIN
             = "INSERT INTO administrador (cedula, pass) VALUES (?, ?);";
     private static final String CMD_RECUPERAR_ADMIN
             = "select * from administrador "
             + "where cedula = ?";
-
-    private static final String CMD_ACTUALIZAR_USUARIO
-            = "UPDATE usuario "
+            private static final String CMD_ACTUALIZAR_ADMIN
+            = "UPDATE administrador "
             + "SET pass = ? "
             + "WHERE cedula=?, pass = ?;";
 
