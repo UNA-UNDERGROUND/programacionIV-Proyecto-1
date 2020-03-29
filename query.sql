@@ -55,3 +55,13 @@ CREATE TABLE movimiento(
 );
 
 
+CREATE TABLE cuenta_vinculada (
+  id_cuenta int NOT NULL,
+  cedula int NOT NULL,
+    CONSTRAINT FK_cuenta_vinculada_id_cuenta
+    FOREIGN KEY (id_cuenta)
+    REFERENCES cuenta(id_cuenta),
+  CONSTRAINT FK_cuenta_vinculada_cedula
+    FOREIGN KEY (cedula)
+    REFERENCES cliente(cedula)
+);
