@@ -54,9 +54,9 @@ public class BancoDAO {
     //<editor-fold desc="Metodos de estructuras" defaultstate="collapsed">
     //<editor-fold desc="Usuario" defaultstate="collapsed">
     public boolean agregarUsuario(Usuario usuario) {
-
+        String comando = usuario.esAdministrativo()?CMD_AGREGAR_ADMIN:CMD_AGREGAR_USUARIO;
         try (Connection cnx = obtenerConexion();
-                PreparedStatement stm = cnx.prepareStatement(CMD_AGREGAR_USUARIO)) {
+                PreparedStatement stm = cnx.prepareStatement(comando)) {
 
             stm.clearParameters();
             stm.setInt(1, usuario.getCedula());
