@@ -21,11 +21,7 @@ public class Backend {
     public static void main(String[] args) {
         BancoDAO instancia = BancoDAO.obtenerInstancia();
 
-        Usuario cuentas[] = instancia.recuperarUsuarios();
-        
-        for(Usuario u: cuentas){
-            System.out.println(u);
-        }
+
         
     }
     
