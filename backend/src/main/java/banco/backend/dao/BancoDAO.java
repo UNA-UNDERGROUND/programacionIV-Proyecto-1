@@ -201,6 +201,35 @@ public class BancoDAO {
         }
         return resultado.toArray(new Cuenta[0]);
     }
+    public Cuenta[] recuperarCuentasVinculadas(int cedula) {
+        ArrayList<Cuenta> resultado = new ArrayList<>();
+        try (Connection cnx = obtenerConexion();
+                PreparedStatement stm = cnx.prepareStatement(CMD_RECUPERAR_CUENTAS_VINCULADAS)) {
+            stm.clearParameters();
+
+            stm.setInt(1, cedula);
+
+            try (ResultSet rs = stm.executeQuery()) {
+                while (rs.next()) {
+                    Cuenta nuevo
+                            = new Cuenta(
+                                    rs.getInt(1),
+                                    rs.getInt(2),
+                                    rs.getString(3),
+                                    rs.getBigDecimal(4),
+                                    rs.getInt(4)
+                            );
+                    resultado.add(nuevo);
+                }
+            } catch (Exception ex) {
+                System.err.println(ex.getMessage());
+            }
+        } catch (Exception ex) {
+            String error = ex.getLocalizedMessage();
+            System.err.println(error);
+        }
+        return resultado.toArray(new Cuenta[0]);
+    }
 //</editor-fold>
     private static BancoDAO instancia = null;
     private static final String UBICACION_CREDENCIALES = "/configuraciones/credenciales-bd.properties";
@@ -226,6 +255,8 @@ public class BancoDAO {
             = "UPDATE usuario "
             + "SET pass = ? "
             + "WHERE cedula=?, pass = ?;";
+
+
     private static final String CMD_RECUPERAR_CLIENTE
             = "select * from cliente "
             + "where cedula = ?";
@@ -237,6 +268,9 @@ public class BancoDAO {
             + "where id_cuenta = ?";
     private static final String CMD_RECUPERAR_CUENTAS
             = "select * from cuenta "
+            + "where cedula= ?";
+    private static final String CMD_RECUPERAR_CUENTAS_VINCULADAS
+            = "select * from cuenta_vinculada "
             + "where cedula= ?";
 
     //</editor-fold>
