@@ -94,14 +94,14 @@ public class BancoDAO {
         }
         return resultado;
     }
-    
-    public boolean modificarUsuario(Usuario usuario){
-                String comando = usuario.esAdministrativo() ? CMD_ACTUALIZAR_ADMIN : CMD_ACTUALIZAR_USUARIO;
+
+    public boolean modificarUsuario(Usuario usuario) {
+        String comando = usuario.esAdministrativo() ? CMD_ACTUALIZAR_ADMIN : CMD_ACTUALIZAR_USUARIO;
         try (Connection cnx = obtenerConexion();
                 PreparedStatement stm = cnx.prepareStatement(comando)) {
 
             stm.clearParameters();
-             stm.setString(1, usuario.getPass());
+            stm.setString(1, usuario.getPass());
             stm.setInt(2, usuario.getCedula());
             stm.setString(3, usuario.getPass());
 
@@ -159,6 +159,24 @@ public class BancoDAO {
         return false;
     }
 
+    public boolean actualizarCliente(Cliente cliente) {
+        try (Connection cnx = obtenerConexion();
+                PreparedStatement stm = cnx.prepareStatement(CMD_ACTUALIZAR_CLIENTE)) {
+
+            stm.clearParameters();
+            
+            stm.setString(1, cliente.getNombre());
+            stm.setString(2, cliente.getApellidos());
+            stm.setString(3, cliente.getNumero());
+            stm.setInt(4, cliente.getCedula());
+
+            return stm.executeUpdate() == 1;
+        } catch (Exception ex) {
+            System.err.printf("No se pudo insertar un cliente nuevo: %s \n", ex.getMessage());
+        }
+        return false;
+    }
+
     //</editor-fold>
     //<editor-fold desc="Cuenta" defaultstate="collapsed">
     public Cuenta recuperarCuenta(int numeroCuenta) {
@@ -189,6 +207,7 @@ public class BancoDAO {
         }
         return resultado;
     }
+
     public Cuenta[] recuperarCuentas(int cedula) {
         ArrayList<Cuenta> resultado = new ArrayList<>();
         try (Connection cnx = obtenerConexion();
@@ -218,6 +237,7 @@ public class BancoDAO {
         }
         return resultado.toArray(new Cuenta[0]);
     }
+
     public Cuenta[] recuperarCuentasVinculadas(int cedula) {
         ArrayList<Cuenta> resultado = new ArrayList<>();
         try (Connection cnx = obtenerConexion();
@@ -257,38 +277,47 @@ public class BancoDAO {
 
     //<editor-fold desc="SENTENCIAS SQL" defaultstate="collapsed">
     private static final String CMD_AGREGAR_USUARIO
-            = "INSERT INTO usuario (cedula, pass) VALUES (?, ?);";
+            = "INSERT INTO usuario "
+            + "(cedula, pass) "
+            + "VALUES (?, ?);";
     private static final String CMD_RECUPERAR_USUARIO
             = "select * from usuario "
-            + "where cedula = ?";
-        private static final String CMD_ACTUALIZAR_USUARIO
+            + "where cedula = ?;";
+    private static final String CMD_ACTUALIZAR_USUARIO
             = "UPDATE usuario "
             + "SET pass = ? "
             + "WHERE cedula=?, pass = ?;";
 
     private static final String CMD_AGREGAR_ADMIN
-            = "INSERT INTO administrador (cedula, pass) VALUES (?, ?);";
+            = "INSERT INTO administrador "
+            + "(cedula, pass) "
+            + "VALUES (?, ?);";
     private static final String CMD_RECUPERAR_ADMIN
             = "select * from administrador "
-            + "where cedula = ?";
-            private static final String CMD_ACTUALIZAR_ADMIN
+            + "where cedula = ?;";
+    private static final String CMD_ACTUALIZAR_ADMIN
             = "UPDATE administrador "
             + "SET pass = ? "
             + "WHERE cedula=?, pass = ?;";
 
-
     private static final String CMD_RECUPERAR_CLIENTE
             = "select * from cliente "
-            + "where cedula = ?";
+            + "where cedula = ?;";
     private static final String CMD_AGREGAR_CLIENTE
-            = "insert into cliente (cedula, nombre, apellidos, telefono) "
-            + "values (?, ?, ?, ?)";
+            = "insert into cliente "
+            + "(cedula, nombre, apellidos, telefono) "
+            + "values (?, ?, ?, ?);";
+    private static final String CMD_ACTUALIZAR_CLIENTE
+            = "UPDATE cliente "
+            + "SET nombre = ?, apellidos=?, numero=? "
+            + "WHERE cedula=?;";
+
     private static final String CMD_RECUPERAR_CUENTA
             = "select * from cuenta "
-            + "where id_cuenta = ?";
+            + "where id_cuenta = ?;";
     private static final String CMD_RECUPERAR_CUENTAS
             = "select * from cuenta "
-            + "where cedula= ?";
+            + "where cedula= ?;";
     private static final String CMD_RECUPERAR_CUENTAS_VINCULADAS
             = "select * from cuenta_vinculada "
             + "where cedula= ?";
