@@ -8,6 +8,7 @@ package banco.backend;
 import banco.backend.db.BancoDAO;
 import banco.backend.estructuras.Cliente;
 import banco.backend.estructuras.Usuario;
+import banco.backend.estructuras.dao.UsuarioDAO;
 
 /**
  *
@@ -20,7 +21,7 @@ public class Controlador {
     }
 
     public Usuario login(Usuario credenciales) {
-        Usuario  res = bd.recuperarUsuario(credenciales);
+        Usuario  res = daoUsuario.recuperarUsuario(credenciales);
         
         if(res!=null && !res.equals(credenciales)){
                 res=null;
@@ -41,4 +42,5 @@ public class Controlador {
         return instancia == null ? instancia = new Controlador() : instancia;
     }
     BancoDAO bd = new BancoDAO();
+    UsuarioDAO daoUsuario = new UsuarioDAO();
 }
