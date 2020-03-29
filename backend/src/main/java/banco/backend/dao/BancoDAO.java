@@ -69,25 +69,6 @@ public class BancoDAO {
         return false;
     }
 
-    public Usuario[] recuperarUsuarios() {
-        List<Usuario> lista = new ArrayList<>();
-        try (Connection cnx = obtenerConexion();
-                PreparedStatement stm = cnx.prepareStatement(CMD_RECUPERAR_USUARIOS)) {
-            stm.clearParameters();
-
-            try (ResultSet rs = stm.executeQuery()) {
-                while (rs.next()) {
-                    lista.add(new Usuario(rs.getInt(1), rs.getString(2)));
-                }
-            } catch (Exception ex) {
-                System.err.println(ex.getMessage());
-            }
-        } catch (Exception ex) {
-            System.err.println(ex.getMessage());
-        }
-        return lista.toArray(new Usuario[0]);
-    }
-
     public Usuario recuperarUsuario(Usuario credenciales) {
         Usuario resultado = null;
         try (Connection cnx = obtenerConexion();
@@ -155,8 +136,6 @@ public class BancoDAO {
     //<editor-fold desc="SENTENCIAS SQL" defaultstate="collapsed">
     private static final String CMD_AGREGAR_USUARIO
             = "INSERT INTO usuario (cedula, pass) VALUES (?, ?);";
-    private static final String CMD_RECUPERAR_USUARIOS
-            = "select * from usuario;";
     private static final String CMD_RECUPERAR_USUARIO
             = "select * from usuario "
             + "where cedula = ?";
