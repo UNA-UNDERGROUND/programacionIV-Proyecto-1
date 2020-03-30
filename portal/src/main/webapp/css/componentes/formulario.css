@@ -8,3 +8,10 @@
 .formulario>form:valid button{
   background: #037bee;
 }
+
+.campo-entrada {
+    width: 100%;
+    height: 50px;
+    position: relative;
+    margin-top: 15px;
+}
