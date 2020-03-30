@@ -8,6 +8,7 @@ package banco.backend;
 import banco.backend.db.BancoDAO;
 import banco.backend.estructuras.Cliente;
 import banco.backend.estructuras.Usuario;
+import banco.backend.estructuras.dao.ClienteDAO;
 import banco.backend.estructuras.dao.UsuarioDAO;
 
 /**
@@ -30,7 +31,7 @@ public class Controlador {
         return res;
     }
     public Cliente   recuperarDatosPersonales(Usuario cliente){
-        Cliente resultado = bd.recuperarCliente(cliente.getCedula());
+        Cliente resultado = daoCliente.recuperarCliente(cliente.getCedula());
 
         return resultado;
     }
@@ -43,4 +44,5 @@ public class Controlador {
     }
     BancoDAO bd = new BancoDAO();
     UsuarioDAO daoUsuario = new UsuarioDAO();
+    ClienteDAO daoCliente = new ClienteDAO();
 }
