@@ -20,28 +20,27 @@ public class Movimiento {
             boolean deposito,
             BigDecimal monto,
             String descripcion,
-            Date fechaDeposito)
-    {
-        this.idTransaccion=idTransaccion;
-        this.idCuenta=idCuenta;
-        this.deposito=deposito;
+            Date fechaDeposito) {
+        this.idTransaccion = idTransaccion;
+        this.idCuenta = idCuenta;
+        this.deposito = deposito;
         this.monto = monto;
-        this.descripcion=descripcion;
+        this.descripcion = descripcion;
         this.fechaDeposito = fechaDeposito;
-        
+
     }
+
     Movimiento(
             int idCuenta,
             boolean deposito,
             BigDecimal monto,
-            String descripcion)
-    {
-        this.idCuenta=idCuenta;
-        this.deposito=deposito;
+            String descripcion) {
+        this.idCuenta = idCuenta;
+        this.deposito = deposito;
         this.monto = monto;
-        this.descripcion=descripcion;
+        this.descripcion = descripcion;
     }
-    
+
     public int getIdTransaccion() {
         return idTransaccion;
     }
@@ -66,11 +65,11 @@ public class Movimiento {
         return fechaDeposito;
     }
 
-    private int idTransaccion=0;
+    private int idTransaccion = 0;
     private int idCuenta;
     private boolean deposito;
     private BigDecimal monto;
-    private String descripcion="";
-    private Date fechaDeposito=null; 
+    private String descripcion = "";
+    private Date fechaDeposito = null;
 
 }
