@@ -78,9 +78,10 @@ public class MonedaDAO extends BancoDAO{
     
     //<editor-fold desc="Moneda" defaultstate="collapsed">
     private static final String CMD_RECUPERAR_MONEDA
-            = "select * from moneda";
-    private static final String CMD_RECUPERAR_MONEDAS
             = "select * from moneda "
             + "where codigo= ?";
+    private static final String CMD_RECUPERAR_MONEDAS
+            = "select * from moneda";
+            
     //</editor-fold>
 }
