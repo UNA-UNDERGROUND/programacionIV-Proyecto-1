@@ -16,3 +16,6 @@ button.submit:hover{
     opacity: .7;
 }
   
+.formulario>form:valid button{
+  background: #037bee;
+}
