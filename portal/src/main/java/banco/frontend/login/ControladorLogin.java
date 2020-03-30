@@ -105,7 +105,7 @@ public class ControladorLogin extends HttpServlet {
                 viewUrl = "/";
             }
             else{
-                Cliente cliente = controlador.recuperarDatosPersonales(usuario);
+                Cliente cliente = controlador.recuperarDatosPersonales(usuario.getCedula());
                 session.setAttribute("cliente", cliente);
                 viewUrl = "/";
             }
