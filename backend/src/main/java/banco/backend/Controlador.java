@@ -30,10 +30,17 @@ public class Controlador {
 
         return res;
     }
-    public Cliente   recuperarDatosPersonales(Usuario cliente){
-        Cliente resultado = daoCliente.recuperarCliente(cliente.getCedula());
+    
+    public Cliente   recuperarDatosPersonales(int cedula){
+        Cliente resultado = daoCliente.recuperarCliente(cedula);
 
         return resultado;
+    }
+    public boolean registrarCliente(Cliente cliente){
+        return daoCliente.agregarCliente(cliente);
+    }
+    public boolean actualizarCliente(Cliente cliente){
+        return daoCliente.actualizarCliente(cliente);
     }
     
     
