@@ -36,6 +36,10 @@ public class Controlador {
 
         return res;
     }
+    
+    public boolean registrarUsuario(Usuario cliente){
+        return daoUsuario.agregarUsuario(cliente);
+    }
 
     public Cliente recuperarDatosPersonales(int cedula) {
         Cliente resultado = daoCliente.recuperarCliente(cedula);
