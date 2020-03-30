@@ -28,27 +28,29 @@ public class Controlador {
     }
 
     public Usuario login(Usuario credenciales) {
-        Usuario  res = daoUsuario.recuperarUsuario(credenciales);
-        
-        if(res!=null && !res.equals(credenciales)){
-                res=null;
+        Usuario res = daoUsuario.recuperarUsuario(credenciales);
+
+        if (res != null && !res.equals(credenciales)) {
+            res = null;
         }
 
         return res;
     }
-    
-    public Cliente   recuperarDatosPersonales(int cedula){
+
+    public Cliente recuperarDatosPersonales(int cedula) {
         Cliente resultado = daoCliente.recuperarCliente(cedula);
 
         return resultado;
     }
-    public boolean registrarCliente(Cliente cliente){
+
+    public boolean registrarCliente(Cliente cliente) {
         return daoCliente.agregarCliente(cliente);
     }
-    public boolean actualizarCliente(Cliente cliente){
+
+    public boolean actualizarCliente(Cliente cliente) {
         return daoCliente.actualizarCliente(cliente);
     }
-    
+
     public Cuenta recuperarCuenta(int idCuenta) {
         return daoCuenta.recuperarCuenta(idCuenta);
     }
@@ -91,10 +93,11 @@ public class Controlador {
     public boolean agregarCuentaVinculada(Cliente cliente, Cuenta cuenta){
         return daoCuenta.agregarCuentaVinculada(cliente.getCedula(), cuenta.getIdCuenta());
     }
-    
+
     public Moneda[] recuperarMonedas() {
         return daoMoneda.recuperarMonedas();
     }
+
     private static Controlador instancia;
 
     public static Controlador getInstancia() {
