@@ -14,7 +14,7 @@ import java.sql.Date;
  */
 public class Movimiento {
 
-    Movimiento(
+    public Movimiento(
             int idTransaccion,
             int idCuenta,
             boolean deposito,
@@ -30,7 +30,7 @@ public class Movimiento {
 
     }
 
-    Movimiento(
+    public Movimiento(
             int idCuenta,
             boolean deposito,
             BigDecimal monto,
