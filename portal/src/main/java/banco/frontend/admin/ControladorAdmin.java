@@ -5,9 +5,17 @@
  */
 package banco.frontend.admin;
 
-
+import banco.backend.Controlador;
+import banco.backend.estructuras.Cliente;
+import banco.backend.estructuras.Cuenta;
+import banco.backend.estructuras.Moneda;
 import banco.backend.estructuras.Usuario;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,11 +24,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.RandomStringUtils;
+
 /**
  *
  * @author jonguz
  */
-@WebServlet(name = "AdminDashboardController", urlPatterns = {"/admin/AbrirCuenta/show"})
+@WebServlet(name = "AdminCrearCuentaController", urlPatterns = {"/admin/AbrirCuenta/show", "/admin/AbrirCuenta"})
 public class ControladorAdmin extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request,
@@ -28,33 +38,190 @@ public class ControladorAdmin extends HttpServlet {
             throws ServletException, IOException {
 
         String viewUrl = "";
-        switch (request.getServletPath()) {
-            case "/admin/AbrirCuenta/show":
-                viewUrl = this.showAbrirCuenta(request);
-                break;
+        try {
+            if (validarSesion(request)) {
+                generarAtributos(request);
+                switch (request.getServletPath()) {
+                    case "/admin/AbrirCuenta":
+                        viewUrl = this.abrirCuenta(request);
+                        break;
+                    case "/admin/AbrirCuenta/show":
+                        viewUrl = this.abrirCuentaShow(request);
+                        break;
+                }
+            }
+        } catch (Exception ex) {
+            viewUrl = "/presentation/Error.jsp";
         }
+
         request.getRequestDispatcher(viewUrl).forward(request, response);
     }
 
-    public String showAbrirCuenta(HttpServletRequest request) {
-        return this.showAbrirCuentaAction(request);
+    public String abrirCuentaShow(HttpServletRequest request) {
+        return this.abrirCuentaActionShow(request);
     }
 
-    public String showAbrirCuentaAction(HttpServletRequest request) {
-        HttpSession session = request.getSession(true);
+    public String abrirCuenta(HttpServletRequest request) {
+        if (validarCampos(request)) {
+            return this.abrirCuentaAction(request);
+        }
+        return "presentation/administrador/AbrirCuenta.jsp";
+    }
+
+    public String abrirCuentaActionShow(HttpServletRequest request) {
         String direccion;
         try {
-            Usuario usuario = (Usuario) session.getAttribute("usuario");
-            if (usuario.esAdministrativo()) {
-                direccion =  "/presentation/administrador/AbrirCuenta.jsp";
-            }
-            else{
-                direccion = "/portal/logout";
-            }
+            direccion = "/presentation/administrador/AbrirCuenta.jsp";
         } catch (Exception ex) {
             direccion = "/presentation/error.jsp";
         }
         return direccion;
+    }
+
+    public String abrirCuentaAction(HttpServletRequest request) {
+        Controlador controlador = Controlador.getInstancia();
+        int cedula = Integer.parseInt(request.getParameter("cedula"));
+        Cliente cliente = controlador.recuperarDatosPersonales(cedula);
+        Usuario usuario = controlador.recuperarUsuario(cedula);
+        if (cliente != null) {
+            String moneda = request.getParameter("moneda");
+            int limiteDiario = Integer.parseInt(request.getParameter("limite"));
+            Cuenta cuenta = new Cuenta(cedula, moneda, new BigDecimal(0), limiteDiario);
+
+            request.setAttribute("cuenta", cuenta);
+            request.setAttribute("moneda", moneda);
+            if (controlador.agregarCuenta(cuenta)) {
+                if (usuario == null) {
+                    controlador.registrarUsuario(new Usuario(
+                            cedula,
+                            RandomStringUtils.randomAlphanumeric(8)
+                    ));
+                }
+                return "index.jsp";
+            }
+        } else {
+            if ((Boolean) request.getAttribute("cuentaRequerida")) {
+                String nombre = (String) request.getAttribute("nombre");
+                String apellidos = (String) request.getAttribute("apellidos");
+                String numero = (String) request.getAttribute("numero");
+
+                cliente = new Cliente(cedula);
+
+                cliente.setNombre(nombre);
+                cliente.setApellidos(apellidos);
+                cliente.setNumero(numero);
+
+                request.setAttribute("cliente", cliente);
+                if (controlador.registrarCliente(cliente)) {
+                    request.setAttribute("cuentaRequerida", (Boolean) false);
+                }
+
+            } else {
+                request.setAttribute("cuentaRequerida", (Boolean) true);
+            }
+
+        }
+        return "/presentation/administrador/AbrirCuenta.jsp";
+    }
+
+    boolean validarCampos(HttpServletRequest request) {
+        Map<String, String> errores = new HashMap<>();
+
+        if ((Boolean) request.getAttribute("cuentaRequerida")) {
+            if (request.getParameter("nombre").isEmpty()) {
+                errores.put("nombre", "el nombre es un campo obligatorio");
+            }
+            if (request.getParameter("apellidos").isEmpty()) {
+                errores.put("apellidos", "la apellidos es un campo obligatorio");
+            }
+            if (request.getParameter("numero").isEmpty()) {
+                errores.put("numero", "se requiere de un numero telefonico");
+            }
+        }
+
+        if (request.getParameter("cedula").isEmpty()) {
+            errores.put("cedula", "la cedula es un campo obligatorio");
+        } else {
+            try {
+                Integer.parseInt(request.getParameter("cedula"));
+            } catch (NumberFormatException e) {
+                errores.put("usuario", "formato de cedula incorrecto");
+            }
+        }
+        if (request.getParameter("limite").isEmpty()) {
+            errores.put("limite", "el limite de transferencia no puede estar en blanco");
+        } else {
+            try {
+                Integer.parseInt(request.getParameter("limite"));
+            } catch (NumberFormatException e) {
+                errores.put("limite", "el limite de transferencia debe de ser un valor numerico");
+            }
+        }
+        if (request.getParameter("moneda").isEmpty()) {
+            errores.put("moneda", "no se indico una moneda");
+        } else {
+            Moneda moneda = Controlador.getInstancia().recuperarMoneda(request.getParameter("moneda"));
+            if (moneda == null) {
+                errores.put("moneda", "esta moneda no se encuentra disponible");
+            }
+        }
+
+        request.setAttribute("errores", errores);
+        return errores.isEmpty();
+    }
+
+    public void generarAtributos(HttpServletRequest request) {
+        int cedula;
+        if (request.getAttribute("cedula") == null) {
+            request.setAttribute("cedula", "");
+            cedula = 0;
+        } else {
+            try {
+                cedula = Integer.parseInt((String) request.getAttribute("cedula"));
+            } catch (NumberFormatException ex) {
+                cedula = 0;
+            }
+        }
+        if (request.getAttribute("cuentaRequerida") == null) {
+            request.setAttribute("cuentaRequerida", (Boolean) false);
+        } else {
+            if ((Boolean) request.getAttribute("cuentaRequerida")) {
+                if (request.getAttribute("nombre") == null) {
+                    request.setAttribute("nombre", "");
+                }
+                if (request.getAttribute("apellidos") == null) {
+                    request.setAttribute("apellidos", "");
+                }
+                if (request.getAttribute("numero") == null) {
+                    request.setAttribute("numero", "");
+                }
+
+            }
+            if (request.getAttribute("cliente") == null) {
+                Cliente cliente = new Cliente(cedula);
+                cliente.setNombre((String) request.getAttribute("nombre"));
+                cliente.setApellidos((String) request.getAttribute("apellidos"));
+                cliente.setNumero((String) request.getAttribute("numero"));
+                request.setAttribute("cliente", cliente);
+            }
+        }
+        if (request.getAttribute("cuenta") == null) {
+            Cuenta cuenta = new Cuenta();
+            cuenta.setLimiteTransferencia(100000);
+            request.setAttribute("cuenta", cuenta);
+        }
+        if (request.getAttribute("moneda") == null) {
+            request.setAttribute("moneda", " ");
+        }
+        List<Moneda> monedas = Arrays.asList(Controlador.getInstancia().recuperarMonedas());
+        request.setAttribute("monedas", monedas);
+
+    }
+
+    public boolean validarSesion(HttpServletRequest request) {
+        HttpSession session = request.getSession(true);
+        Usuario usuario = (Usuario) session.getAttribute("usuario");
+        return usuario.esAdministrativo();
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
