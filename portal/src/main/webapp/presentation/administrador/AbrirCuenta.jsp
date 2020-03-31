@@ -47,6 +47,11 @@
                     <%}%>
                 </div>
                 <%}%>
+                <%if (request.getAttribute("exitoso") != null) {%>
+                <div class="exitoso">
+                    <label>Cuenta añadida.</label>
+                </div>
+                <%}%>
 
                 <div class="campo-entrada 
                      <%=erroneo("usuario", errores)%>">
@@ -70,7 +75,7 @@
                         <option value=""  disabled selected>Seleccione una moneda</option>
                         <%for (Moneda moneda : monedas) {%>
                         <%if (codigoMoneda.equals(moneda.getCodigo())) {%>
-                        <option value="<%=moneda.getCodigo()%>" required><%=moneda.getNombre()%></option>
+                        <option value="<%=moneda.getCodigo()%>" selected><%=moneda.getNombre()%></option>
                         <%} else {%>
                         <option value="<%=moneda.getCodigo()%>"><%=moneda.getNombre()%></option>
                         <%}%>
@@ -84,7 +89,7 @@
                 <div class="campo-entrada 
                      <%=erroneo("nombre", errores)%>">
                     <input type="text" id="nombre" name="nombre" value="<%=cliente.getNombre()%>" placeholder=" " required>
-                    <label for="limite">Nombre del Cliente</label>
+                    <label for="nombre">Nombre del Cliente</label>
                 </div>
 
                 <div class="campo-entrada 
