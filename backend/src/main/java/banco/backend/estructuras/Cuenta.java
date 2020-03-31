@@ -17,6 +17,9 @@ public class Cuenta {
     public Cuenta(){
         
     }
+    public Cuenta(int cedula){
+        this.cedula = cedula;
+    }
     public Cuenta(int cedula, String moneda, BigDecimal saldo, int limiteDiario) {
         this(0, cedula, moneda, saldo, limiteDiario);
     }
