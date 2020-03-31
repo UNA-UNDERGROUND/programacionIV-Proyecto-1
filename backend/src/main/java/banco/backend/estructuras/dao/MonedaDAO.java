@@ -6,7 +6,6 @@
 package banco.backend.estructuras.dao;
 
 import banco.backend.db.BancoDAO;
-import banco.backend.estructuras.Cuenta;
 import banco.backend.estructuras.Moneda;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
