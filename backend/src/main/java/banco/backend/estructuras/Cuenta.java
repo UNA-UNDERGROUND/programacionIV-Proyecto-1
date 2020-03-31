@@ -14,9 +14,11 @@ import java.math.BigDecimal;
 public class Cuenta {
 
     //<editor-fold desc="Constructores" defaultstate="collapsed">
-    
-    public Cuenta() {
-
+    public Cuenta(){
+        
+    }
+    public Cuenta(int cedula, String moneda, BigDecimal saldo, int limiteDiario) {
+        this(0, cedula, moneda, saldo, limiteDiario);
     }
 
     public Cuenta(int id, int cedula, String moneda, BigDecimal saldo, int limiteDiario) {

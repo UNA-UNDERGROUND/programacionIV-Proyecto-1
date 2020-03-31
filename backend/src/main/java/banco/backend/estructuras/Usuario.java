@@ -15,6 +15,10 @@ public class Usuario {
     public Usuario() {
 
     }
+    
+    public Usuario(int cedula){
+        this.cedula = cedula;
+    }
 
     public Usuario(int cedula, String pass) {
         this.cedula = cedula;

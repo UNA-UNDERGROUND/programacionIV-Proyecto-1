@@ -12,6 +12,9 @@ package banco.backend.estructuras;
 public class Cliente {
 
     //<editor-fold desc="Constructores" defaultstate="collapsed">
+    public Cliente(){
+        
+    }
     public Cliente(int cedula) {
         this.cedula = cedula;
     }
