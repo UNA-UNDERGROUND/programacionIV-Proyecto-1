@@ -25,10 +25,10 @@
         Cliente cliente = (Cliente) request.getAttribute("cliente");
         Cuenta cuenta = (Cuenta) request.getAttribute("cuenta");
         boolean cuentaRequerida = (Boolean) request.getAttribute("cuentaRequerida");
-        String textoError = (String) request.getAttribute("textoError");
-        Map<String, String> errores = (Map<String, String>) request.getAttribute("errores");
         List<Moneda> monedas = (List<Moneda>) request.getAttribute("monedas");
         String codigoMoneda = (String) request.getAttribute("moneda");
+        String textoError = (String) request.getAttribute("textoError");
+        Map<String, String> errores = (Map<String, String>) request.getAttribute("errores");
     %>
 
 
@@ -79,7 +79,7 @@
                     </select>
                 </div>
 
-                <%if (cuentaRequerida && false) {%>
+                <%if (cuentaRequerida) {%>
                 <h6>Informacion de usuario</h6>
                 <div class="campo-entrada 
                      <%=erroneo("nombre", errores)%>">

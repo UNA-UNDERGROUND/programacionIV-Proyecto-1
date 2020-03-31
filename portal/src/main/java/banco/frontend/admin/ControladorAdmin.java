@@ -118,6 +118,13 @@ public class ControladorAdmin extends HttpServlet {
 
             } else {
                 request.setAttribute("cuentaRequerida", (Boolean) true);
+                if (request.getAttribute("cliente") == null) {
+                    cliente = new Cliente(cedula);
+                    cliente.setNombre((String) request.getAttribute("nombre"));
+                    cliente.setApellidos((String) request.getAttribute("apellidos"));
+                    cliente.setNumero((String) request.getAttribute("numero"));
+                    request.setAttribute("cliente", cliente);
+                }
             }
 
         }
@@ -173,7 +180,6 @@ public class ControladorAdmin extends HttpServlet {
     public void generarAtributos(HttpServletRequest request) {
         int cedula;
         if (request.getAttribute("cedula") == null) {
-            request.setAttribute("cedula", "");
             cedula = 0;
         } else {
             try {
@@ -182,6 +188,7 @@ public class ControladorAdmin extends HttpServlet {
                 cedula = 0;
             }
         }
+        request.setAttribute("cedula", (Integer)cedula);
         if (request.getAttribute("cuentaRequerida") == null) {
             request.setAttribute("cuentaRequerida", (Boolean) false);
         } else {
@@ -195,18 +202,10 @@ public class ControladorAdmin extends HttpServlet {
                 if (request.getAttribute("numero") == null) {
                     request.setAttribute("numero", "");
                 }
-
-            }
-            if (request.getAttribute("cliente") == null) {
-                Cliente cliente = new Cliente(cedula);
-                cliente.setNombre((String) request.getAttribute("nombre"));
-                cliente.setApellidos((String) request.getAttribute("apellidos"));
-                cliente.setNumero((String) request.getAttribute("numero"));
-                request.setAttribute("cliente", cliente);
             }
         }
         if (request.getAttribute("cuenta") == null) {
-            Cuenta cuenta = new Cuenta();
+            Cuenta cuenta = new Cuenta(cedula);
             cuenta.setLimiteTransferencia(100000);
             request.setAttribute("cuenta", cuenta);
         }
