@@ -100,6 +100,10 @@ public class Controlador {
     public boolean agregarCuentaVinculada(Cliente cliente, Cuenta cuenta){
         return daoCuenta.agregarCuentaVinculada(cliente.getCedula(), cuenta.getIdCuenta());
     }
+    
+    public Moneda recuperarMoneda(String codigo){
+        return daoMoneda.recuperarMoneda(codigo);
+    }
 
     public Moneda[] recuperarMonedas() {
         return daoMoneda.recuperarMonedas();
