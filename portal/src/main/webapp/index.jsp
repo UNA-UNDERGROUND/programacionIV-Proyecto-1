@@ -18,7 +18,7 @@
 
             <div>
                 <%if (usuario == null) {%>
-                <h1>Bienvendio al Banco PSB</h1>
+                <h1>Bienvenido al Banco PSB</h1>
                 <%} else {%>
                 <%if (usuario.esAdministrativo()) {%>
                 <h1>DashBoard Administrativo</h1>
