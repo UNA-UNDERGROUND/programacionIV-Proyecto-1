@@ -31,7 +31,7 @@ import org.apache.commons.lang.RandomStringUtils;
  * @author jonguz
  */
 @WebServlet(name = "AdminCrearCuentaController", urlPatterns = {"/admin/AbrirCuenta/show", "/admin/AbrirCuenta"})
-public class ControladorAdmin extends HttpServlet {
+public class CrearCuenta extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request,
             HttpServletResponse response)
