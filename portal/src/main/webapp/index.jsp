@@ -1,11 +1,9 @@
+<!DOCTYPE html>
 <%@page import="banco.backend.estructuras.Cliente"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-
 <%Cliente cliente = (Cliente) session.getAttribute("cliente");%>
 <% Usuario usuario = (Usuario) session.getAttribute("usuario");%>
 <html>
-
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <%@ include file="/presentation/Head.jsp" %>
