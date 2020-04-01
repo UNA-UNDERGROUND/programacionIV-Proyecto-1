@@ -13,16 +13,17 @@ import java.sql.Date;
  * @author jonguz
  */
 public class Movimiento {
-    
-        public Movimiento(
+
+    public Movimiento(
             int idCuenta,
             boolean deposito,
             BigDecimal monto,
             String descripcion) {
         this.idCuenta = idCuenta;
         this.deposito = deposito;
-        this.monto = monto;
+        this.monto = monto.signum() == -1 ? monto.negate() : monto;
         this.descripcion = descripcion;
+
     }
 
     public Movimiento(
@@ -32,16 +33,11 @@ public class Movimiento {
             BigDecimal monto,
             String descripcion,
             Date fechaDeposito) {
+        this(idCuenta, deposito, monto, descripcion);
         this.idTransaccion = idTransaccion;
-        this.idCuenta = idCuenta;
-        this.deposito = deposito;
-        this.monto = monto;
-        this.descripcion = descripcion;
         this.fechaDeposito = fechaDeposito;
 
     }
-
-
 
     public int getIdTransaccion() {
         return idTransaccion;
