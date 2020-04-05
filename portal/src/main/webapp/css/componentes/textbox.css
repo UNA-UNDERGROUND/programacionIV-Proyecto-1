@@ -50,7 +50,7 @@
     border: 2px solid #2f2f2fee;
 }
 
-.campo-entrada input:not([type=checkbox]):valid~label {
+.campo-entrada input:not([type=checkbox]):valid:required~label {
     border-radius: 10px;
     background: #1cbe2954;
     border: 2px solid #1cbe2954;
@@ -60,11 +60,3 @@
     background: #682f2fbe;
     border: 2px solid #682f2fbe;
 }
-
-/*.campo-entrada input:not([type=checkbox]):not(:focus):not(:valid)~label{
-    background: #682f2fbe;
-    border: 2px solid #682f2fbe;
-}
-*/
-
-
