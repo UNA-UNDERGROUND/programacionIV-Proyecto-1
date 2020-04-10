@@ -5,8 +5,16 @@
  */
 package banco.frontend.admin;
 
+import banco.backend.Controlador;
+import banco.backend.estructuras.Cliente;
+import banco.backend.estructuras.Cuenta;
+import banco.backend.estructuras.Moneda;
 import banco.backend.estructuras.Usuario;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -32,20 +40,16 @@ public class Movimiento extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String viewUrl;
+        String viewUrl = "/presentation/Error.jsp";
         try {
-            if(validarSesion(request)){
-
-            switch (request.getServletPath()) {
-                case "/admin/Movimiento/":
-                    viewUrl = procesarMovimiento(request);
-                break;
-                default:
-                    viewUrl = "/presentation/Error.jsp";
-                    break;
-            }
-            }
-            else{
+            if (validarSesion(request)) {
+                String res = request.getServletPath();
+                switch (request.getServletPath()) {
+                    case "/admin/Movimiento":
+                        viewUrl = procesarMovimiento(request);
+                        break;
+                }
+            } else {
                 viewUrl = "/portal/logout";
             }
         } catch (Exception ex) {
@@ -64,11 +68,33 @@ public class Movimiento extends HttpServlet {
         }
         return "/presentation/administrador/Movimiento.jsp";
     }
-    
-    public void generarAtributos(HttpServletRequest request){
-        
+
+    public void generarAtributos(HttpServletRequest request) {
+        Controlador controlador = Controlador.getInstancia();
+        Integer cedula;
+        try {
+            cedula = Integer.parseInt(request.getParameter("cedula"));
+        } catch (Exception ex) {
+            cedula = null;
+        }
+        if (cedula != null) {
+            request.setAttribute("cedula", cedula);
+            Cliente cliente = controlador.recuperarDatosPersonales(cedula);
+            if(cliente!= null){
+                Object[] resultado= controlador.recuperarCuentas(cliente);
+                List<Cuenta> cuentas = new ArrayList<>();
+                Map<String, Moneda> monedas = (Map<String, Moneda>)resultado[1];
+                
+                cuentas.addAll(Arrays.asList((Cuenta[])resultado[0]));
+                
+                request.setAttribute("cuentas", cuentas);
+                request.setAttribute("monedas", monedas);
+                
+                
+            }
+        }
     }
-    
+
     public boolean validarSesion(HttpServletRequest request) {
         HttpSession session = request.getSession(true);
         Usuario usuario = (Usuario) session.getAttribute("usuario");
