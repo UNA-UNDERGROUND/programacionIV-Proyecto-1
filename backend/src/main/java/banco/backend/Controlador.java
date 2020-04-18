@@ -9,11 +9,14 @@ import banco.backend.db.BancoDAO;
 import banco.backend.estructuras.Cliente;
 import banco.backend.estructuras.Cuenta;
 import banco.backend.estructuras.Moneda;
+import banco.backend.estructuras.Movimiento;
 import banco.backend.estructuras.Usuario;
 import banco.backend.estructuras.dao.ClienteDAO;
 import banco.backend.estructuras.dao.CuentaDAO;
 import banco.backend.estructuras.dao.MonedaDAO;
+import banco.backend.estructuras.dao.MovimientoDAO;
 import banco.backend.estructuras.dao.UsuarioDAO;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -109,6 +112,24 @@ public class Controlador {
         return daoMoneda.recuperarMonedas();
     }
 
+    public Movimiento[] recuperarMovimientos(int idCuenta) {
+        return daoMovimiento.recuperarMovimientos(idCuenta);
+    }
+
+    public Movimiento recuperarMovimiento(int idMovimiento) {
+        return daoMovimiento.recuperarMovimiento(idMovimiento);
+    }
+
+    public boolean agregarMovimiento(int idCuenta, boolean deposito, BigDecimal monto, String descripcion) {
+        Movimiento movimiento = new Movimiento(idCuenta, deposito, monto, descripcion);
+        return daoMovimiento.agregarMovimiento(movimiento);
+    }
+
+    public boolean agregarTransferencia(Cuenta cuentaOrigen, int idCuenta, BigDecimal monto, String descripcion) {
+        Movimiento movimiento = new Movimiento(idCuenta, false, monto, descripcion);
+        return daoMovimiento.agregarTransferencia(cuentaOrigen, movimiento);
+    }
+
     private static Controlador instancia;
 
     public static Controlador getInstancia() {
@@ -119,4 +140,5 @@ public class Controlador {
     ClienteDAO daoCliente = new ClienteDAO();
     CuentaDAO daoCuenta = new CuentaDAO();
     MonedaDAO daoMoneda = new MonedaDAO();
+    MovimientoDAO daoMovimiento = new MovimientoDAO();
 }
