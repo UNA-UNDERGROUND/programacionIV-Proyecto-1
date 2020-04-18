@@ -1,4 +1,4 @@
-.campo-entrada input {
+.campo input {
     box-shadow: none;
     width: 100%;
     height: 50px;
@@ -11,52 +11,12 @@
     transition: background-color 100ms linear;
 }
 
-.campo-entrada.erroneo input {
-    border-style: solid;
-    border-color: #682f2fbe;
-}
-
-.campo-entrada.erroneo input:hover {
-    border-color: #771212be;
-}
-
-.campo-entrada.campo-entrada input:focus {
-    background: #4f4f4f;
-}
-
-.campo-entrada input:hover {
+.campo input:hover {
     background: #3f3f3f;
 }
 
-.campo-entrada input+label {
-    position: absolute;
-    left: 10px;
-    top: 15px;
-    transition: all 0.3s;
-    color: #999;
-    font-weight: normal;
-}
 
-.campo-entrada input:focus~label,
-.campo-entrada input:not([type=checkbox]):not(:placeholder-shown)~label {
-    left: 5px;
-    top: -10px;
-    padding: 0 5px;
-    border-radius: 20px;
-}
 
-.campo-entrada input:focus~label{
-    background: #2f2f2fb0;
-    border: 2px solid #2f2f2fee;
-}
 
-.campo-entrada input:not([type=checkbox]):valid:required~label {
-    border-radius: 10px;
-    background: #1cbe2954;
-    border: 2px solid #1cbe2954;
-}
 
-.campo-entrada input:not([type=checkbox]):not(:focus):not(:valid):not(:placeholder-shown)~label{
-    background: #682f2fbe;
-    border: 2px solid #682f2fbe;
-}
+
