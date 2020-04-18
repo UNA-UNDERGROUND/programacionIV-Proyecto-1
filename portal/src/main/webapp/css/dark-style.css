@@ -4,7 +4,8 @@
 @import "componentes/div.css";
 @import "componentes/formulario.css";
 @import "componentes/select.css";
-
+@import "componentes/radio.css";
+@import "componentes/campo.css";
 
 .contenido h6,
 h1,
