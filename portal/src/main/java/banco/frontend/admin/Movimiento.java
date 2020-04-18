@@ -63,7 +63,7 @@ public class Movimiento extends HttpServlet {
 
     private String procesarTramite(HttpServletRequest request) {
         generarAtributos(request);
-        if (validarCampos(request)) {
+        if (validarCampos(request) && request.getParameter("tipoTramite")!=null) {
             switch (request.getParameter("tipoTramite")) {
                 case "Deposito":
                     return procesarDeposito(request);
@@ -71,7 +71,6 @@ public class Movimiento extends HttpServlet {
                     return procesarRetiro(request);
                 case "Movimiento":
                     return procesarMovimiento(request);
-
             }
 
         }
@@ -155,12 +154,12 @@ public class Movimiento extends HttpServlet {
                     idDepositado = null;
                 }
 
-                request.setAttribute("cuenta", cuenta);
                 request.setAttribute("descripcion", descripcion);
                 request.setAttribute("monto", monto);
                 request.setAttribute("idDepositado", idDepositado);
                 request.setAttribute("cedulaDepositado", cedulaDepositado);
             }
+            request.setAttribute("cuenta", cuenta);
         }
     }
 
