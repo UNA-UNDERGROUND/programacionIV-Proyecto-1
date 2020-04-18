@@ -152,7 +152,7 @@ public class MovimientoDAO extends BancoDAO {
                 //primero el deposito
 
                 stmMovimiento.setInt(1, movimiento.getIdCuenta());
-                stmMovimiento.setBoolean(2, movimiento.esDeposito());
+                stmMovimiento.setBoolean(2, true);
                 stmMovimiento.setBigDecimal(2, movimiento.getMonto());
                 stmMovimiento.setString(4, movimiento.getDescripcion());
 
