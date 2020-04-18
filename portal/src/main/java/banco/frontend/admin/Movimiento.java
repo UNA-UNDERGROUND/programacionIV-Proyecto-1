@@ -11,8 +11,10 @@ import banco.backend.estructuras.Cuenta;
 import banco.backend.estructuras.Moneda;
 import banco.backend.estructuras.Usuario;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.ServletException;
@@ -46,7 +48,7 @@ public class Movimiento extends HttpServlet {
                 String res = request.getServletPath();
                 switch (request.getServletPath()) {
                     case "/admin/Movimiento":
-                        viewUrl = procesarMovimiento(request);
+                        viewUrl = procesarTramite(request);
                         break;
                 }
             } else {
@@ -59,40 +61,150 @@ public class Movimiento extends HttpServlet {
         request.getRequestDispatcher(viewUrl).forward(request, response);
     }
 
-    private String procesarMovimiento(HttpServletRequest request) {
+    private String procesarTramite(HttpServletRequest request) {
         generarAtributos(request);
-        if (request.getParameter("deposito") != null) {
+        if (validarCampos(request)) {
+            switch (request.getParameter("tipoTramite")) {
+                case "Deposito":
+                    return procesarDeposito(request);
+                case "Retiro":
+                    return procesarRetiro(request);
+                case "Movimiento":
+                    return procesarMovimiento(request);
 
-        } else {
+            }
 
         }
+
+        return "/presentation/administrador/Movimiento.jsp";
+    }
+
+    private String procesarDeposito(HttpServletRequest request) {
+        BigDecimal monto = (BigDecimal) request.getAttribute("monto");
+        String descripcion = (String) request.getAttribute("descripcion");
+        Integer idCuenta = ((Cuenta) request.getAttribute("cuenta")).getIdCuenta();
+
+        if (Controlador.getInstancia().agregarMovimiento(idCuenta, true, monto, descripcion)) {
+
+        }
+
+        return "/presentation/administrador/Movimiento.jsp";
+    }
+
+    private String procesarRetiro(HttpServletRequest request) {
+        return "/presentation/administrador/Movimiento.jsp";
+    }
+
+    private String procesarMovimiento(HttpServletRequest request) {
         return "/presentation/administrador/Movimiento.jsp";
     }
 
     public void generarAtributos(HttpServletRequest request) {
         Controlador controlador = Controlador.getInstancia();
         Integer cedula;
+        Integer idCuenta;
         try {
             cedula = Integer.parseInt(request.getParameter("cedula"));
-        } catch (Exception ex) {
+        } catch (NumberFormatException ex) {
             cedula = null;
         }
-        if (cedula != null) {
+        try {
+            idCuenta = Integer.parseInt(request.getParameter("idCuenta"));
+        } catch (NumberFormatException ex) {
+            idCuenta = null;
+        }
+
+        if (cedula != null && idCuenta == null) {
             request.setAttribute("cedula", cedula);
             Cliente cliente = controlador.recuperarDatosPersonales(cedula);
-            if(cliente!= null){
-                Object[] resultado= controlador.recuperarCuentas(cliente);
+            if (cliente != null) {
+                Object[] resultado = controlador.recuperarCuentas(cliente);
                 List<Cuenta> cuentas = new ArrayList<>();
-                Map<String, Moneda> monedas = (Map<String, Moneda>)resultado[1];
-                
-                cuentas.addAll(Arrays.asList((Cuenta[])resultado[0]));
-                
+                Map<String, Moneda> monedas = (Map<String, Moneda>) resultado[1];
+
+                cuentas.addAll(Arrays.asList((Cuenta[]) resultado[0]));
+
                 request.setAttribute("cuentas", cuentas);
                 request.setAttribute("monedas", monedas);
-                
-                
+                request.setAttribute("cliente", cliente);
             }
         }
+        if (idCuenta != null) {
+            Cuenta cuenta = Controlador.getInstancia().recuperarCuenta(idCuenta);
+
+            BigDecimal monto;
+            String descripcion = request.getParameter("descripcion");
+            try {
+                monto = new BigDecimal(request.getParameter("monto"));
+            } catch (Exception ex) {
+                monto = null;
+            }
+
+            if (request.getParameterMap().containsKey("tipoTransaccion")
+                    && request.getParameter("tipoTransaccion").equals("Movimiento")) {
+                Integer idDepositado;
+                Integer cedulaDepositado;
+                try {
+                    cedulaDepositado = Integer.parseInt(request.getParameter("cedulaDepositado"));
+                } catch (NumberFormatException ex) {
+                    cedulaDepositado = null;
+                }
+                try {
+                    idDepositado = Integer.parseInt(request.getParameter("idDepositado"));
+                } catch (NumberFormatException ex) {
+                    idDepositado = null;
+                }
+
+                request.setAttribute("cuenta", cuenta);
+                request.setAttribute("descripcion", descripcion);
+                request.setAttribute("monto", monto);
+                request.setAttribute("idDepositado", idDepositado);
+                request.setAttribute("cedulaDepositado", cedulaDepositado);
+            }
+        }
+    }
+
+    public boolean validarCampos(HttpServletRequest request) {
+        Map<String, String> errores = new HashMap();
+        Cuenta cuenta = (Cuenta) request.getAttribute("cuenta");
+        Cliente cliente = (Cliente) request.getAttribute("cliente");
+
+        if (cuenta == null) {
+            if (request.getParameter("cedula") != null && cliente == null) {
+                errores.put("cedula", "el cliente no tiene cuentas asignadas");
+            } else {
+                errores.put("cuenta", "la cuenta indicada en el sistema no existe");
+            }
+        } else {
+            if(request.getParameterMap().containsKey("tipoTramite")){
+                BigDecimal monto = (BigDecimal)request.getAttribute("monto");
+                String descripcion = (String)request.getAttribute("descripcion");
+                Integer idDepositado = (Integer)request.getAttribute("idDepositado");
+                Integer cedulaDepositado = (Integer)request.getAttribute("cedulaDepositado");
+                        
+
+                if(monto.compareTo(BigDecimal.ZERO) < 0){
+                    errores.put("monto", "el monto no puede ser menor a 0");
+                }
+                if(descripcion.isEmpty()){
+                    errores.put("descripcion", "la descripcion no puede estar vacia");
+                }
+                
+                
+                if(request.getParameter("tipoTramite").equals("Movimiento")){
+                    if(cedulaDepositado==null){
+                        errores.put("cedula", "la cedula no es valida");
+                    }
+                    if(idDepositado==null){
+                        errores.put("idDepositado", "el id de la cuenta a depositar no es valida");
+                    }
+                }
+            }
+            
+        }
+
+        request.setAttribute("errores", errores);
+        return errores.isEmpty();
     }
 
     public boolean validarSesion(HttpServletRequest request) {
