@@ -39,11 +39,12 @@ public class Controlador {
 
         return res;
     }
-    
-    public Usuario recuperarUsuario(int cedula){
+
+    public Usuario recuperarUsuario(int cedula) {
         return daoUsuario.recuperarUsuario(new Usuario(cedula));
     }
-    public boolean registrarUsuario(Usuario cliente){
+
+    public boolean registrarUsuario(Usuario cliente) {
         return daoUsuario.agregarUsuario(cliente);
     }
 
@@ -66,7 +67,7 @@ public class Controlador {
     }
 
     public Object[] recuperarCuentas(Cliente cliente) {
-        Cuenta[] cuentas 
+        Cuenta[] cuentas
                 = daoCuenta.recuperarCuentas(cliente.getCedula());
         Map<String, Moneda> monedas = new HashMap<>();
         for (Cuenta cuenta : cuentas) {
@@ -82,7 +83,7 @@ public class Controlador {
     }
 
     public Object[] recuperarCuentasVinculadas(Cliente cliente) {
-        Cuenta[] cuentas 
+        Cuenta[] cuentas
                 = daoCuenta.recuperarCuentasVinculadas(cliente.getCedula());
         Map<String, Moneda> monedas = new HashMap<>();
         for (Cuenta cuenta : cuentas) {
@@ -100,11 +101,12 @@ public class Controlador {
     public boolean agregarCuenta(Cuenta cuenta) {
         return daoCuenta.agregarCuenta(cuenta);
     }
-    public boolean agregarCuentaVinculada(Cliente cliente, Cuenta cuenta){
+
+    public boolean agregarCuentaVinculada(Cliente cliente, Cuenta cuenta) {
         return daoCuenta.agregarCuentaVinculada(cliente.getCedula(), cuenta.getIdCuenta());
     }
-    
-    public Moneda recuperarMoneda(String codigo){
+
+    public Moneda recuperarMoneda(String codigo) {
         return daoMoneda.recuperarMoneda(codigo);
     }
 
