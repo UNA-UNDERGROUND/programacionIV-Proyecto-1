@@ -114,29 +114,44 @@
             <%else {%>
             <h6>Informacion de la cuenta</h6>
             <div>
-                <div>
-                    <a>Propietario de la cuenta: <%=cliente.getNombre() + " " + cliente.getApellidos()%></a>
+                <div class="campo">
+                    <label>
+                        Propietario de la cuenta:
+                        <input type="text"
+                               value="<%=cliente.getNombre() + " " + cliente.getApellidos()%>"
+                               disabled>
+                    </label>
                 </div>
-                <div>
-                    <a>Numero de cuenta: <%=cuenta.getIdCuenta()%></a>
+                <div class="campo">
+                    <label>
+                        Numero de cuenta:
+                        <input type="text"
+                               value="<%=cuenta.getIdCuenta()%> (<%=cuenta.getMoneda()%>)"
+                               disabled>
+                    </label>
                 </div>
-                <div>
-                    <a>Moneda de la cuenta: <%=cuenta.getMoneda()%></a>
-                </div>
+
             </div>
             <h6>Detalles del deposito</h6>
             <form action="/portal/admin/Movimiento" style="margin: 0px 5px;">
 
+
                 <div class="campo-entrada <%=erroneo("tipoTramite", errores)%>" >
+
                     <label>Tipo de Tramite</label>
-                    <p>
-                        <input type="radio" name = "tipoTramite" value="Deposito" checked="checked"/>
-                        <input type="radio" name = "tipoTramite" value="Retiro"/>
-                        <input type="radio" name = "tipoTramite" value="Movimiento"/>
-                    </p>
-
+                    <div class ="radio">
+                        <label>
+                            <input type = "radio" name="tipoTramite" value="Deposito" checked/>Deposito
+                        </label>
+                        <label>
+                            <input type = "radio" name="tipoTramite" value="Retiro"/>Retiro
+                        </label>
+                        <label>
+                            <input type = "radio" name="tipoTramite" value="Movimiento"/>Movimiento
+                        </label>
+                    </div>
                 </div>
-
+                <button class="submit" >Proceder con la transaccion</button>
             </form>
 
 
