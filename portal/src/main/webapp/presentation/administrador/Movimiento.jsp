@@ -112,32 +112,48 @@
             </div>
             <%}%>
             <%else {%>
-            <h6>Informacion de la cuenta</h6>
-            <div>
-                <div class="campo">
-                    <label>
-                        Propietario de la cuenta:
-                        <input type="text"
-                               value="<%=cliente.getNombre() + " " + cliente.getApellidos()%>"
-                               disabled>
-                    </label>
-                </div>
-                <div class="campo">
-                    <label>
-                        Numero de cuenta:
-                        <input type="text"
-                               value="<%=cuenta.getIdCuenta()%> (<%=cuenta.getMoneda()%>)"
-                               disabled>
-                    </label>
-                </div>
 
-            </div>
-            <h6>Detalles del deposito</h6>
+
+            <h6>Detalles de la transaccion</h6>
             <form action="/portal/admin/Movimiento" style="margin: 0px 5px;">
+                <div>
+                    <div class="campo">
+                        <label>
+                            Propietario de la cuenta:
+                            <input type="text"
+                                   value="<%=cliente.getNombre() + " " + cliente.getApellidos()%>"
+                                   disabled>
+                        </label>
+                    </div>
+                    <div class="campo">
+                        <label>
+                            Numero de cuenta:
+                            <input type="text"
+                                   value="<%=cuenta.getIdCuenta()%> (<%=cuenta.getMoneda()%>)"
+                                   disabled>
+                        </label>
+                    </div>
+                </div>
+                <%if (request.getAttribute("movimiento") == null) {%>
+                <div class ="campo-entrada <%=erroneo("monto", errores)%>">
+                    <label>
+                        <input type="number" id="monto" name="monto" 
+                               value=""  placeholder=" " required>
+                        <label for="monto">Monto de la transaccion: </label>
+                    </label>
 
+                </div>
+                <div class ="campo-entrada <%=erroneo("descripcion", errores)%>">
+                    <label>
+                        <input type="text" id="descripcion" name="descripcion" 
+                               value=""  placeholder=" " required>
+                        <label for="descripcion">Descripcion del Tramite: </label>
+                    </label>
+
+                </div>
+                <%}%>
 
                 <div class="campo-entrada <%=erroneo("tipoTramite", errores)%>" >
-
                     <label>Tipo de Tramite</label>
                     <div class ="radio">
                         <label>
