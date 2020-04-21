@@ -63,7 +63,7 @@ public class Movimiento extends HttpServlet {
 
     private String procesarTramite(HttpServletRequest request) {
         generarAtributos(request);
-        if (validarCampos(request) && request.getParameter("tipoTramite")!=null) {
+        if (validarCampos(request) && request.getParameter("tipoTramite") != null) {
             switch (request.getParameter("tipoTramite")) {
                 case "Deposito":
                     return procesarDeposito(request);
@@ -139,6 +139,9 @@ public class Movimiento extends HttpServlet {
                 monto = null;
             }
 
+            request.setAttribute("descripcion", descripcion);
+            request.setAttribute("monto", monto);
+
             if (request.getParameterMap().containsKey("tipoTransaccion")
                     && request.getParameter("tipoTransaccion").equals("Movimiento")) {
                 Integer idDepositado;
@@ -154,8 +157,6 @@ public class Movimiento extends HttpServlet {
                     idDepositado = null;
                 }
 
-                request.setAttribute("descripcion", descripcion);
-                request.setAttribute("monto", monto);
                 request.setAttribute("idDepositado", idDepositado);
                 request.setAttribute("cedulaDepositado", cedulaDepositado);
             }
@@ -175,31 +176,39 @@ public class Movimiento extends HttpServlet {
                 errores.put("cuenta", "la cuenta indicada en el sistema no existe");
             }
         } else {
-            if(request.getParameterMap().containsKey("tipoTramite")){
-                BigDecimal monto = (BigDecimal)request.getAttribute("monto");
-                String descripcion = (String)request.getAttribute("descripcion");
-                Integer idDepositado = (Integer)request.getAttribute("idDepositado");
-                Integer cedulaDepositado = (Integer)request.getAttribute("cedulaDepositado");
-                        
+            if (request.getParameterMap().containsKey("tipoTramite")) {
+                BigDecimal monto = (BigDecimal) request.getAttribute("monto");
+                String descripcion = (String) request.getAttribute("descripcion");
+                Integer idDepositado = (Integer) request.getAttribute("idDepositado");
+                Integer cedulaDepositado = (Integer) request.getAttribute("cedulaDepositado");
 
-                if(monto.compareTo(BigDecimal.ZERO) < 0){
-                    errores.put("monto", "el monto no puede ser menor a 0");
+                try {
+                    if (monto.compareTo(BigDecimal.ZERO) < 0) {
+                        errores.put("monto", "el monto no puede ser menor a 0");
+                    }
+                } catch (Exception ex) {
+                    errores.put("monto", "no se ingreso un monto valido");
                 }
-                if(descripcion.isEmpty()){
-                    errores.put("descripcion", "la descripcion no puede estar vacia");
+
+                try {
+                    if (descripcion.isEmpty()) {
+                        errores.put("descripcion", "la descripcion no puede estar vacia");
+                    }
                 }
-                
-                
-                if(request.getParameter("tipoTramite").equals("Movimiento")){
-                    if(cedulaDepositado==null){
+                 catch (Exception ex) {
+                   errores.put("descripcion", "la descripcion no puede estar vacia");
+                }
+
+                if (request.getParameter("tipoTramite").equals("Movimiento")) {
+                    if (cedulaDepositado == null) {
                         errores.put("cedula", "la cedula no es valida");
                     }
-                    if(idDepositado==null){
+                    if (idDepositado == null) {
                         errores.put("idDepositado", "el id de la cuenta a depositar no es valida");
                     }
                 }
             }
-            
+
         }
 
         request.setAttribute("errores", errores);

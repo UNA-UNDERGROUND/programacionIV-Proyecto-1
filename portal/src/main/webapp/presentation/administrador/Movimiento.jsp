@@ -134,6 +134,9 @@
                         </label>
                     </div>
                 </div>
+
+                <input type="hidden" name="idCuenta" value="<%=cuenta.getIdCuenta()%>">
+
                 <%if (request.getAttribute("movimiento") == null) {%>
                 <div class ="campo-entrada <%=erroneo("monto", errores)%>">
                     <label>
@@ -169,8 +172,6 @@
                 </div>
                 <button class="submit" >Proceder con la transaccion</button>
             </form>
-
-
             <%}%>
 
         </div>
