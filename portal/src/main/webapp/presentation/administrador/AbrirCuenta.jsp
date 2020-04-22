@@ -50,6 +50,16 @@
                 <%if (request.getAttribute("exitoso") != null) {%>
                 <div class="exitoso">
                     <label>Cuenta añadida.</label>
+                    <%if (request.getAttribute("pass") != null) {%>
+                    <label>la contraseña generada para el usuario es: <%=(String) request.getAttribute("pass")%></label>
+                    <%}%>
+
+                </div>
+                <%}%>
+                <%if (request.getAttribute("usuarioCreado") != null) {%>
+                <div class="exitoso">
+                    <label>Se crearon los datos del cliente</label>
+                    <label>proceda a insertar la cuenta.</label>
                 </div>
                 <%}%>
 
