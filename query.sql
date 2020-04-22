@@ -49,6 +49,7 @@ CREATE TABLE movimiento(
   monto decimal(13, 4) not null,
   descripcion varchar(255) not null,
   fecha_deposito datetime default current_timestamp,
+  movimiento_caja boolean default false,
   CONSTRAINT FK_movimiento_cuenta
     FOREIGN KEY (id_cuenta)
     REFERENCES cuenta(id_cuenta)
