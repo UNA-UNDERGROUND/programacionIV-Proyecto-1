@@ -95,22 +95,22 @@ public class MovimientoDAO extends BancoDAO {
 
                 stmMovimiento.setInt(1, movimiento.getIdCuenta());
                 stmMovimiento.setBoolean(2, movimiento.esDeposito());
-                stmMovimiento.setBigDecimal(2, movimiento.getMonto());
+                stmMovimiento.setBigDecimal(3, movimiento.getMonto());
                 stmMovimiento.setString(4, movimiento.getDescripcion());
 
                 BigDecimal monto
                         = movimiento.esDeposito()
                         ? movimiento.getMonto()
                         : movimiento.getMonto().negate();
-                if (!movimiento.esDeposito()) {
-                    monto.negate();
-                }
+                //if (!movimiento.esDeposito()) {
+                //   monto.negate();
+                //}
 
                 stmCuenta.setBigDecimal(1, monto);
                 stmCuenta.setInt(2, movimiento.getIdCuenta());
                 stmCuenta.setBigDecimal(3, monto);
 
-                if (stmCuenta.executeUpdate() + stmMovimiento.executeUpdate() == 2) {
+                if (stmCuenta.executeUpdate() + stmMovimiento.executeUpdate() != 2) {
                     cnx.rollback();
                     return false;
                 }
