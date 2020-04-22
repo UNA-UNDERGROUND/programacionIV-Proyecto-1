@@ -5,8 +5,10 @@
  */
 package banco.backend;
 
-import banco.backend.db.BancoDAO;
 import banco.backend.estructuras.Usuario;
+import banco.presentation.login.Credenciales;
+import java.math.BigDecimal;
+
 
 
 /**
@@ -19,9 +21,18 @@ public class Backend {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        BancoDAO instancia = new BancoDAO();
+        Controlador controlador = Controlador.getInstancia();
+        
+        Usuario creds = new Usuario(208010443, "asdf1234", true);
 
-
+        boolean res = controlador.agregarMovimiento(1, false, new BigDecimal("2000"), "prueba backend", creds);
+        
+        if(res){
+            System.out.println("exitoso");
+        }
+        else{
+            System.out.println("fallido");
+        }
         
     }
     
