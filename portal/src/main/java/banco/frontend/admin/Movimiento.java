@@ -72,30 +72,35 @@ public class Movimiento extends HttpServlet {
                 case "Movimiento":
                     return procesarMovimiento(request);
             }
-
         }
-
         return "/presentation/administrador/Movimiento.jsp";
     }
 
     private String procesarDeposito(HttpServletRequest request) {
-        BigDecimal monto = (BigDecimal) request.getAttribute("monto");
-        String descripcion = (String) request.getAttribute("descripcion");
-        Integer idCuenta = ((Cuenta) request.getAttribute("cuenta")).getIdCuenta();
-
-        if (Controlador.getInstancia().agregarMovimiento(idCuenta, true, monto, descripcion)) {
-
+        if(realizarMovimiento(request, true)){
+            request.setAttribute("exitoso", true);
         }
-
         return "/presentation/administrador/Movimiento.jsp";
     }
 
     private String procesarRetiro(HttpServletRequest request) {
+        if(realizarMovimiento(request, false)){
+            request.setAttribute("exitoso", true);
+        }
         return "/presentation/administrador/Movimiento.jsp";
     }
 
     private String procesarMovimiento(HttpServletRequest request) {
         return "/presentation/administrador/Movimiento.jsp";
+    }
+    
+    public boolean realizarMovimiento(HttpServletRequest request, boolean esDeposito){
+        BigDecimal monto = (BigDecimal) request.getAttribute("monto");
+        String descripcion = (String) request.getAttribute("descripcion");
+        Integer idCuenta = ((Cuenta) request.getAttribute("cuenta")).getIdCuenta();
+        Usuario creds = (Usuario) request.getSession().getAttribute("usuario");
+
+        return Controlador.getInstancia().agregarMovimiento(idCuenta, esDeposito, monto, descripcion, creds);
     }
 
     public void generarAtributos(HttpServletRequest request) {
@@ -172,8 +177,8 @@ public class Movimiento extends HttpServlet {
         if (cuenta == null) {
             if (request.getParameter("cedula") != null && cliente == null) {
                 errores.put("cedula", "el cliente no tiene cuentas asignadas");
-            } else {
-                errores.put("cuenta", "la cuenta indicada en el sistema no existe");
+            } else if(request.getParameter("idCuenta") != null){
+                errores.put("idCuenta", "la cuenta indicada en el sistema no existe");
             }
         } else {
             if (request.getParameterMap().containsKey("tipoTramite")) {
@@ -194,9 +199,8 @@ public class Movimiento extends HttpServlet {
                     if (descripcion.isEmpty()) {
                         errores.put("descripcion", "la descripcion no puede estar vacia");
                     }
-                }
-                 catch (Exception ex) {
-                   errores.put("descripcion", "la descripcion no puede estar vacia");
+                } catch (Exception ex) {
+                    errores.put("descripcion", "la descripcion no puede estar vacia");
                 }
 
                 if (request.getParameter("tipoTramite").equals("Movimiento")) {

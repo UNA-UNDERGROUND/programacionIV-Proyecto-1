@@ -45,6 +45,22 @@
     <div class="contenido">
         <div class="formulario">
 
+            <%if (request.getAttribute("exitoso") != null) {%>
+            <div class="exitoso">
+                <label>Transaccion completada.</label>
+            </div>
+            <%}%>
+            <%if (textoError != null) {%>
+            <div class="erroneo">
+                <label><%=textoError%></label>
+                <%if (errores != null) {%>
+                <%for (String error : errores.values()) {%>
+                <label><%=error%></label>
+                <%}%>
+                <%}%>
+            </div>
+            <%}%>
+
             <%if (cuentas != null && cuenta == null) {%>
             <h6>Realizar Movimiento</h6>
             <form action="/portal/admin/Movimiento" method="post">
@@ -115,7 +131,7 @@
 
 
             <h6>Detalles de la transaccion</h6>
-            <form action="/portal/admin/Movimiento" style="margin: 0px 5px;">
+            <form action="/portal/admin/Movimiento" method="post" style="margin: 0px 5px;">
                 <div>
                     <div class="campo">
                         <label>
