@@ -78,7 +78,7 @@ public class MovimientoDAO extends BancoDAO {
         return resultado;
     }
 
-    public boolean agregarMovimiento(Movimiento movimiento) {
+    public boolean agregarMovimiento(Movimiento movimiento, boolean movimientoCaja) {
         String comandoMovimiento = CMD_AGREGAR_MOVIMIENTO;
         String comandoCuenta = CMD_ACTUALIZAR_CUENTA;
         try (Connection cnx = obtenerConexion()) {
@@ -97,6 +97,7 @@ public class MovimientoDAO extends BancoDAO {
                 stmMovimiento.setBoolean(2, movimiento.esDeposito());
                 stmMovimiento.setBigDecimal(3, movimiento.getMonto());
                 stmMovimiento.setString(4, movimiento.getDescripcion());
+                stmMovimiento.setBoolean(5, movimientoCaja);
 
                 BigDecimal monto
                         = movimiento.esDeposito()
@@ -127,7 +128,7 @@ public class MovimientoDAO extends BancoDAO {
         return false;
     }
 
-    public boolean agregarTransferencia(Cuenta cuenta, Movimiento movimiento) {
+    public boolean agregarTransferencia(Cuenta cuenta, Movimiento movimiento, boolean movimientoCaja) {
         String comandoMovimiento = CMD_AGREGAR_MOVIMIENTO;
         String comandoCuenta = CMD_ACTUALIZAR_CUENTA;
         try (Connection cnx = obtenerConexion()) {
@@ -153,8 +154,9 @@ public class MovimientoDAO extends BancoDAO {
 
                 stmMovimiento.setInt(1, movimiento.getIdCuenta());
                 stmMovimiento.setBoolean(2, true);
-                stmMovimiento.setBigDecimal(2, movimiento.getMonto());
+                stmMovimiento.setBigDecimal(3, movimiento.getMonto());
                 stmMovimiento.setString(4, movimiento.getDescripcion());
+                stmMovimiento.setBoolean(5, movimientoCaja);
 
                 BigDecimal monto = movimiento.getMonto();
 
@@ -200,8 +202,8 @@ public class MovimientoDAO extends BancoDAO {
     //<editor-fold desc="Movimiento" defaultstate="collapsed">
     private static final String CMD_AGREGAR_MOVIMIENTO
             = "insert into movimiento "
-            + "(id_cuenta, deposito, monto, descripcion)"
-            + "values (?, ?, ?, ?);";
+            + "(id_cuenta, deposito, monto, descripcion, movimiento_caja)"
+            + "values (?, ?, ?, ?, ?);";
     private static final String CMD_ACTUALIZAR_CUENTA
             = "update cuenta "
             + "set saldo = saldo + ? "
