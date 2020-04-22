@@ -43,6 +43,8 @@ public class CrearCuenta extends HttpServlet {
                 generarAtributos(request);
                 switch (request.getServletPath()) {
                     case "/admin/AbrirCuenta":
+                        //recibir caracteres en codificacion UTF-8
+                        request.setCharacterEncoding("UTF-8");
                         viewUrl = this.abrirCuenta(request);
                         break;
                     case "/admin/AbrirCuenta/show":
@@ -88,21 +90,22 @@ public class CrearCuenta extends HttpServlet {
             String moneda = request.getParameter("moneda");
             int limiteDiario = Integer.parseInt(request.getParameter("limite"));
             Cuenta cuenta = new Cuenta(cedula, moneda, new BigDecimal(0), limiteDiario);
-
+            String pass = null;
             request.setAttribute("cuenta", cuenta);
             request.setAttribute("moneda", moneda);
             if (controlador.agregarCuenta(cuenta)) {
                 if (usuario == null) {
+                    pass = RandomStringUtils.randomAlphanumeric(8);
                     controlador.registrarUsuario(new Usuario(
                             cedula,
-                            RandomStringUtils.randomAlphanumeric(8)
+                            pass
                     ));
                 }
                 request.setAttribute("exitoso", (Boolean)true);
                 request.setAttribute("cliente", new Cliente());
                 request.setAttribute("cuenta", new Cuenta());
-                
-                return "/presentation/administrador/AbrirCuenta.jsp";
+                request.setAttribute("pass", pass);
+
             }
         } else {
             String nombre = (String) request.getParameter("nombre");
@@ -125,11 +128,12 @@ public class CrearCuenta extends HttpServlet {
             if (cuentaValida) {
                 if (controlador.registrarCliente(cliente)) {
                     request.setAttribute("cuentaRequerida", (Boolean) false);
+                    request.setAttribute("usuarioCreado", true);
                 }
             } else {
                 request.setAttribute("cuentaRequerida", (Boolean) true);
             }
-
+            
         }
         return "/presentation/administrador/AbrirCuenta.jsp";
     }
