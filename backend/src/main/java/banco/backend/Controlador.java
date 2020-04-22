@@ -122,14 +122,29 @@ public class Controlador {
         return daoMovimiento.recuperarMovimiento(idMovimiento);
     }
 
-    public boolean agregarMovimiento(int idCuenta, boolean deposito, BigDecimal monto, String descripcion) {
-        Movimiento movimiento = new Movimiento(idCuenta, deposito, monto, descripcion);
-        return daoMovimiento.agregarMovimiento(movimiento);
+    public boolean agregarMovimiento(int idCuenta, boolean deposito, BigDecimal monto, String descripcion, Usuario usuario) {
+        if (validarMovimiento(idCuenta, usuario)) {
+            Movimiento movimiento = new Movimiento(idCuenta, deposito, monto, descripcion);
+            return daoMovimiento.agregarMovimiento(movimiento, usuario.esAdministrativo());
+        }
+        return false;
     }
 
-    public boolean agregarTransferencia(Cuenta cuentaOrigen, int idCuenta, BigDecimal monto, String descripcion) {
-        Movimiento movimiento = new Movimiento(idCuenta, false, monto, descripcion);
-        return daoMovimiento.agregarTransferencia(cuentaOrigen, movimiento);
+    public boolean agregarTransferencia(Cuenta cuentaOrigen, int idCuenta, BigDecimal monto, String descripcion, Usuario usuario) {
+        if (validarMovimiento(idCuenta, usuario)) {
+            Movimiento movimiento = new Movimiento(idCuenta, false, monto, descripcion);
+            return daoMovimiento.agregarTransferencia(cuentaOrigen, movimiento, usuario.esAdministrativo());
+        }
+        return false;
+    }
+    
+    //verifica si el usuario indicado puede realizar el movimiento solicitado
+    private boolean validarMovimiento(int idCuenta, Usuario usuario) {
+        if(usuario.esAdministrativo()){
+            return true;
+        }
+        Cuenta cuenta = recuperarCuenta(idCuenta);
+        return cuenta!=null && cuenta.getCedula()==usuario.getCedula();
     }
 
     private static Controlador instancia;
