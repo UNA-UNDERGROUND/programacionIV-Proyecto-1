@@ -1,6 +1,5 @@
 <%@page import="banco.backend.estructuras.Cliente"%>
 <%@page import="banco.backend.estructuras.Usuario"%>
-<%Cliente cliente = (Cliente) session.getAttribute("cliente");%>
 <% Usuario usuario = (Usuario) session.getAttribute("usuario");%>
 <header>
     <div class="logo">
