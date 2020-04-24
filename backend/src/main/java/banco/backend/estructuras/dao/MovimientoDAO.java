@@ -7,8 +7,10 @@ package banco.backend.estructuras.dao;
 
 import banco.backend.db.BancoDAO;
 import banco.backend.estructuras.Cuenta;
+import banco.backend.estructuras.Moneda;
 import banco.backend.estructuras.Movimiento;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -144,45 +146,50 @@ public class MovimientoDAO extends BancoDAO {
                     PreparedStatement stmCuentaD
                     = cnx.prepareStatement(comandoCuenta);) {
                 cnx.setAutoCommit(false);
-                
+
                 stmMovimiento.clearParameters();
                 stmCuenta.clearParameters();
                 stmMovimientoD.clearParameters();
                 stmCuentaD.clearParameters();
                 
-                //primero el deposito
+                BigDecimal montoDeposito = conversion(cuenta, movimiento);
+                BigDecimal monto = movimiento.getMonto();
+                //si el monto no se puede convertir producira una excepcion
+                //al no existir monto equivalente(null), por lo tanto el bloque catch
+                //cancela la operacion
+                
 
+                //primero el deposito (registro)
                 stmMovimiento.setInt(1, movimiento.getIdCuenta());
                 stmMovimiento.setBoolean(2, true);
-                stmMovimiento.setBigDecimal(3, movimiento.getMonto());
+                stmMovimiento.setBigDecimal(3, montoDeposito);
                 stmMovimiento.setString(4, movimiento.getDescripcion());
-                stmMovimiento.setBoolean(5, movimientoCaja);
+                stmMovimiento.setBoolean(5, false);
 
-                BigDecimal monto = movimiento.getMonto();
-
-                stmCuenta.setBigDecimal(1, monto);
+                //actualizacion saldo
+                stmCuenta.setBigDecimal(1, montoDeposito);
                 stmCuenta.setInt(2, movimiento.getIdCuenta());
-                stmCuenta.setBigDecimal(3, monto);
-                
+                stmCuenta.setBigDecimal(3, montoDeposito);
+
                 //deduccion de cuenta origen
                 
                 stmMovimientoD.setInt(1, cuenta.getIdCuenta());
                 stmMovimientoD.setBoolean(2, false);
-                stmMovimientoD.setBigDecimal(2, movimiento.getMonto());
+                stmMovimientoD.setBigDecimal(3, monto);
                 stmMovimientoD.setString(4, movimiento.getDescripcion());
-                
-                monto = monto.negate();
+                stmMovimientoD.setBoolean(5, movimientoCaja);
+
+                monto = movimiento.getMonto().negate();
 
                 stmCuentaD.setBigDecimal(1, monto);
-                stmCuentaD.setInt(2, movimiento.getIdCuenta());
+                stmCuentaD.setInt(2, cuenta.getIdCuenta());
                 stmCuentaD.setBigDecimal(3, monto);
-                
 
                 if (stmCuenta.executeUpdate()
                         + stmMovimiento.executeUpdate()
                         + stmCuentaD.executeUpdate()
                         + stmMovimientoD.executeUpdate()
-                        == 4) {
+                        != 4) {
                     cnx.rollback();
                     return false;
                 }
@@ -198,6 +205,36 @@ public class MovimientoDAO extends BancoDAO {
         }
         return false;
     }
+
+    private BigDecimal conversion(Cuenta cuenta, Movimiento movimiento) {
+
+        Cuenta cuentaDestino = new CuentaDAO().recuperarCuenta(movimiento.getIdCuenta());
+        if (cuentaDestino != null) {
+            MonedaDAO daoMoneda = new MonedaDAO();
+            Moneda monedaOrigen = daoMoneda.recuperarMoneda(cuenta.getMoneda());
+            Moneda monedaDestino = daoMoneda.recuperarMoneda(cuentaDestino.getMoneda());
+
+            if (monedaOrigen != null && monedaDestino != null) {
+                if (monedaOrigen.equals(monedaDestino)) {
+                    return movimiento.getMonto();
+                }
+                if(monedaDestino.getPrecioCompra().equals(BigDecimal.ZERO)){
+                    return null;
+                }
+
+                //convertimos al precio de compra (colones) y luego a la moneda equivalente
+                //en caso de no existir una operacion precisa se redondea hacia abajo
+                return (movimiento.getMonto()
+                        .multiply(monedaOrigen.getPrecioCompra()))
+                        .divide(monedaDestino.getPrecioCompra(), 4, RoundingMode.HALF_DOWN);
+
+            }
+
+        }
+
+        return null;
+    }
+    
 
     //<editor-fold desc="Movimiento" defaultstate="collapsed">
     private static final String CMD_AGREGAR_MOVIMIENTO

@@ -5,6 +5,7 @@
  */
 package banco.backend;
 
+import banco.backend.estructuras.Cuenta;
 import banco.backend.estructuras.Usuario;
 import banco.presentation.login.Credenciales;
 import java.math.BigDecimal;
@@ -24,8 +25,9 @@ public class Backend {
         Controlador controlador = Controlador.getInstancia();
         
         Usuario creds = new Usuario(208010443, "asdf1234", true);
+        Cuenta origen = controlador.recuperarCuenta(1);
 
-        boolean res = controlador.agregarMovimiento(1, false, new BigDecimal("2000"), "prueba backend", creds);
+        boolean res = controlador.agregarTransferencia(origen,2, new BigDecimal("1000"),"Prueba Transferencia(Backend)",creds);
         
         if(res){
             System.out.println("exitoso");

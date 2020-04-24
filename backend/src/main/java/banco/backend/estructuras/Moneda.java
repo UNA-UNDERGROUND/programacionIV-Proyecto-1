@@ -46,6 +46,10 @@ public class Moneda {
     public float getPorcentajeInteres() {
         return porcentajeInteres;
     }
+    
+    public boolean equals(Moneda otro){
+        return codigo.equals(otro.codigo);
+    }
 
     private final String codigo;
     private final String nombre;
