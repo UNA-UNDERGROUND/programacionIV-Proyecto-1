@@ -92,6 +92,9 @@ public class Movimiento extends HttpServlet {
     }
 
     private String procesarMovimiento(HttpServletRequest request) {
+        if(realizarTransaccion(request)){
+            request.setAttribute("exitoso", true);
+        }
         return "/presentation/administrador/Movimiento.jsp";
     }
 
