@@ -162,25 +162,17 @@ public class Movimiento extends HttpServlet {
             if (request.getParameterMap().containsKey("tipoTramite")
                     && request.getParameter("tipoTramite").equals("Movimiento")) {
                 Integer idDepositado;
-                Integer cedulaDepositado;
-                try {
-                    cedulaDepositado = Integer.parseInt(request.getParameter("cedulaDepositado"));
-                } catch (NumberFormatException ex) {
-                    cedulaDepositado = null;
-                }
                 try {
                     idDepositado = Integer.parseInt(request.getParameter("idDepositado"));
                 } catch (NumberFormatException ex) {
                     idDepositado = null;
                 }
 
-                if (idDepositado == null && cedulaDepositado == null) {
+                if (idDepositado == null) {
                     request.setAttribute("requiereInfoTransaccion", true);
                 }
 
                 request.setAttribute("idDepositado", idDepositado);
-                request.setAttribute("cedulaDepositado", cedulaDepositado);
-
             }
             request.setAttribute("cuenta", cuenta);
         }
