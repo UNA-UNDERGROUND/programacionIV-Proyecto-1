@@ -127,9 +127,7 @@
 
             </div>
             <%}%>
-            <%else {%>
-
-
+            <%else if(request.getAttribute("requiereInfoTransaccion")==null){%>
             <h6>Detalles de la transaccion</h6>
             <form action="/portal/admin/Movimiento" method="post" style="margin: 0px 5px;">
                 <div>
@@ -182,12 +180,15 @@
                             <input type = "radio" name="tipoTramite" value="Retiro"/>Retiro
                         </label>
                         <label>
-                            <input type = "radio" name="tipoTramite" value="Movimiento"/>Movimiento
+                            <input type = "radio" name="tipoTramite" value="Movimiento"/>Transferencia
                         </label>
                     </div>
                 </div>
                 <button class="submit" >Proceder con la transaccion</button>
             </form>
+            <%}%>
+            <%else{%>
+            
             <%}%>
 
         </div>

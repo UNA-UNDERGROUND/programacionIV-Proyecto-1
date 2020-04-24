@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,6 +64,7 @@ public class Movimiento extends HttpServlet {
 
     private String procesarTramite(HttpServletRequest request) {
         generarAtributos(request);
+        Object tt = request.getParameter("tipoTramite");
         if (validarCampos(request) && request.getParameter("tipoTramite") != null) {
             switch (request.getParameter("tipoTramite")) {
                 case "Deposito":
@@ -77,14 +79,14 @@ public class Movimiento extends HttpServlet {
     }
 
     private String procesarDeposito(HttpServletRequest request) {
-        if(realizarMovimiento(request, true)){
+        if (realizarMovimiento(request, true)) {
             request.setAttribute("exitoso", true);
         }
         return "/presentation/administrador/Movimiento.jsp";
     }
 
     private String procesarRetiro(HttpServletRequest request) {
-        if(realizarMovimiento(request, false)){
+        if (realizarMovimiento(request, false)) {
             request.setAttribute("exitoso", true);
         }
         return "/presentation/administrador/Movimiento.jsp";
@@ -93,8 +95,8 @@ public class Movimiento extends HttpServlet {
     private String procesarMovimiento(HttpServletRequest request) {
         return "/presentation/administrador/Movimiento.jsp";
     }
-    
-    public boolean realizarMovimiento(HttpServletRequest request, boolean esDeposito){
+
+    public boolean realizarMovimiento(HttpServletRequest request, boolean esDeposito) {
         BigDecimal monto = (BigDecimal) request.getAttribute("monto");
         String descripcion = (String) request.getAttribute("descripcion");
         Integer idCuenta = ((Cuenta) request.getAttribute("cuenta")).getIdCuenta();
@@ -147,8 +149,9 @@ public class Movimiento extends HttpServlet {
             request.setAttribute("descripcion", descripcion);
             request.setAttribute("monto", monto);
 
-            if (request.getParameterMap().containsKey("tipoTransaccion")
-                    && request.getParameter("tipoTransaccion").equals("Movimiento")) {
+
+            if (request.getParameterMap().containsKey("tipoTramite")
+                    && request.getParameter("tipoTramite").equals("Movimiento")) {
                 Integer idDepositado;
                 Integer cedulaDepositado;
                 try {
@@ -162,8 +165,13 @@ public class Movimiento extends HttpServlet {
                     idDepositado = null;
                 }
 
+                if (idDepositado == null && cedulaDepositado == null) {
+                    request.setAttribute("requiereInfoTransaccion", true);
+                }
+
                 request.setAttribute("idDepositado", idDepositado);
                 request.setAttribute("cedulaDepositado", cedulaDepositado);
+
             }
             request.setAttribute("cuenta", cuenta);
         }
@@ -177,7 +185,7 @@ public class Movimiento extends HttpServlet {
         if (cuenta == null) {
             if (request.getParameter("cedula") != null && cliente == null) {
                 errores.put("cedula", "el cliente no tiene cuentas asignadas");
-            } else if(request.getParameter("idCuenta") != null){
+            } else if (request.getParameter("idCuenta") != null) {
                 errores.put("idCuenta", "la cuenta indicada en el sistema no existe");
             }
         } else {
@@ -203,7 +211,8 @@ public class Movimiento extends HttpServlet {
                     errores.put("descripcion", "la descripcion no puede estar vacia");
                 }
 
-                if (request.getParameter("tipoTramite").equals("Movimiento")) {
+                if (request.getParameter("tipoTramite").equals("Movimiento")
+                        && request.getAttribute("requiereInfoTransaccion") == null) {
                     if (cedulaDepositado == null) {
                         errores.put("cedula", "la cedula no es valida");
                     }
