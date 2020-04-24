@@ -29,6 +29,7 @@
         Integer cedula = 0;
         Cliente cliente = null;
         Integer idCuenta = 0;
+        Integer idDepositado = (Integer) request.getAttribute("idDepostiado");
         BigDecimal monto = (BigDecimal) request.getAttribute("monto");
         String descripcion = (String) request.getAttribute("descripcion");
         Cuenta cuenta = (Cuenta) request.getAttribute("cuenta");
@@ -190,6 +191,8 @@
             </form>
             <%}%>
             <%else {%>
+            <h6>Seleccione la cuenta que desea depositar</h6>
+
             <form action="/portal/admin/Movimiento" method="post" style="margin: 0px 5px;">
                 <div>
                     <div class="campo">
@@ -229,12 +232,13 @@
                 <input type="hidden" name="idCuenta" value="<%=cuenta.getIdCuenta()%>">
                 <input type="hidden" name="monto" value="<%=monto%>" >
                 <input type="hidden" name="descripcion" value="<%=descripcion%>">
-                <input type="hidden" name="tipoTramite" value="Movimiento">
-
-                
-
-
-
+                <input type="hidden" name="tipoTramite" value="Movimiento">  
+                <div class="campo-entrada <%=erroneo("idDepositado", errores)%>" >
+                    <input type="text" id="idDepositado" name="idDepositado" 
+                           value="<%=idDepositado == null ? "" : idDepositado%>"  
+                           pattern="\d+" title="Ingrese una cuenta destino valida" placeholder=" " required>
+                    <label for="idDepositado">cuenta a depositar</label>
+                </div>
 
                 <button class="submit" >Proceder con la transaccion</button>
             </form>
