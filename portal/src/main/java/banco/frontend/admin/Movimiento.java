@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -103,6 +102,16 @@ public class Movimiento extends HttpServlet {
         Usuario creds = (Usuario) request.getSession().getAttribute("usuario");
 
         return Controlador.getInstancia().agregarMovimiento(idCuenta, esDeposito, monto, descripcion, creds);
+    }
+    
+    public boolean realizarTransaccion(HttpServletRequest request) {
+        BigDecimal monto = (BigDecimal) request.getAttribute("monto");
+        String descripcion = (String) request.getAttribute("descripcion");
+        Cuenta cuentaOrigen = ((Cuenta) request.getAttribute("cuenta"));
+        Usuario creds = (Usuario) request.getSession().getAttribute("usuario");
+        Integer cuentaDestino = (Integer) request.getAttribute("idDepositado");
+        
+        return Controlador.getInstancia().agregarTransferencia(cuentaOrigen, cuentaDestino, monto, descripcion, creds);
     }
 
     public void generarAtributos(HttpServletRequest request) {

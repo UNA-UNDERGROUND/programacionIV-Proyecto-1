@@ -1,4 +1,5 @@
 
+<%@page import="java.math.BigDecimal"%>
 <%@page import="banco.backend.Controlador"%>
 <%@page import="java.util.List"%>
 <%@page import="banco.backend.estructuras.Moneda"%>
@@ -28,6 +29,8 @@
         Integer cedula = 0;
         Cliente cliente = null;
         Integer idCuenta = 0;
+        BigDecimal monto = (BigDecimal) request.getAttribute("monto");
+        String descripcion = (String) request.getAttribute("descripcion");
         Cuenta cuenta = (Cuenta) request.getAttribute("cuenta");
         if (request.getAttribute("cedula") != null) {
             Object valor = request.getAttribute("cedula");
@@ -127,7 +130,7 @@
 
             </div>
             <%}%>
-            <%else if(request.getAttribute("requiereInfoTransaccion")==null){%>
+            <%else if (request.getAttribute("requiereInfoTransaccion") == null) {%>
             <h6>Detalles de la transaccion</h6>
             <form action="/portal/admin/Movimiento" method="post" style="margin: 0px 5px;">
                 <div>
@@ -155,7 +158,7 @@
                 <div class ="campo-entrada <%=erroneo("monto", errores)%>">
                     <label>
                         <input type="number" id="monto" name="monto" 
-                               value=""  placeholder=" " required>
+                               value="<%= monto == null ? "" : monto%>"  placeholder=" " required>
                         <label for="monto">Monto de la transaccion: </label>
                     </label>
 
@@ -163,10 +166,9 @@
                 <div class ="campo-entrada <%=erroneo("descripcion", errores)%>">
                     <label>
                         <input type="text" id="descripcion" name="descripcion" 
-                               value=""  placeholder=" " required>
+                               value="<%=descripcion == null ? "" : descripcion%>"  placeholder=" " required>
                         <label for="descripcion">Descripcion del Tramite: </label>
                     </label>
-
                 </div>
                 <%}%>
 
@@ -187,8 +189,56 @@
                 <button class="submit" >Proceder con la transaccion</button>
             </form>
             <%}%>
-            <%else{%>
-            
+            <%else {%>
+            <form action="/portal/admin/Movimiento" method="post" style="margin: 0px 5px;">
+                <div>
+                    <div class="campo">
+                        <label>
+                            Propietario de la cuenta:
+                            <input type="text"
+                                   value="<%=cliente.getNombre() + " " + cliente.getApellidos()%>"
+                                   disabled>
+                        </label>
+                    </div>
+                    <div class="campo">
+                        <label>
+                            Numero de cuenta:
+                            <input type="text"
+                                   value="<%=cuenta.getIdCuenta()%> (<%=cuenta.getMoneda()%>)"
+                                   disabled>
+                        </label>
+                    </div>
+                    <div class="campo">
+                        <label>
+                            Monto:
+                            <input type="text"
+                                   value="<%=monto%>"
+                                   disabled>
+                        </label>
+                    </div>
+                    <div class="campo">
+                        <label>
+                            Descripcion:
+                            <input type="text"
+                                   value="<%=descripcion%>"
+                                   disabled>
+                        </label>
+                    </div>
+                </div>
+
+                <input type="hidden" name="idCuenta" value="<%=cuenta.getIdCuenta()%>">
+                <input type="hidden" name="monto" value="<%=monto%>" >
+                <input type="hidden" name="descripcion" value="<%=descripcion%>">
+                <input type="hidden" name="tipoTramite" value="Movimiento">
+
+                
+
+
+
+
+                <button class="submit" >Proceder con la transaccion</button>
+            </form>
+
             <%}%>
 
         </div>
