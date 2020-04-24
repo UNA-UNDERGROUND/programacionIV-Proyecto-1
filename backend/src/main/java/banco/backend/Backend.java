@@ -7,7 +7,6 @@ package banco.backend;
 
 import banco.backend.estructuras.Cuenta;
 import banco.backend.estructuras.Usuario;
-import banco.presentation.login.Credenciales;
 import java.math.BigDecimal;
 
 

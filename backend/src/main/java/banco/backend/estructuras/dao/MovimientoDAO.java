@@ -133,8 +133,11 @@ public class MovimientoDAO extends BancoDAO {
     public boolean agregarTransferencia(Cuenta cuenta, Movimiento movimiento, boolean movimientoCaja) {
         String comandoMovimiento = CMD_AGREGAR_MOVIMIENTO;
         String comandoCuenta = CMD_ACTUALIZAR_CUENTA;
+        if(cuenta.getIdCuenta()==movimiento.getIdCuenta()){
+            return false;
+        }
         try (Connection cnx = obtenerConexion()) {
-
+            
             try (
                     PreparedStatement stmMovimiento
                     = cnx.prepareStatement(comandoMovimiento);

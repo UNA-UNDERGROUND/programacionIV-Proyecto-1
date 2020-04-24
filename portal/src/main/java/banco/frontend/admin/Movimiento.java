@@ -92,7 +92,8 @@ public class Movimiento extends HttpServlet {
     }
 
     private String procesarMovimiento(HttpServletRequest request) {
-        if(realizarTransaccion(request)){
+        if(request.getAttribute("idDepositado")!= null 
+                && realizarTransaccion(request)){
             request.setAttribute("exitoso", true);
         }
         return "/presentation/administrador/Movimiento.jsp";
@@ -171,11 +172,11 @@ public class Movimiento extends HttpServlet {
                     idDepositado = null;
                 }
 
-                if (idDepositado == null) {
+                request.setAttribute("idDepositado", idDepositado);
+                
+                if(idDepositado == null){
                     request.setAttribute("requiereInfoTransaccion", true);
                 }
-
-                request.setAttribute("idDepositado", idDepositado);
             }
             request.setAttribute("cuenta", cuenta);
         }
@@ -196,8 +197,6 @@ public class Movimiento extends HttpServlet {
             if (request.getParameterMap().containsKey("tipoTramite")) {
                 BigDecimal monto = (BigDecimal) request.getAttribute("monto");
                 String descripcion = (String) request.getAttribute("descripcion");
-                Integer idDepositado = (Integer) request.getAttribute("idDepositado");
-                Integer cedulaDepositado = (Integer) request.getAttribute("cedulaDepositado");
 
                 try {
                     if (monto.compareTo(BigDecimal.ZERO) < 0) {
@@ -215,15 +214,6 @@ public class Movimiento extends HttpServlet {
                     errores.put("descripcion", "la descripcion no puede estar vacia");
                 }
 
-                if (request.getParameter("tipoTramite").equals("Movimiento")
-                        && request.getAttribute("requiereInfoTransaccion") == null) {
-                    if (cedulaDepositado == null) {
-                        errores.put("cedula", "la cedula no es valida");
-                    }
-                    if (idDepositado == null) {
-                        errores.put("idDepositado", "el id de la cuenta a depositar no es valida");
-                    }
-                }
             }
 
         }

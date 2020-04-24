@@ -8,22 +8,8 @@
 <%@page import="java.util.Map"%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
 
-    <head>
-
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Transaccion de cuenta</title>
-        <%@ include file="/presentation/Head.jsp" %>
-        <link rel="stylesheet" href="/portal/css/componentes/formulario.css">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-    </head>
-
-
-    <jsp:include page="/presentation/Header.jsp" />
-
-    <%
+<%
         List<Cuenta> cuentas = (List<Cuenta>) request.getAttribute("cuentas");
         Map<String, Moneda> monedas = (Map<String, Moneda>) request.getAttribute("monedas");
         Integer cedula = 0;
@@ -45,6 +31,20 @@
         Map<String, String> errores = (Map<String, String>) request.getAttribute("errores");
     %>
 
+<!DOCTYPE html>
+<html>
+
+    <head>
+
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Transaccion de cuenta</title>
+        <%@ include file="/presentation/Head.jsp" %>
+        <link rel="stylesheet" href="/portal/css/componentes/formulario.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+
+
+    <jsp:include page="/presentation/Header.jsp" />
 
     <div class="contenido">
         <div class="formulario">
@@ -127,8 +127,6 @@
 
                     <button class="submit" >Recuperar por cedula</button>
                 </form>
-
-
             </div>
             <%}%>
             <%else if (request.getAttribute("requiereInfoTransaccion") == null) {%>
@@ -162,7 +160,6 @@
                                value="<%= monto == null ? "" : monto%>"  placeholder=" " required>
                         <label for="monto">Monto de la transaccion: </label>
                     </label>
-
                 </div>
                 <div class ="campo-entrada <%=erroneo("descripcion", errores)%>">
                     <label>
@@ -172,7 +169,6 @@
                     </label>
                 </div>
                 <%}%>
-
                 <div class="campo-entrada <%=erroneo("tipoTramite", errores)%>" >
                     <label>Tipo de Tramite</label>
                     <div class ="radio">
@@ -192,7 +188,6 @@
             <%}%>
             <%else {%>
             <h6>Seleccione la cuenta que desea depositar</h6>
-
             <form action="/portal/admin/Movimiento" method="post" style="margin: 0px 5px;">
                 <div>
                     <div class="campo">
