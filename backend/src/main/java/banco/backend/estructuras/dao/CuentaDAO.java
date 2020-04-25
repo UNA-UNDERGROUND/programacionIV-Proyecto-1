@@ -104,6 +104,9 @@ public class CuentaDAO extends BancoDAO {
             stm.setInt(1, id_cuenta);
             stm.setInt(2, cedula);
             stm.setInt(3, id_cuenta);
+            stm.setInt(4, cedula);
+            stm.setInt(5, id_cuenta);
+            stm.setInt(6, cedula);
 
             return stm.executeUpdate() == 1;
         } catch (Exception ex) {
@@ -181,12 +184,16 @@ public class CuentaDAO extends BancoDAO {
     //<editor-fold desc="Cuenta Vinculada" defaultstate="collapsed">
     private static final String CMD_AGREGAR_CUENTA_VINCULADA
             = "insert into cuenta_vinculada "
-            + "select ?, ?"
+            + "select ?, ? "
             + "from cuenta "
-            + "where not exist "
-            + "select id_cuenta "
-            + "from cuenta "
-            + "where cedula = ?";
+            + "where "
+            + "id_cuenta = ? and "
+            + "not cedula = ? "
+            + "and not exists( "
+            + "select * "
+            + "from cuenta_vinculada "
+            + "where id_cuenta = ? and cedula = ?"
+            + ");";
     private static final String CMD_RECUPERAR_CUENTAS_VINCULADAS
             = "select cuenta.* from cuenta_vinculada "
             + "inner join cuenta "
