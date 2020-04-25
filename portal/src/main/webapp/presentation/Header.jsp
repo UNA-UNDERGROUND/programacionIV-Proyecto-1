@@ -19,6 +19,7 @@
             <li><a href="/portal/admin/Movimiento">Movimiento (test)</a></li>
             <%}else{%>
             <li><a href="/portal/cliente/cuentas">Ver Cuentas</a></li>
+            <li><a href="/portal/cliente/cuentas/vincular">Vincular Cuentas</a></li>
             <%}}%>
         </ul>
     </nav>
