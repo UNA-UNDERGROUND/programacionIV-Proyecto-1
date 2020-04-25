@@ -1,4 +1,5 @@
 
+<%@page import="java.sql.Date"%>
 <%@page import="banco.backend.estructuras.Movimiento"%>
 <%@page import="java.math.BigDecimal"%>
 <%@page import="banco.backend.Controlador"%>
@@ -18,6 +19,8 @@
     List<Cuenta> cuentasV = (List<Cuenta>) request.getAttribute("cuentasV");
 
     List<Movimiento> movimientos = (List<Movimiento>) request.getAttribute("movimientos");
+    Date inicio = (Date) request.getAttribute("inicio");
+    Date fin = (Date) request.getAttribute("fin");
 
 %>
 
@@ -35,7 +38,7 @@
 
     <div class="contenido">
 
-        <%if (movimientos == null) {%>
+        <%if (request.getParameter("cuenta") == null) {%>
         <div class="formulario">
             <table>
                 <caption>Cuentas de <%=cliente.getNombre() + " " + cliente.getApellidos()%></caption>
@@ -76,6 +79,31 @@
             </table>
         </div>
         <%}%>
+        <%else if (request.getParameter("confirmar") == null) {%>
+
+        <div class="formulario">
+            <h6>Seleccione un rango</h6>
+            <form method="post">
+                <div class="campo-entrada">
+                    <input type="date" name="inicio" id="inicio" required>
+                    <label for="inicio">Fecha de Inicio</label>
+                </div>
+                <div class="campo-entrada">
+                    <input type="date" name="fin" value="<%=fin == null ? "" : fin%>" required>
+                    <label for="fin">Fecha final</label>
+                </div>
+                <input type="hidden" name="confirmar" value="">
+                <input type="hidden" name="cuenta" value="<%=request.getParameter("cuenta")%>"> 
+                <button class="submit">Seleccionar Rango</button>
+            </form>
+            <form method="post">
+                <input type="hidden" name="confirmar" value="">
+                <input type="hidden" name="cuenta" value="<%=request.getParameter("cuenta")%>"> 
+                <button class="submit">Mostrar todos los movimientos</button>
+            </form>
+        </div>
+
+        <%}%>
         <%else {%>
         <div class="formulario">
             <table>
@@ -90,17 +118,18 @@
                 <%for (Movimiento m : movimientos) {%>
                 <tr>
                     <td><%=m.getIdTransaccion()%></td>
-                    <td><%=m.esDeposito()?"Deposito":"Retiro"%></td>
-                    <td><%=m.getFechaDeposito()%></td>
+                    <td><%=m.esDeposito() ? "Deposito" : "Retiro"%></td>
                     <td><%=m.getMonto()%></td>
                     <td><%=m.getDescripcion()%></td>
+                    <td><%=m.getFechaDeposito()%></td>
                 </tr>
                 <%}%>
             </table>
+
         </div>
         <%}%>
-
     </div>
+
 
     <%@ include file="/presentation/Footer.jsp" %>
 
