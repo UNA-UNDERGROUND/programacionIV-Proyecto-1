@@ -12,6 +12,7 @@ import banco.backend.estructuras.Movimiento;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -28,6 +29,37 @@ public class MovimientoDAO extends BancoDAO {
                 PreparedStatement stm = cnx.prepareStatement(CMD_RECUPERAR_MOVIMIENTOS)) {
             stm.clearParameters();
             stm.setInt(1, idCuenta);
+            try (ResultSet rs = stm.executeQuery()) {
+                while (rs.next()) {
+                    Movimiento nuevo
+                            = new Movimiento(
+                                    rs.getInt(1),
+                                    rs.getInt(2),
+                                    rs.getBoolean(3),
+                                    rs.getBigDecimal(4),
+                                    rs.getString(5),
+                                    rs.getDate(6)
+                            );
+                    resultado.add(nuevo);
+                }
+            } catch (Exception ex) {
+                System.err.println(ex.getMessage());
+            }
+        } catch (Exception ex) {
+            String error = ex.getLocalizedMessage();
+            System.err.println(error);
+        }
+        return resultado.toArray(new Movimiento[0]);
+    }
+
+    public Movimiento[] recuperarMovimientos(int idCuenta, Date inicio, Date fin) {
+        ArrayList<Movimiento> resultado = new ArrayList<>();
+        try (Connection cnx = obtenerConexion();
+                PreparedStatement stm = cnx.prepareStatement(CMD_RECUPERAR_MOVIMIENTOS_FECHA)) {
+            stm.clearParameters();
+            stm.setInt(1, idCuenta);
+            stm.setDate(2, inicio);
+            stm.setDate(3, fin);
             try (ResultSet rs = stm.executeQuery()) {
                 while (rs.next()) {
                     Movimiento nuevo
@@ -133,11 +165,12 @@ public class MovimientoDAO extends BancoDAO {
     public boolean agregarTransferencia(Cuenta cuenta, Movimiento movimiento, boolean movimientoCaja) {
         String comandoMovimiento = CMD_AGREGAR_MOVIMIENTO;
         String comandoCuenta = CMD_ACTUALIZAR_CUENTA;
-        if(cuenta.getIdCuenta()==movimiento.getIdCuenta()){
+        if (cuenta.getIdCuenta() == movimiento.getIdCuenta()
+                || (!movimientoCaja && !puedeRetirar(cuenta))) {
             return false;
         }
         try (Connection cnx = obtenerConexion()) {
-            
+
             try (
                     PreparedStatement stmMovimiento
                     = cnx.prepareStatement(comandoMovimiento);
@@ -154,13 +187,12 @@ public class MovimientoDAO extends BancoDAO {
                 stmCuenta.clearParameters();
                 stmMovimientoD.clearParameters();
                 stmCuentaD.clearParameters();
-                
+
                 BigDecimal montoDeposito = conversion(cuenta, movimiento);
                 BigDecimal monto = movimiento.getMonto();
                 //si el monto no se puede convertir producira una excepcion
                 //al no existir monto equivalente(null), por lo tanto el bloque catch
                 //cancela la operacion
-                
 
                 //primero el deposito (registro)
                 stmMovimiento.setInt(1, movimiento.getIdCuenta());
@@ -175,7 +207,6 @@ public class MovimientoDAO extends BancoDAO {
                 stmCuenta.setBigDecimal(3, montoDeposito);
 
                 //deduccion de cuenta origen
-                
                 stmMovimientoD.setInt(1, cuenta.getIdCuenta());
                 stmMovimientoD.setBoolean(2, false);
                 stmMovimientoD.setBigDecimal(3, monto);
@@ -209,6 +240,47 @@ public class MovimientoDAO extends BancoDAO {
         return false;
     }
 
+    public BigDecimal limiteDiarioRestante(Cuenta cuenta) {
+        BigDecimal resultado = null;
+        try (Connection cnx = obtenerConexion();
+                PreparedStatement stm = cnx.prepareStatement(CMD_RECUPERAR_MONTO_RESTANTE)) {
+            stm.clearParameters();
+            stm.setInt(1, cuenta.getIdCuenta());
+            try (ResultSet rs = stm.executeQuery()) {
+                if (rs.next()) {
+                    resultado = rs.getBigDecimal(1);
+                }
+            } catch (Exception ex) {
+                System.err.println(ex.getMessage());
+            }
+        } catch (Exception ex) {
+            String error = ex.getLocalizedMessage();
+            System.err.println(error);
+        }
+        return resultado;
+    }
+
+    public boolean puedeRetirar(Cuenta cuenta) {
+        boolean resultado = false;
+        try (Connection cnx = obtenerConexion();
+                PreparedStatement stm = cnx.prepareStatement(CMD_RECUPERAR_PUEDE_RETIRAR)) {
+            stm.clearParameters();
+            stm.setInt(1, cuenta.getIdCuenta());
+            stm.setInt(2, cuenta.getIdCuenta());
+            try (ResultSet rs = stm.executeQuery()) {
+                if (rs.next()) {
+                    resultado = rs.getBoolean(1);
+                }
+            } catch (Exception ex) {
+                System.err.println(ex.getMessage());
+            }
+        } catch (Exception ex) {
+            String error = ex.getLocalizedMessage();
+            System.err.println(error);
+        }
+        return resultado;
+    }
+
     private BigDecimal conversion(Cuenta cuenta, Movimiento movimiento) {
 
         Cuenta cuentaDestino = new CuentaDAO().recuperarCuenta(movimiento.getIdCuenta());
@@ -221,7 +293,7 @@ public class MovimientoDAO extends BancoDAO {
                 if (monedaOrigen.equals(monedaDestino)) {
                     return movimiento.getMonto();
                 }
-                if(monedaDestino.getPrecioCompra().equals(BigDecimal.ZERO)){
+                if (monedaDestino.getPrecioCompra().equals(BigDecimal.ZERO)) {
                     return null;
                 }
 
@@ -237,7 +309,6 @@ public class MovimientoDAO extends BancoDAO {
 
         return null;
     }
-    
 
     //<editor-fold desc="Movimiento" defaultstate="collapsed">
     private static final String CMD_AGREGAR_MOVIMIENTO
@@ -250,9 +321,36 @@ public class MovimientoDAO extends BancoDAO {
             + "where id_cuenta = ? and saldo + ? >= 0;";
     private static final String CMD_RECUPERAR_MOVIMIENTO
             = "select * from movimiento "
-            + "where id_transaccion = ?";
+            + "where id_transaccion = ?;";
     private static final String CMD_RECUPERAR_MOVIMIENTOS
             = "select * from movimiento "
-            + "where id_cuenta = ?";
-    //</editor-fold>
+            + "where id_cuenta = ?;";
+    private static final String CMD_RECUPERAR_MOVIMIENTOS_FECHA
+            = "select * from movimiento "
+            + "where id_cuenta=? "
+            + "and fecha_deposito >= ?"
+            + "and fecha_deposito < ?;";
+    private static final String CMD_RECUPERAR_MONTO_RESTANTE
+            = "select sum(monto) from movimiento "
+            + "where id_cuenta=? "
+            + "and movimiento_caja = 0  "
+            + "and deposito = 0 "
+            + "and fecha_deposito >= curdate() "
+            + "and fecha_deposito < DATE_ADD(curdate(), interval 1 day);";
+    private static final String CMD_RECUPERAR_PUEDE_RETIRAR
+            = "select COALESCE(( "
+            + "select sum(monto) "
+            + "from movimiento "
+            + "where id_cuenta = ? "
+            + "and deposito = 0 "
+            + "and movimiento_caja = 0 "
+            + "and fecha_deposito >= curdate() "
+            + "and fecha_deposito < DATE_ADD(curdate(), interval 1 day) "
+            + "),0 ) < ( "
+            + "select limite_transferencia "
+            + "from cuenta "
+            + "where id_cuenta = ? "
+            + ");";
+//</editor-fold>
+
 }

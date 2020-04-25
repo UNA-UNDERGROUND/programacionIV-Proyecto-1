@@ -156,7 +156,7 @@
                 <%if (request.getAttribute("movimiento") == null) {%>
                 <div class ="campo-entrada <%=erroneo("monto", errores)%>">
                     <label>
-                        <input type="number" id="monto" name="monto" 
+                        <input type="number" id="monto" name="monto" step="any"
                                value="<%= monto == null ? "" : monto%>"  placeholder=" " required>
                         <label for="monto">Monto de la transaccion: </label>
                     </label>

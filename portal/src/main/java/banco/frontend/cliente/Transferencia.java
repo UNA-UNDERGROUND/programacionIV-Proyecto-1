@@ -67,6 +67,7 @@ public class Transferencia extends HttpServlet {
         if (request.getAttribute("idDepositado") != null
                 && realizarTransaccion(request)) {
             request.setAttribute("exitoso", true);
+            request.removeAttribute("cuenta");
         }
         return "/presentation/cliente/transferencia.jsp";
     }
@@ -77,7 +78,7 @@ public class Transferencia extends HttpServlet {
         Cuenta cuentaOrigen = ((Cuenta) request.getAttribute("cuenta"));
         Usuario creds = (Usuario) request.getSession().getAttribute("usuario");
         Integer cuentaDestino = (Integer) request.getAttribute("idDepositado");
-
+        
         return Controlador.getInstancia().agregarTransferencia(cuentaOrigen, cuentaDestino, monto, descripcion, creds);
     }
 
@@ -87,6 +88,9 @@ public class Transferencia extends HttpServlet {
         Usuario u = (Usuario) request.getSession().getAttribute("usuario");
         Cliente cliente = c.recuperarDatosPersonales(u.getCedula());
         Object res[] = c.recuperarCuentas(cliente);
+        BigDecimal monto;
+        String descripcion = request.getParameter("descripcion");
+        Integer idDepositado;
 
         List<Cuenta> cuentas = Arrays.asList((Cuenta[]) res[0]);
         request.setAttribute("cuentas", cuentas);
@@ -95,25 +99,50 @@ public class Transferencia extends HttpServlet {
         List<Cuenta> cuentaV = Arrays.asList((Cuenta[]) res[0]);
         request.setAttribute("cuentasV", cuentaV);
 
-        try{
+        try {
             Integer idCuenta = Integer.parseInt(request.getParameter("cuenta"));
             cuenta = c.recuperarCuenta(idCuenta);
-        }
-        catch(NumberFormatException ex){
+            if (cuenta.getCedula() != cliente.getCedula()) {
+                cuenta = null;
+            }
+        } catch (NumberFormatException ex) {
             cuenta = null;
         }
-        
+        try {
+            idDepositado = Integer.parseInt(request.getParameter("idDepositado"));
+        } catch (NumberFormatException ex) {
+            idDepositado = null;
+        }
+        try {
+            monto = new BigDecimal(request.getParameter("monto"));
+        } catch (Exception ex) {
+            monto = null;
+        }
+
         request.setAttribute("cuenta", cuenta);
-        
+        request.setAttribute("idDepositado", idDepositado);
+        request.setAttribute("monto", monto);
+        request.setAttribute("descripcion", descripcion);
+
     }
 
     public boolean validarCampos(HttpServletRequest request) {
         Map<String, String> errores = new HashMap();
 
-        if(request.getParameter("cuenta") != null &&request.getAttribute("cuenta") == null){
-            errores.put("cuenta","la cuenta ingresada no es valida");
+        if (request.getParameter("cuenta") != null && request.getAttribute("cuenta") == null) {
+            errores.put("cuenta", "la cuenta ingresada no es valida");
         }
-        
+        if (request.getParameter("monto") != null
+                && (request.getAttribute("monto") == null
+                || ((BigDecimal) request.getAttribute("monto")).compareTo(BigDecimal.ZERO) > 0)) {
+            errores.put("monto", "el monto ingresado no es valido");
+        }
+        Integer idDepositado = (Integer)request.getAttribute("idDepositado");
+        if (request.getParameter("idDepositado") != null
+                && (idDepositado == null || Controlador.getInstancia().recuperarCuenta(idDepositado)!=null)) {
+            errores.put("idDepositado", "la cuenta ingresada no es valida");
+        }
+
         request.setAttribute("errores", errores);
         return errores.isEmpty();
     }

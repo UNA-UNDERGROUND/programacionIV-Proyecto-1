@@ -1,4 +1,5 @@
 
+<%@page import="java.math.BigDecimal"%>
 <%@page import="java.util.List"%>
 <%@page import="banco.backend.estructuras.Moneda"%>
 <%@page import="banco.backend.estructuras.Cuenta"%>
@@ -11,8 +12,9 @@
     List<Cuenta> cuentasV = (List<Cuenta>) request.getAttribute("cuentasV");
     Cuenta cuenta = (Cuenta) request.getAttribute("cuenta");
     Integer idDeposito = (Integer) request.getAttribute("idDeposito");
-    Integer monto = (Integer) request.getAttribute("monto");
+    BigDecimal monto = (BigDecimal) request.getAttribute("monto");
     String descripcion = (String) request.getAttribute("descripcion");
+    String textoError = (String) request.getAttribute("textoError");
 %>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -31,7 +33,16 @@
     <div class="contenido">
         <div class="formulario">
             <h6>Transferencia Remota</h6>
-
+            <%if (request.getAttribute("exitoso") != null) {%>
+            <div class="exitoso">
+                <label>Transferencia realizada.</label>
+            </div>
+            <%}%>
+            <%if (textoError != null) {%>
+            <div class="erroneo">
+                <label><%=textoError%></label>
+            </div>
+            <%}%>
             <form action="/portal/cliente/cuentas/transferencia" method="post">
                 <%if (cuenta == null) {%>
                 <div class="campo-entrada" >
@@ -55,6 +66,12 @@
                                value="<%=cuenta.getIdCuenta()%> (<%=cuenta.getMoneda()%>)"
                                disabled>
                     </label>
+                    <label>
+                        Monto de la cuenta:
+                        <input type="text" 
+                               value="<%=cuenta.getSaldo()%>"
+                               disabled>
+                    </label>
                 </div>
                 <input type="hidden" name="cuenta" value="<%=cuenta.getIdCuenta()%>">
 
@@ -75,11 +92,15 @@
                         <option value="<%=cuentav.getIdCuenta()%>">Cuenta Propia (<%=cuentav.getMoneda()%>)</option>
                         <%}%>
                         <%}%>
-
+                        <%for (Cuenta cuentav : cuentasV) {%>
+                        <%if (cuentav.getIdCuenta() != cuenta.getIdCuenta()) {%>
+                        <option value="<%=cuentav.getIdCuenta()%>">Cuenta Vinculada (<%=cuentav.getMoneda()%>)</option>
+                        <%}%>
+                        <%}%>
                     </datalist>
                 </div>
                 <div class="campo-entrada" >
-                    <input type="number" id="monto" name="monto" 
+                    <input type="number" id="monto" name="monto"  step="any"
                            value="<%=monto == null ? "" : monto%>"  
                            placeholder=" " required>
                     <label for="monto">monto</label>

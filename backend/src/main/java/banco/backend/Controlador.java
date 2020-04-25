@@ -131,7 +131,7 @@ public class Controlador {
     }
 
     public boolean agregarTransferencia(Cuenta cuentaOrigen, int idCuenta, BigDecimal monto, String descripcion, Usuario usuario) {
-        if (validarMovimiento(idCuenta, usuario)) {
+        if (validarMovimiento(cuentaOrigen.getIdCuenta(), usuario)) {
             Movimiento movimiento = new Movimiento(idCuenta, false, monto, descripcion);
             return daoMovimiento.agregarTransferencia(cuentaOrigen, movimiento, usuario.esAdministrativo());
         }
