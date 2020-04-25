@@ -35,67 +35,64 @@ public class VisorCuentas extends HttpServlet {
         if (validarSesion(request)) {
             switch (request.getServletPath()) {
                 case "/cliente/cuentas":
-                    if(request.getParameter("cuenta")==null){
+                    if (request.getParameter("cuenta") == null) {
                         viewUrl = verCuentas(request);
+                    } else {
+                        viewUrl = verCuenta(request);
                     }
-                    else{
-                        viewUrl =  verCuenta(request);
-                    }
-                    
-                    
+
                     break;
             }
-        }
-        else{
+        } else {
             viewUrl = "/logout";
         }
 
         request.getRequestDispatcher(viewUrl).forward(request, response);
     }
-    
-    public String verCuenta(HttpServletRequest request){
+
+    public String verCuenta(HttpServletRequest request) {
         Integer idCuenta;
-        
-        try{
+        try {
             idCuenta = Integer.parseInt(request.getParameter("cuenta"));
-        }
-        catch(NumberFormatException ex){
+        } catch (NumberFormatException ex) {
             idCuenta = null;
         }
         
-        if(idCuenta == null){
+        Controlador c = Controlador.getInstancia();
+        Usuario u = (Usuario) request.getSession().getAttribute("usuario");
+        Cliente cliente = c.recuperarDatosPersonales(u.getCedula());
+        Cuenta cuenta = c.recuperarCuenta(idCuenta);
+
+        
+
+        if (idCuenta == null || cuenta == null || cuenta.getCedula()!=cliente.getCedula()) {
             return "/presentation/Error.jsp";
-        }
-        else{
-            Controlador c = Controlador.getInstancia();
-            Usuario u = (Usuario) request.getSession().getAttribute("usuario");
-            Cliente cliente = c.recuperarDatosPersonales(u.getCedula());
-            
-            List<Movimiento> m 
+        } else {
+
+            List<Movimiento> m
                     = Arrays.asList(
                             c.recuperarMovimientos(idCuenta)
                     );
             request.setAttribute("movimientos", m);
             request.setAttribute("cliente", cliente);
         }
-        
+
         return "/presentation/cliente/verCuentas.jsp";
     }
-    
-    public String verCuentas(HttpServletRequest request){
+
+    public String verCuentas(HttpServletRequest request) {
         Controlador c = Controlador.getInstancia();
         Usuario u = (Usuario) request.getSession().getAttribute("usuario");
         Cliente cliente = c.recuperarDatosPersonales(u.getCedula());
         Object res[] = c.recuperarCuentas(cliente);
-        
-        List<Cuenta> cuenta = Arrays.asList((Cuenta[])res[0]);
+
+        List<Cuenta> cuenta = Arrays.asList((Cuenta[]) res[0]);
         request.setAttribute("cuentas", cuenta);
 
         res = c.recuperarCuentasVinculadas(cliente);
-        List<Cuenta> cuentaV = Arrays.asList((Cuenta[])res[0]);
+        List<Cuenta> cuentaV = Arrays.asList((Cuenta[]) res[0]);
         request.setAttribute("cuentasV", cuentaV);
 
-        
         request.setAttribute("cliente", cliente);
         return "/presentation/cliente/verCuentas.jsp";
     }
