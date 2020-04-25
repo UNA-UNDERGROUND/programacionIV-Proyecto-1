@@ -7,8 +7,12 @@ package banco.frontend.cliente;
 
 import banco.backend.Controlador;
 import banco.backend.estructuras.Cliente;
+import banco.backend.estructuras.Cuenta;
 import banco.backend.estructuras.Usuario;
+import banco.backend.estructuras.Movimiento;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -31,7 +35,14 @@ public class VisorCuentas extends HttpServlet {
         if (validarSesion(request)) {
             switch (request.getServletPath()) {
                 case "/cliente/cuentas":
-                    viewUrl = verCuentas(request);
+                    if(request.getParameter("cuenta")==null){
+                        viewUrl = verCuentas(request);
+                    }
+                    else{
+                        viewUrl =  verCuenta(request);
+                    }
+                    
+                    
                     break;
             }
         }
@@ -42,12 +53,50 @@ public class VisorCuentas extends HttpServlet {
         request.getRequestDispatcher(viewUrl).forward(request, response);
     }
     
+    public String verCuenta(HttpServletRequest request){
+        Integer idCuenta;
+        
+        try{
+            idCuenta = Integer.parseInt(request.getParameter("cuenta"));
+        }
+        catch(NumberFormatException ex){
+            idCuenta = null;
+        }
+        
+        if(idCuenta == null){
+            return "/presentation/Error.jsp";
+        }
+        else{
+            Controlador c = Controlador.getInstancia();
+            Usuario u = (Usuario) request.getSession().getAttribute("usuario");
+            Cliente cliente = c.recuperarDatosPersonales(u.getCedula());
+            
+            List<Movimiento> m 
+                    = Arrays.asList(
+                            c.recuperarMovimientos(idCuenta)
+                    );
+            request.setAttribute("movimientos", m);
+            request.setAttribute("cliente", cliente);
+        }
+        
+        return "/presentation/cliente/verCuentas.jsp";
+    }
+    
     public String verCuentas(HttpServletRequest request){
+        Controlador c = Controlador.getInstancia();
         Usuario u = (Usuario) request.getSession().getAttribute("usuario");
-        Cliente c = Controlador.getInstancia().recuperarDatosPersonales(u.getCedula());
+        Cliente cliente = c.recuperarDatosPersonales(u.getCedula());
+        Object res[] = c.recuperarCuentas(cliente);
         
-        request.setAttribute("cliente", c);
+        List<Cuenta> cuenta = Arrays.asList((Cuenta[])res[0]);
+        request.setAttribute("cuentas", cuenta);
+
+        res = c.recuperarCuentasVinculadas(cliente);
+        List<Cuenta> cuentaV = Arrays.asList((Cuenta[])res[0]);
+        request.setAttribute("cuentasV", cuentaV);
+
         
+        request.setAttribute("cliente", cliente);
         return "/presentation/cliente/verCuentas.jsp";
     }
 
