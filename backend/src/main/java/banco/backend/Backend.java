@@ -23,10 +23,10 @@ public class Backend {
     public static void main(String[] args) {
         Controlador controlador = Controlador.getInstancia();
         
-        Usuario creds = new Usuario(208010443, "asdf1234", true);
+        Usuario creds = new Usuario(208010443, "asdf1234", false);
         Cuenta origen = controlador.recuperarCuenta(1);
 
-        boolean res = controlador.agregarTransferencia(origen,2, new BigDecimal("1000"),"Prueba Transferencia(Backend)",creds);
+        boolean res = controlador.agregarTransferencia(origen,2, new BigDecimal("1000"),"Prueba Limite Transferencia(Backend)",creds);
         
         if(res){
             System.out.println("exitoso");
