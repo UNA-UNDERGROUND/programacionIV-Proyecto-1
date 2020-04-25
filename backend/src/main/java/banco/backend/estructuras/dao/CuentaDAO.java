@@ -190,7 +190,7 @@ public class CuentaDAO extends BancoDAO {
     private static final String CMD_RECUPERAR_CUENTAS_VINCULADAS
             = "select cuenta.* from cuenta_vinculada "
             + "inner join cuenta "
-            + "on cuenta_vinculada.id_cuenta=cuenta.id_cuenta;";
+            + "on cuenta_vinculada.id_cuenta=cuenta.id_cuenta and cuenta_vinculada.cedula = ?;";
     private static final String CMD_REMOVER_CUENTA_VINCULADA
             = "delete from cuenta_vinculada "
             + "where id_cuenta= ? cedula= ? ";
