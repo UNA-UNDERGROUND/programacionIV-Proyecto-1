@@ -23,7 +23,7 @@ import javax.servlet.http.HttpSession;
  * @author jonguz
  */
 @WebServlet(name = "AccountLoginController", urlPatterns = {"/login","/login/show", "/logout"})
-public class ControladorLogin extends HttpServlet {
+public class GestorLogin extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request,
         HttpServletResponse response)
