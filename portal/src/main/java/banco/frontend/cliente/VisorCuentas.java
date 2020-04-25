@@ -12,8 +12,11 @@ import banco.backend.estructuras.Usuario;
 import banco.backend.estructuras.Movimiento;
 import java.io.IOException;
 import java.util.Arrays;
+import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -52,26 +55,40 @@ public class VisorCuentas extends HttpServlet {
 
     public String verCuenta(HttpServletRequest request) {
         Integer idCuenta;
+        Date inicio;
+        Date fin;
         try {
             idCuenta = Integer.parseInt(request.getParameter("cuenta"));
         } catch (NumberFormatException ex) {
             idCuenta = null;
         }
-        
+        try {
+            inicio = new Date(formatoFecha.parse(request.getParameter("inicio")).getTime());
+            fin = new Date(formatoFecha.parse(request.getParameter("fin")).getTime());
+        } catch (Exception ex) {
+            inicio = null;
+            Calendar c = Calendar.getInstance();
+            c.setTime(new java.util.Date());   
+            c.add(Calendar.DATE, 1);
+            fin = new Date(c.getTime().getTime());
+        }
+
+        request.setAttribute("inicio", inicio);
+        request.setAttribute("fin", fin);
+
         Controlador c = Controlador.getInstancia();
         Usuario u = (Usuario) request.getSession().getAttribute("usuario");
         Cliente cliente = c.recuperarDatosPersonales(u.getCedula());
         Cuenta cuenta = c.recuperarCuenta(idCuenta);
 
-        
-
-        if (idCuenta == null || cuenta == null || cuenta.getCedula()!=cliente.getCedula()) {
+        if (idCuenta == null || cuenta == null || cuenta.getCedula() != cliente.getCedula()) {
             return "/presentation/Error.jsp";
-        } else {
+        } else if(request.getParameter("confirmar") != null){
 
             List<Movimiento> m
-                    = Arrays.asList(
-                            c.recuperarMovimientos(idCuenta)
+                    = Arrays.asList((inicio != null)
+                            ? c.recuperarMovimientos(idCuenta, inicio, fin)
+                            : c.recuperarMovimientos(idCuenta)
                     );
             request.setAttribute("movimientos", m);
             request.setAttribute("cliente", cliente);
@@ -101,6 +118,8 @@ public class VisorCuentas extends HttpServlet {
         Usuario u = (Usuario) request.getSession().getAttribute("usuario");
         return u != null && !u.esAdministrativo();
     }
+
+    SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
