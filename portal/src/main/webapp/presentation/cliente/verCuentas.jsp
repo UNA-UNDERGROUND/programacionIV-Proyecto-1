@@ -15,10 +15,7 @@
     Cliente cliente = (Cliente) request.getAttribute("cliente");
 
     List<Cuenta> cuentas = (List<Cuenta>) request.getAttribute("cuentas");
-    Map<String, Moneda> monedas = (Map<String, Moneda>) request.getAttribute("monedas");
-
     List<Cuenta> cuentasV = (List<Cuenta>) request.getAttribute("cuentasV");
-    Map<String, Moneda> monedasV = (Map<String, Moneda>) request.getAttribute("monedasV");
 
     List<Movimiento> movimientos = (List<Movimiento>) request.getAttribute("movimientos");
 
@@ -29,7 +26,7 @@
 
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Transaccion de cuenta</title>
+        <title>Ver Cuentas</title>
         <%@ include file="/presentation/Head.jsp" %>
         <link rel="stylesheet" href="/portal/css/componentes/formulario.css">
         <meta name="viewport" content="width=device-width, initial-scale=1">

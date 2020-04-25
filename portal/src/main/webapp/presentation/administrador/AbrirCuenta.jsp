@@ -12,7 +12,7 @@
     <head>
 
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Login</title>
+        <title>Registrar una nueva cuenta</title>
         <%@ include file="/presentation/Head.jsp" %>
         <link rel="stylesheet" href="/portal/css/componentes/formulario.css">
         <meta name="viewport" content="width=device-width, initial-scale=1">
