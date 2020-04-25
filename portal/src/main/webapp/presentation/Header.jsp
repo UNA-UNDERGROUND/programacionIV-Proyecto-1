@@ -20,6 +20,7 @@
             <%}else{%>
             <li><a href="/portal/cliente/cuentas">Ver Cuentas</a></li>
             <li><a href="/portal/cliente/cuentas/vincular">Vincular Cuentas</a></li>
+            <li><a href="/portal/cliente/cuentas/transferencia">Transferencia remota</a></li>
             <%}}%>
         </ul>
     </nav>
