@@ -18,7 +18,7 @@
             <li><a href="/portal/admin/AbrirCuenta/show">Abrir Cuenta</a></li>
             <li><a href="/portal/admin/Movimiento">Movimiento (test)</a></li>
             <%}else{%>
-            <li><a href="#">Ver Cuentas</a></li>
+            <li><a href="/portal/cliente/cuentas">Ver Cuentas</a></li>
             <%}}%>
         </ul>
     </nav>
