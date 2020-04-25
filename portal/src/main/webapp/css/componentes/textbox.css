@@ -60,3 +60,7 @@
     background: #682f2fbe;
     border: 2px solid #682f2fbe;
 }
+
+input::-webkit-calendar-picker-indicator {
+    background-color: inherit;
+}
