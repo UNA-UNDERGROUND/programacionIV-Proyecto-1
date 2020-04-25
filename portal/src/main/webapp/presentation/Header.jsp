@@ -16,7 +16,7 @@
             <%if (usuario != null) {%>
             <%if (usuario.esAdministrativo()) {%>
             <li><a href="/portal/admin/AbrirCuenta/show">Abrir Cuenta</a></li>
-            <li><a href="/portal/admin/Movimiento">Movimiento (test)</a></li>
+            <li><a href="/portal/admin/Movimiento">Movimientos y Transferencias</a></li>
             <%}else{%>
             <li><a href="/portal/cliente/cuentas">Ver Cuentas</a></li>
             <li><a href="/portal/cliente/cuentas/vincular">Vincular Cuentas</a></li>
