@@ -17,6 +17,7 @@ import banco.backend.estructuras.dao.MonedaDAO;
 import banco.backend.estructuras.dao.MovimientoDAO;
 import banco.backend.estructuras.dao.UsuarioDAO;
 import java.math.BigDecimal;
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -116,6 +117,9 @@ public class Controlador {
 
     public Movimiento[] recuperarMovimientos(int idCuenta) {
         return daoMovimiento.recuperarMovimientos(idCuenta);
+    }
+    public Movimiento[] recuperarMovimientos(int idCuenta, Date inicio, Date fin) {
+        return daoMovimiento.recuperarMovimientos(idCuenta, inicio, fin);
     }
 
     public Movimiento recuperarMovimiento(int idMovimiento) {
