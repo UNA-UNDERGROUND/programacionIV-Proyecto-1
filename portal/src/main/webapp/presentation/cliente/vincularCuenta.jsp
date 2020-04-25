@@ -1,72 +1,81 @@
+<%@page import="banco.backend.estructuras.Cuenta"%>
 <%@page import="java.util.HashMap"%>
 <%@page import="java.util.Map"%>
 
-    <%@page contentType="text/html" pageEncoding="UTF-8"%>
-        <!DOCTYPE html>
-        <html>
 
-        <head>
+<%
+    String textoError = (String) request.getAttribute("textoError");
+    Integer idCuenta = (Integer) request.getAttribute("idCuenta");
+    Cuenta cuenta = (Cuenta) request.getAttribute("cuenta");
+%>
 
-            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-            <title>Login</title>
-            <%@ include file="/presentation/Head.jsp" %>
-                <meta name="viewport" content="width=device-width, initial-scale=1">
-        </head>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
 
-        <body>
-             <jsp:include page="/presentation/Header.jsp" />
-            <% Usuario credenciales= (Usuario) request.getAttribute("credenciales"); %>
-            <%String  textoError = (String) request.getAttribute("textoError"); %>
-            <%Map<String, String>  errores = (Map<String, String>) request.getAttribute("errores"); %>
-            
-                <div class="contenido centrado">
-                    <div class="formulario">
-                        <h6>Iniciar sesion</h6>
+    <head>
 
-                        <form action="/portal/login" method="post">
-                            <%if(textoError!=null){%>
-                            <div class="erroneo">
-                                <label><%=textoError%></label>
-                                <%if(errores!=null){%>
-                                <%for(String error: errores.values()){%>
-                                    <label><%=error%></label>
-                                <%}}%>
-                            </div>
-                            <%}%>
-                            
-                            <div class="campo-entrada <%=erroneo("usuario",errores)%>">
-                                <input type="text" id="cedula" name="usuario" 
-                                       value="<%=credenciales.getCedula()==0? "" : credenciales.getCedula()%>"  
-                                       pattern="\d+" title="Ingrese una cedula valida sin guiones y/o espacios" placeholder=" " required>
-                                <label for="cedula">Cedula</label>
-                            </div>
-                            <div class="campo-entrada <%=erroneo("pass",errores)%>">
-                                <input type="password" id="contraseña" name="pass" value="<%=credenciales.getPass()%>" placeholder=" "  required>
-                                <label for="contraseña">Contraseña</label>
-                            </div>
-                            <div class="campo-entrada">
-                                <input type="checkbox" id="login-admin" value="login-admin" name="admin">
-                                <label for="login-admin">Login administrativo</label>
-                            </div>
-                            <button class="submit">Iniciar sesion</button>
-                        </form>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Vincular Cuenta</title>
+        <%@ include file="/presentation/Head.jsp" %>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
 
+    <body>
+        <jsp:include page="/presentation/Header.jsp" />
+
+
+        <div class="contenido centrado">
+            <div class="formulario">
+                <h6>Vincular Cuenta</h6>
+                <form action="/portal/cliente/cuentas/vincular" method="post">
+                    <%if (request.getAttribute("completado") != null) {%>
+                    <div class="exitoso">
+                        <label>Se vinculo correctamente la cuenta</label>
                     </div>
+                    <%}%>
+                    <%if (textoError != null) {%>
+                    <div class="erroneo">
+                        <label><%=textoError%></label>
+                    </div>
+                    <%}%>
+                    <%if (cuenta == null) {%>
+                    <div class="campo-entrada">
+                        <input type="text" id="idCuenta" name="idCuenta" 
+                               value="<%=idCuenta == null ? "" : idCuenta%>"  
+                               pattern="\d+" title="Ingrese una cuenta valida" placeholder=" " required>
+                        <label for="idCuenta">idCuenta</label>
+                    </div>
+                    <button class="submit">Recuperar Cuenta</button>
+                    <%}%>
+                    <%else {%>
+                    <div class="campo">
+                        <label>
+                            Cedula del propietario:
+                            <input type="text"
+                                   value="<%=cuenta.getCedula()%>"
+                                   disabled>
+                        </label>
+                    </div>
+                    <div class="campo">
+                        <label>
+                            Id de cuenta:
+                            <input type="text"
+                                   value="<%=cuenta.getIdCuenta()%> (<%=cuenta.getMoneda()%>)"
+                                   disabled>
+                        </label>
+                    </div>
+                    <input type="hidden" name="idCuenta" value="<%=cuenta.getIdCuenta()%>">
+                    <input type="hidden" name="confirmar" value="">
+                    <button class="submit">Confirmar Vinculacion</button>
+                    <%}%>
+                </form>
+            </div>
+        </div>
 
-                </div>
+        <%@ include file="/presentation/Footer.jsp" %>
+    </body>
 
-                <%@ include file="/presentation/Footer.jsp" %>
-        </body>
+</html>
 
-        </html>
-        
-        
- <%!
-    private String erroneo(String campo, Map<String,String> errores){
-      if ( (errores!=null) && (errores.get(campo)!=null) )
-        return "erroneo";
-      else
-        return "";
-    }
-   
-%> 
+

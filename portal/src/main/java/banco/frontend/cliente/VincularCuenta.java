@@ -9,11 +9,7 @@ import banco.backend.Controlador;
 import banco.backend.estructuras.Cliente;
 import banco.backend.estructuras.Cuenta;
 import banco.backend.estructuras.Usuario;
-import banco.backend.estructuras.Movimiento;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -24,8 +20,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author jonguz
  */
-@WebServlet(name = "ClientDashboardController", urlPatterns = {"/cliente/cuentas"})
-public class VisorCuentas extends HttpServlet {
+@WebServlet(name = "vincularCuentas", urlPatterns = {"/cliente/cuentas/vincular"})
+public class VincularCuenta extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request,
             HttpServletResponse response)
@@ -34,70 +30,51 @@ public class VisorCuentas extends HttpServlet {
         String viewUrl = "";
         if (validarSesion(request)) {
             switch (request.getServletPath()) {
-                case "/cliente/cuentas":
-                    if(request.getParameter("cuenta")==null){
-                        viewUrl = verCuentas(request);
-                    }
-                    else{
-                        viewUrl =  verCuenta(request);
-                    }
-                    
-                    
+                case "/cliente/cuentas/vincular":
+                    viewUrl = vincularCuenta(request);
                     break;
             }
-        }
-        else{
+        } else {
             viewUrl = "/logout";
         }
 
         request.getRequestDispatcher(viewUrl).forward(request, response);
     }
-    
-    public String verCuenta(HttpServletRequest request){
-        Integer idCuenta;
-        
-        try{
-            idCuenta = Integer.parseInt(request.getParameter("cuenta"));
-        }
-        catch(NumberFormatException ex){
-            idCuenta = null;
-        }
-        
-        if(idCuenta == null){
-            return "/presentation/Error.jsp";
-        }
-        else{
-            Controlador c = Controlador.getInstancia();
-            Usuario u = (Usuario) request.getSession().getAttribute("usuario");
-            Cliente cliente = c.recuperarDatosPersonales(u.getCedula());
-            
-            List<Movimiento> m 
-                    = Arrays.asList(
-                            c.recuperarMovimientos(idCuenta)
-                    );
-            request.setAttribute("movimientos", m);
-            request.setAttribute("cliente", cliente);
-        }
-        
-        return "/presentation/cliente/verCuentas.jsp";
-    }
-    
-    public String verCuentas(HttpServletRequest request){
+
+    public String vincularCuenta(HttpServletRequest request) {
         Controlador c = Controlador.getInstancia();
         Usuario u = (Usuario) request.getSession().getAttribute("usuario");
         Cliente cliente = c.recuperarDatosPersonales(u.getCedula());
-        Object res[] = c.recuperarCuentas(cliente);
-        
-        List<Cuenta> cuenta = Arrays.asList((Cuenta[])res[0]);
-        request.setAttribute("cuentas", cuenta);
+        Integer idCuenta;
+        Cuenta cuenta;
 
-        res = c.recuperarCuentasVinculadas(cliente);
-        List<Cuenta> cuentaV = Arrays.asList((Cuenta[])res[0]);
-        request.setAttribute("cuentasV", cuentaV);
+        try {
+            idCuenta = Integer.parseInt(request.getParameter("idCuenta"));
+            cuenta = c.recuperarCuenta(idCuenta);
+        } catch (NumberFormatException ex) {
+            cuenta = null;
+            idCuenta = null;
+        }
+        request.setAttribute("cuenta", cuenta);
+        if (cuenta == null && idCuenta != null) {
+            request.setAttribute("textoError", "esta cuenta no es valida");
+        } else if (cuenta != null
+                && cuenta.getCedula() == cliente.getCedula()) {
+            request.setAttribute("textoError", "no se pueden vincular cuentas del mismo cliente");
+            request.removeAttribute("cuenta");
+        } else if (request.getParameter("confirmar") != null) {
+            if (!Controlador.getInstancia().agregarCuentaVinculada(cliente, cuenta)) {
+                request.setAttribute("textoError", "no se pudo vincular la cuenta");
+            } else {
+                request.setAttribute("completado", "");
+            }
+        }
 
-        
-        request.setAttribute("cliente", cliente);
-        return "/presentation/cliente/verCuentas.jsp";
+        return "/presentation/cliente/vincularCuenta.jsp";
+    }
+
+    public void vincular(HttpServletRequest request) {
+
     }
 
     public boolean validarSesion(HttpServletRequest request) {
