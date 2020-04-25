@@ -15,6 +15,7 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 /**
@@ -31,6 +32,7 @@ public class MovimientoDAO extends BancoDAO {
             stm.setInt(1, idCuenta);
             try (ResultSet rs = stm.executeQuery()) {
                 while (rs.next()) {
+                    //LocalDate corrige un error en la clase SQL al recuperar fechas
                     Movimiento nuevo
                             = new Movimiento(
                                     rs.getInt(1),
@@ -38,7 +40,7 @@ public class MovimientoDAO extends BancoDAO {
                                     rs.getBoolean(3),
                                     rs.getBigDecimal(4),
                                     rs.getString(5),
-                                    rs.getDate(6)
+                                    Date.valueOf(rs.getObject(6 , LocalDate.class ))
                             );
                     resultado.add(nuevo);
                 }
@@ -62,6 +64,7 @@ public class MovimientoDAO extends BancoDAO {
             stm.setDate(3, fin);
             try (ResultSet rs = stm.executeQuery()) {
                 while (rs.next()) {
+                    //LocalDate corrige un error en la clase SQL al recuperar fechas
                     Movimiento nuevo
                             = new Movimiento(
                                     rs.getInt(1),
@@ -69,7 +72,7 @@ public class MovimientoDAO extends BancoDAO {
                                     rs.getBoolean(3),
                                     rs.getBigDecimal(4),
                                     rs.getString(5),
-                                    rs.getDate(6)
+                                    Date.valueOf(rs.getObject(6 , LocalDate.class ))
                             );
                     resultado.add(nuevo);
                 }
@@ -324,12 +327,14 @@ public class MovimientoDAO extends BancoDAO {
             + "where id_transaccion = ?;";
     private static final String CMD_RECUPERAR_MOVIMIENTOS
             = "select * from movimiento "
-            + "where id_cuenta = ?;";
+            + "where id_cuenta = ? "
+            + "ORDER BY fecha_deposito desc;";
     private static final String CMD_RECUPERAR_MOVIMIENTOS_FECHA
             = "select * from movimiento "
-            + "where id_cuenta=? "
-            + "and fecha_deposito >= ?"
-            + "and fecha_deposito < ?;";
+            + "where id_cuenta =? "
+            + "and fecha_deposito >= ? "
+            + "and fecha_deposito < ? "
+            + "ORDER BY fecha_deposito desc;";
     private static final String CMD_RECUPERAR_MONTO_RESTANTE
             = "select sum(monto) from movimiento "
             + "where id_cuenta=? "
