@@ -102,6 +102,9 @@ public class Controlador {
     public boolean agregarCuenta(Cuenta cuenta) {
         return daoCuenta.agregarCuenta(cuenta);
     }
+    public boolean acreditarIntereses(){
+        return daoCuenta.acreditarIntereses();
+    }
 
     public boolean agregarCuentaVinculada(Cliente cliente, Cuenta cuenta) {
         return daoCuenta.agregarCuentaVinculada(cliente.getCedula(), cuenta.getIdCuenta());

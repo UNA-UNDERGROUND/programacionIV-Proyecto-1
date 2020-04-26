@@ -94,6 +94,21 @@ public class CuentaDAO extends BancoDAO {
         return resultado.toArray(new Cuenta[0]);
     }
 
+    public boolean acreditarIntereses() {
+        try (Connection cnx = obtenerConexion();
+                PreparedStatement stm1 = cnx.prepareStatement(CMD_NOTIFICAR_INTERESES);
+                PreparedStatement stm2 = cnx.prepareStatement(CMD_ACREDITAR_INTERESES);
+                ) {
+            //importante crear primero los detalles de intereses
+            stm1.clearParameters();
+            stm2.clearParameters();
+            return stm1.executeUpdate() +stm2.executeUpdate() == 2;
+        } catch (Exception ex) {
+            System.err.printf("No se pudo acreditar los intereses: %s \n", ex.getMessage());
+        }
+        return false;
+    }
+
     //</editor-fold>
     //<editor-fold desc="Cuenta Vinculada" defaultstate="collapsed">
     public boolean agregarCuentaVinculada(int cedula, int id_cuenta) {
@@ -180,6 +195,21 @@ public class CuentaDAO extends BancoDAO {
             = "UPDATE cliente "
             + "SET saldo = ? "
             + "WHERE cedula=?;";
+    private static final String CMD_ACREDITAR_INTERESES
+            = "update cuenta, moneda "
+            + "set saldo=saldo+(saldo*porcentaje_interes/100) "
+            + "where cuenta.moneda = moneda.codigo;";
+    private static final String CMD_NOTIFICAR_INTERESES
+            = "insert into movimiento "
+            + "(id_cuenta, deposito, monto, descripcion, movimiento_caja) "
+            + "select "
+            + "id_cuenta, "
+            + "0, "
+            + "(saldo*moneda.porcentaje_interes/100), "
+            + "'Intereses Generados Con su Cuenta', "
+            + "1 "
+            + "FROM cuenta "
+            + "INNER JOIN moneda ON cuenta.moneda = moneda.codigo;";
     //</editor-fold>
     //<editor-fold desc="Cuenta Vinculada" defaultstate="collapsed">
     private static final String CMD_AGREGAR_CUENTA_VINCULADA
