@@ -66,3 +66,12 @@ CREATE TABLE cuenta_vinculada (
     FOREIGN KEY (cedula)
     REFERENCES cliente(cedula)
 );
+
+INSERT INTO moneda (codigo, nombre, signo, precio_compra, porcentaje_interes)
+VALUES 
+('CRC','Colon Costarricense' ,'₡' ,'1'       ,'10'),
+('CAD','Dolar Canadiense'    ,'C$','402,1500','8'),
+('EUR','Euro'                ,'€' ,'612,61'  ,'12,5'),
+('JPY','Yen'                 ,'¥' ,'5,28'    ,'9,6'),
+('RUB','Rublo Ruso'          ,'₽' ,'7,6'     ,'10'),
+('USD','Dolar Estadounidense','$' ,'566,63'  ,'5'),
